@@ -35,20 +35,6 @@ export function Nav() {
               Home
             </Link>
           </li>
-          <li className={`gradient-border rounded-md ${pathname === "/veridaq-request" ? 'normal-gradient-border' : ''}`}>
-            <Link
-              href="/veridaq-request"
-              className="flex bg-[#38313A] items-center gap-4 text-white font-medium p-4"
-            >
-              <Image
-                alt="inbox"
-                src="/assets/icons/send.svg"
-                width={20}
-                height={20}
-              />
-              Veridaq Request
-            </Link>
-          </li>
           <li className={`gradient-border rounded-md ${pathname === "/veridaq-box" ? 'normal-gradient-border' : ''}`}>
             <Link
               href="/veridaq-box"
@@ -61,6 +47,20 @@ export function Nav() {
                 height={20}
               />
               Veridaq Box
+            </Link>
+          </li>
+          <li className={`gradient-border rounded-md ${pathname === "/veridaq-issue" ? 'normal-gradient-border' : ''}`}>
+            <Link
+              href="/veridaq-issue"
+              className="flex bg-[#38313A] items-center gap-4 text-white font-medium p-4"
+            >
+              <Image
+                alt="inbox"
+                src="/assets/icons/send.svg"
+                width={20}
+                height={20}
+              />
+              Veridaq Issue
             </Link>
           </li>
           <li className={`gradient-border rounded-md ${pathname === "/veridaq-store" ? 'normal-gradient-border' : ''}`}>
@@ -113,9 +113,9 @@ export async function Header() {
           {`Welcome to Veridaq, ${name}`}
         </p>
       )}
-      {pathname === "/veridaq-request" && (
+      {pathname === "/veridaq-issue" && (
         <p className="text-[32px] font-semibold text-gradient mr-auto">
-          Request the Veridaq you need, here.
+          Issue a Direct Veridaq, here.
         </p>
       )}
       {pathname === "/veridaq-box" && (
@@ -243,6 +243,31 @@ export function SearchBar() {
       <label
         htmlFor="search"
         className="flex items-center gap-4 gradient-border1 w-max p-2 ml-auto rounded-md mt-8"
+      >
+        <input
+          type="text"
+          id="search"
+          placeholder="search"
+          className="border-none outline-none block bg-transparent w-[250px] text-[#5E5C64] placeholder:text-[#5E5C64] capitalize"
+        />
+        <Image
+          src="/assets/icons/search.svg"
+          width={25}
+          height={25}
+          className="object-contain"
+          alt="search"
+        />
+      </label>
+    </div>
+  )
+}
+
+export function SearchBar2() {
+  return (
+      <div className="">
+      <label
+        htmlFor="search"
+        className="flex items-center gap-4 bg-[#E1D7E2] border-4 border-[#554957] w-max p-2 ml-auto rounded-md mt-8"
       >
         <input
           type="text"
@@ -405,5 +430,28 @@ export function ErrorMessage(){
       />
       <p className="text-[24px] font-semibold">Your Veridaq Request is UnSuccessful! Please try again later</p>
     </div>
+  )
+}
+
+export function VeridaqDocument({DocDetails, DocDate}:{DocDetails: string, DocDate: string}) {
+  return (
+      <div className="flex items-start gap-3">
+        <div className="">
+          <Image
+            src={"/assets/icons/veridaq_icon.svg"}
+            alt="veridaq_icon"
+            width={40}
+            height={40}
+          />
+        </div>
+        <div className="flex-col items-start">
+          <div className="">
+            <p>{DocDetails}</p>
+          </div>
+            <div className="">
+              <p>{DocDate}</p>
+            </div>
+        </div>
+      </div>
   )
 }

@@ -6,7 +6,7 @@ import ModalWithStepper from '@/components/shared/Modal';
 import { cardData2 } from "@/constants/cards";
 import { Card2 } from '../shared/shared';
 
-const RequestVeridaq: React.FC = () => {
+const IssueVeridaq: React.FC = () => {
   const [openModalId, setOpenModalId] = useState<string | null>(null);
 
   const handleOpenModal = (id: string) => {
@@ -40,4 +40,4 @@ const RequestVeridaq: React.FC = () => {
   );
 };
 
-export default RequestVeridaq;
+export default IssueVeridaq;

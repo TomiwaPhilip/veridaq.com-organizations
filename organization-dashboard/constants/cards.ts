@@ -1,12 +1,5 @@
 export const cardData = [
   {
-    heading: "Make a Veridaq Request!",
-    paragraph:
-      "Click on the Veridaq Request button to initiate requests for Work History, Membership or Studentship Status, and Documents verification.",
-    bgColor: "#A593C5",
-    outlineColor: "#A294A4",
-  },
-  {
     heading: "Check your Veridaq Box!",
     paragraph:
       "Veridaq Box is for receiving mails from organizations and individuals you have interacted with on the Veridaq platform. You can also issue a Veridaq.",
@@ -14,9 +7,16 @@ export const cardData = [
     outlineColor: "#A593C5",
   },
   {
+    heading: "Issue a Veridaq!",
+    paragraph:
+      "Click on the Veridaq Issue button to issue Veridaq for Work History, Membership or Studentship Status, and Documents verification.",
+    bgColor: "#A593C5",
+    outlineColor: "#A294A4",
+  },
+  {
     heading: "Check your Veridaq Store!",
     paragraph:
-      "Veridaq Box is for receiving mails from organizations and individuals you have interacted with on the Veridaq platform. You can also issue a Veridaq.",
+      "Click on the Veridaq Store button to manage received Veridaq, such as sharing, downloading, requesting updates, and controlling access.",
     bgColor: "#F26BBA",
     outlineColor: "#A593C5",
   },
