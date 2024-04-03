@@ -18,7 +18,7 @@ import {
   FormMessage,
 } from "@/components/form/form";
 import { Input } from "@/components/form/input";
-import { signIn } from 'next-auth/react';
+// import { signIn } from 'next-auth/react';
 
 import { NoOutlineButtonBig } from "@/components/shared/buttons";
 
@@ -41,18 +41,18 @@ export default function SignIn() {
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     setIsLoading(true);
-    const result = await signIn('email', {
-      email: data.email,
-      redirect: true, // Change to true if you want NextAuth.js to handle redirection after sign-in
-    });
+    // const result = await signIn('email', {
+    //   email: data.email,
+    //   redirect: true, // Change to true if you want NextAuth.js to handle redirection after sign-in
+    // });
     setIsLoading(false);
-    if (!result?.error) {
-      // Handle successful sign-in
-      console.log('Sign in successful');
-    } else {
-      // Handle sign-in error
-      console.error('Sign in error:', result.error);
-    }
+    // if (!result?.error) {
+    //   // Handle successful sign-in
+    //   console.log('Sign in successful');
+    // } else {
+    //   // Handle sign-in error
+    //   console.error('Sign in error:', result.error);
+    // }
   };
 
   return (

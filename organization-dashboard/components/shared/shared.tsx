@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { signOut } from 'next-auth/react';
+// import { signOut } from 'next-auth/react';
 // import { getSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 
@@ -97,9 +97,9 @@ export function Nav() {
   );
 }
 
-const handleSignOut = async () => {
-  await signOut({ redirect: true, callbackUrl: '/auth/signin' });
-};
+// const handleSignOut = async () => {
+//   await signOut({ redirect: true, callbackUrl: '/auth/signin' });
+// };
 
 
 export async function Header() {
@@ -145,7 +145,7 @@ export async function Header() {
           src="/assets/images/user.png"
           width={50}
           height={50}
-          onClick={handleSignOut}
+          // onClick={handleSignOut}
           style={{ cursor: 'pointer' }}
         />
     </header>
