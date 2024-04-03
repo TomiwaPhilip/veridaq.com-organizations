@@ -24,10 +24,19 @@ export default function Box() {
                         </div>
                         <div className="mt-10">
                             <hr className="w-full text-center text-[#897A8B]" />
-                            <div className="">
+                            <div className="flex items-center justify-center gap-3">
                                 <button type="button"> 
                                     <Image
                                         src={"/assets/icons/icon-chevron-left"}
+                                        alt="left"
+                                        width={30}
+                                        height={30}
+                                    />
+                                </button>
+                                <p className="text-sm text-[#38313A]">Page 1</p>
+                                <button type="button"> 
+                                    <Image
+                                        src={"/assets/icons/icon-chevron-right"}
                                         alt="left"
                                         width={30}
                                         height={30}
