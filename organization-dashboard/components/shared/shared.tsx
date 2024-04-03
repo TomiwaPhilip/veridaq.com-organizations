@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { signOut } from 'next-auth/react';
-import { getSession } from "next-auth/react";
+// import { getSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 
 // This is the Nav
@@ -104,8 +104,9 @@ const handleSignOut = async () => {
 
 export async function Header() {
   const pathname = usePathname()
-  const session = await getSession()
-  const name = session?.user?.name
+  // const session = await getSession()
+  // const name = session?.user?.name
+  const name = "Tomiwa";
   return (
     <header className="flex items-center gap-4">
       {pathname === "/" && (

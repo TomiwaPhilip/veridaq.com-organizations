@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { signIn } from "next-auth/react";
+// import { signIn } from "next-auth/react";
 
 export function Button({
   name,
@@ -22,7 +22,7 @@ export function GoogleButton() {
   return (
     <button
       className="bg-[#E18571] flex items-center justify-center py-3 px-10 w-full rounded-lg"
-      onClick={() => signIn("google", { callbackUrl: 'https://99clqg-3000.csb.app/' })} // Call signIn with the provider ID ("google" in this case)
+      // onClick={() => signIn("google", { callbackUrl: 'https://99clqg-3000.csb.app/' })} // Call signIn with the provider ID ("google" in this case)
     >
       <img
         src="/assets/icons/google_icon.svg"
@@ -38,7 +38,7 @@ export function LinkedinButton() {
   return (
     <button
       className="bg-[#FFFFFF] text-[#0A66C2] flex items-center justify-center py-3 px-10 w-full rounded-lg"
-      onClick={() => signIn("linkedin", { callbackUrl: 'https://99clqg-3000.csb.app/' })} // Call signIn with the provider ID ("linkedin" in this case)
+      // onClick={() => signIn("linkedin", { callbackUrl: 'https://99clqg-3000.csb.app/' })} // Call signIn with the provider ID ("linkedin" in this case)
     >
       <img
         src="/assets/icons/linkedin_icon.svg"
