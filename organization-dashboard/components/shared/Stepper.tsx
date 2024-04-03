@@ -1,3 +1,5 @@
+"use client";
+
 import React from 'react';
 import WorkReference from '../form/workReference/workReference';
 import StudentshipStatus from '../form/studentshipstatus/studentshipStatus';
