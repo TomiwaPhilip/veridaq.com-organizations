@@ -435,7 +435,7 @@ export function ErrorMessage(){
 
 export function VeridaqDocument({DocDetails, DocDate}:{DocDetails: string, DocDate: string}) {
   return (
-      <div className="flex items-start gap-3">
+      <div className="flex items-start gap-3 hover:cursor-pointer">
         <div className="">
           <Image
             src={"/assets/icons/veridaq_icon.svg"}

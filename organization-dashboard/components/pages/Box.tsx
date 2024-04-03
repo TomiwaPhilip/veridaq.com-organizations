@@ -23,11 +23,11 @@ export default function Box() {
                             />
                         </div>
                         <div className="mt-10">
-                            <hr className="w-full text-center text-[#897A8B]" />
-                            <div className="flex items-center justify-center gap-3">
+                            <hr className="w-full text-center" style={{ borderColor: '#897A8B' }} />
+                            <div className="flex items-center justify-center gap-3 p-3">
                                 <button type="button"> 
                                     <Image
-                                        src={"/assets/icons/icon-chevron-left"}
+                                        src={"/assets/icons/icon-chevron-left.svg"}
                                         alt="left"
                                         width={30}
                                         height={30}
@@ -36,7 +36,7 @@ export default function Box() {
                                 <p className="text-sm text-[#38313A]">Page 1</p>
                                 <button type="button"> 
                                     <Image
-                                        src={"/assets/icons/icon-chevron-right"}
+                                        src={"/assets/icons/icon-chevron-right.svg"}
                                         alt="left"
                                         width={30}
                                         height={30}
