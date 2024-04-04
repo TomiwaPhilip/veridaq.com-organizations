@@ -20,6 +20,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "date-fns": "^3.6.0",
+    "google-auth-library": "^9.7.0",
     "iron-session": "^8.0.1",
     "jose": "^5.2.3",
     "lucide-react": "^0.363.0",

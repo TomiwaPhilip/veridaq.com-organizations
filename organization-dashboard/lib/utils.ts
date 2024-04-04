@@ -1,5 +1,7 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+import getSession from "./actions/server-hooks/getsession.action";
+import { SessionData } from "./iron-session/session";
 import { Resend } from 'resend';
 // import { SendVerificationRequestParams } from "next-auth/providers/email";
 
@@ -29,3 +31,25 @@ export function isBase64Image(imageData: string) {
 //     console.log({ error });
 //   }
 // };
+
+
+
+export async function saveSession(session: SessionData): Promise<void> {
+  // Check if session exists
+  let existingSession = await getSession();
+
+  // Assign session properties
+  existingSession.userId = session.userId;
+  existingSession.email = session.email;
+  existingSession.firstName = session.firstName;
+  existingSession.lastName = session.lastName;
+  existingSession.image = session.image;
+  existingSession.role = session.role;
+  existingSession.orgId = session.orgId;
+  existingSession.isOnboarded = session.isOnboarded;
+  existingSession.isVerified = session.isVerified;
+  existingSession.isLoggedIn = session.isLoggedIn;
+
+  // Save the session
+  await existingSession.save();
+}
