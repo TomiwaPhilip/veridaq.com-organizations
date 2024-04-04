@@ -4,37 +4,74 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import getSession from "@/lib/actions/server-hooks/getsession.action";
 import { getGoogleAuthUrl } from "@/lib/actions/server-hooks/google-auth.action";
-
-let username = "john";
-let isPro = true;
-let isBlocked = true;
-
+import VerificationToken from "../utils/emailTokenSchema";
+import { generateToken, sendVerificationRequest, verifyToken } from "../utils";
+import connectToDB from "../model/database";
 
 
-export const login = async (
-  prevState: { error: undefined | string },
-  formData: FormData
-) => {
-  const session = await getSession();
+export async function signIn(email: string) {
+  console.log("I want to send emails")
+  try {
+    connectToDB()
 
-  const formUsername = formData.get("username") as string;
-  const formPassword = formData.get("password") as string;
+    // Generate token and URL for verification
+    const { token, generatedAt, expiresIn } = generateToken();
+    console.log(token);
 
-  // CHECK USER IN THE DB
-  // const user = await db.getUser({username,password})
-
-  if (formUsername !== username) {
-    return { error: "Wrong Credentials!" };
+    const url = `https://legendary-zebra-45v97xp5wr5fjprq-3000.app.github.dev/auth/verify?token=${token}`;
+    
+    // Send email with resend.dev
+    await sendVerificationRequest({ url: url, email: email })
+  
+    // Save email address, verification token, and expiration time in the database
+    await VerificationToken.create({
+      token: token,
+      email: email,
+      createdAt: generatedAt, // Since generated in the function, set current time
+      expiresAt: expiresIn,
+    })
+    
+    // Return a response
+    return true;
+  } catch (error) {
+    return false;
   }
+}
 
-  // session.userId = "1";
-  // session.username = formUsername;
-  // session.isPro = isPro;
-  session.isLoggedIn = true;
 
-  await session.save();
-  redirect("/");
-};
+export async function verifyUserToken(token: string): Promise<boolean> {
+  try {
+    connectToDB();
+
+    const existingToken = await VerificationToken.findOne({ token: token });
+
+    if (!existingToken) {
+      console.log("Token not found in DB");
+      return false; // Token not found in the database
+    }
+
+    // Check if the token has expired
+    const currentTime = new Date();
+    const createdAt = existingToken.createdAt;
+    const expiresIn = existingToken.expiresAt;
+    const timeDifference = currentTime.getTime() - createdAt.getTime(); // Time difference in milliseconds
+    const minutesDifference = Math.floor(timeDifference / (1000 * 60)); // Convert milliseconds to minutes
+    if (minutesDifference > 5) {
+      console.log("Token has expired");
+      // If the token has expired, delete the token document from the database
+      await VerificationToken.findOneAndDelete({ token: token });
+      return false; // Token has expired
+    }
+
+    // If the token is valid, delete the token document from the database
+    await VerificationToken.findOneAndDelete({ token: token });
+    return true; // Token is valid
+  } catch (error: any) {
+    console.error('Error verifying token:', error.message);
+    return false;
+  }
+}
+
 
 export const logout = async () => {
   const session = await getSession();
@@ -51,17 +88,7 @@ export const changePremium = async () => {
   // revalidatePath("/profile");
 };
 
-export const changeUsername = async (formData: FormData) => {
-  const session = await getSession();
 
-  const newUsername = formData.get("username") as string;
-
-  username = newUsername;
-
-  // session.username = username;
-  // await session.save();
-  // revalidatePath("/profile");
-};
 
 let googleAuthUrl: string
 export async function handleGoogleLogin() {

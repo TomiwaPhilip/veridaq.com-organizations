@@ -18,7 +18,7 @@ import {
   FormMessage,
 } from "@/components/form/form";
 import { Input } from "@/components/form/input";
-// import { signIn } from 'next-auth/react';
+import { signIn } from "@/lib/actions/login.action";
 
 import { NoOutlineButtonBig } from "@/components/shared/buttons";
 
@@ -31,6 +31,7 @@ const formSchema = z.object({
 export default function SignIn() {
 
   const [isLoading, setIsLoading] = useState(false);
+  const [isEmailSent, setIsEmailSent] = useState("");
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -41,18 +42,16 @@ export default function SignIn() {
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     setIsLoading(true);
-    // const result = await signIn('email', {
-    //   email: data.email,
-    //   redirect: true, // Change to true if you want NextAuth.js to handle redirection after sign-in
-    // });
+    const result = await signIn(data.email);
     setIsLoading(false);
-    // if (!result?.error) {
-    //   // Handle successful sign-in
-    //   console.log('Sign in successful');
-    // } else {
-    //   // Handle sign-in error
-    //   console.error('Sign in error:', result.error);
-    // }
+    if (result) {
+      // Handle successful sign-in
+      setIsEmailSent("Email has been sent!");
+    } else {
+      // Handle sign-in error
+      setIsEmailSent("Error! No email sent")
+      console.error('Sign in error:', result);
+    }
   };
 
   return (
@@ -86,6 +85,7 @@ export default function SignIn() {
                   </FormItem>
                 )}
               />
+              <p>{isEmailSent}</p>
               <div className="text-center">
                 <NoOutlineButtonBig type="submit" name={isLoading ? 'Sending Email...' : 'Send Magic Link'} disabled={isLoading} />
               </div>
