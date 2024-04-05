@@ -9,6 +9,7 @@ import connectToDB from "../model/database";
 import Role from '@/lib/utils/roleSchema';
 import Organization from "@/lib/utils/organizationSchema";
 import { saveSession } from '@/lib/utils';
+import { getLinkedInAuthUrl } from "./server-hooks/linkedin-auth.action";
 
 
 export async function signIn(email: string) {
@@ -191,5 +192,19 @@ export async function handleGoogleLogin() {
   } finally {
     // Redirect the user to the Google OAuth URL
     redirect (googleAuthUrl)
+  }
+}
+
+let linkedinAuthUrl: string
+export async function handleLinkedInLogin() {
+  try {
+    // Get the Google OAuth URL
+    linkedinAuthUrl = await getLinkedInAuthUrl();
+  } catch (error) {
+    console.error('Error:', error);
+    // Handle error
+  } finally {
+    // Redirect the user to the Google OAuth URL
+    redirect (linkedinAuthUrl)
   }
 }

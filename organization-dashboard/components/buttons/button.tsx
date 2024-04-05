@@ -1,4 +1,4 @@
-import { handleGoogleLogin } from "@/lib/actions/login.action";
+import { handleGoogleLogin, handleLinkedInLogin } from "@/lib/actions/login.action";
 import Link from "next/link";
 // import { signIn } from "next-auth/react";
 
@@ -39,7 +39,7 @@ export function LinkedinButton() {
   return (
     <button
       className="bg-[#FFFFFF] text-[#0A66C2] flex items-center justify-center py-3 px-10 w-full rounded-lg"
-      // onClick={() => signIn("linkedin", { callbackUrl: 'https://99clqg-3000.csb.app/' })} // Call signIn with the provider ID ("linkedin" in this case)
+      onClick={() => handleLinkedInLogin()} // Call signIn with the provider ID ("linkedin" in this case)
     >
       <img
         src="/assets/icons/linkedin_icon.svg"
