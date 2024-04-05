@@ -2,12 +2,34 @@
 
 import Image from "next/image";
 import Link from "next/link";
-// import { signOut } from 'next-auth/react';
-// import { getSession } from "next-auth/react";
+import { signOut } from "@/lib/actions/login.action";
+import getSession from "@/lib/actions/server-hooks/getsession.action";
 import { usePathname } from "next/navigation";
+import { useState, useEffect } from 'react';
+import { SessionData } from "@/lib/iron-session/session";
+
+export function useSession() {
+  const [session, setSession] = useState<SessionData | null>(null);
+
+  useEffect(() => {
+    async function fetchSession() {
+      try {
+        const sessionData = await getSession();
+        setSession(sessionData);
+      } catch (error) {
+        console.error('Error getting session:', error);
+      }
+    }
+
+    fetchSession();
+  }, []);
+
+  return session;
+}
+
+
 
 // This is the Nav
-
 export function Nav() {
   const pathname = usePathname();
   return (
@@ -97,16 +119,16 @@ export function Nav() {
   );
 }
 
-// const handleSignOut = async () => {
-//   await signOut({ redirect: true, callbackUrl: '/auth/signin' });
-// };
+const handleSignOut = async () => {
+  await signOut();
+};
 
 
 export async function Header() {
   const pathname = usePathname()
-  // const session = await getSession()
-  // const name = session?.user?.name
-  const name = "Tomiwa";
+  // const session = useSession()
+  const name = "session?.firstName";
+
   return (
     <header className="flex items-center gap-4">
       {pathname === "/" && (
@@ -145,7 +167,7 @@ export async function Header() {
           src="/assets/images/user.png"
           width={50}
           height={50}
-          // onClick={handleSignOut}
+          onClick={handleSignOut}
           style={{ cursor: 'pointer' }}
         />
     </header>

@@ -15,7 +15,6 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
     }
     const urlSearchParams = new URLSearchParams(req.url.split('?')[1]);
     const code = urlSearchParams.get('code');
-    console.log(code);
 
   // Check if code is undefined
   if (!code) {
@@ -150,10 +149,11 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
     } catch (error) {
       // Handle any errors that occur during the process
       console.error('Error:', error);
+      return Response.json({ error: 'Internal Server Error', status: 500 });
     }    
     
   } catch (error) {
     // Handle any errors that occur during the authentication process
     console.error('Error:', error);
-    // res.status(500).json({ error: 'Internal Server Error' });
+    return Response.json({ error: 'Internal Server Error', status: 500 });
 }}

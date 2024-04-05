@@ -8,16 +8,14 @@ const RoleSchema = new Schema({
       },
     firstName: {
         type: String,
-        required: [true, 'Firstname is required!'],
     },
     lastName: {
         type: String,
-        required: [true, 'LastName is required!'],
     },
     role: {
         type: String,
         enum: ['admin', 'workRefVeridaqRole', 'memStatusVeridaqRole', 'docRefVeridaqRole', 'stdStatusVeridaqRole'],
-        required: [true, 'ADminsitrative role is required!']
+        required: [true, 'Adminsitrative role is required!']
     },
     loginType: {
         type: String,

@@ -22,12 +22,19 @@ import { useUploadThing } from "@/lib/utils/useUploadthing";
   
 import { NoOutlineButtonBig } from "@/components/shared/buttons";
 import { OnboardingValidation } from "@/lib/validations/onboarding";
+import { useSession } from "@/components/shared/shared";
 
 export default function Onboard(){
+
+    const session = useSession();
 
     const router = useRouter();
     const { startUpload } = useUploadThing("media");
     const [files, setFiles] = useState<File[]>([]);
+
+    if (session?.isOnboarded){
+      router.push("/")
+    }
 
     const form = useForm<z.infer<typeof OnboardingValidation>>({
         resolver: zodResolver(OnboardingValidation),

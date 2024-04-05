@@ -17,7 +17,6 @@ export async function getGoogleAuthUrl() {
 export async function getGoogleAccessToken(code: string) {
   try {
     const { tokens } = await client.getToken(code);
-    console.log('Access token:', tokens.access_token);
     return tokens.id_token;
   } catch (error: any) {
     console.error('Error getting access token:', error.message);
@@ -32,7 +31,6 @@ export async function getGoogleUserInfo(accessToken: string) {
       audience: process.env.GOOGLE_CLIENT_ID,
     });
     const payload = ticket.getPayload();
-    console.log('User info:', payload);
     return payload;
   } catch (error: any) {
     console.error('Error verifying ID token:', error.message);
