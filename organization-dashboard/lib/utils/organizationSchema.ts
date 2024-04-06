@@ -3,8 +3,6 @@ import { Schema, model, models } from 'mongoose';
 const OrganizationSchema = new Schema({
   name: {
     type: String,
-    // unique: [true, 'Organization name already exists!'],
-    // required: [true, 'Organization name is required!'],
   },
   email: {
     type: String,
@@ -17,8 +15,9 @@ const OrganizationSchema = new Schema({
   adminLastName: {
     type: String,
   },
-  street_address: {
+  streetAddress: {
     type: String,
+    default: null,
   },
   city: {
     type: String,
@@ -47,12 +46,11 @@ const OrganizationSchema = new Schema({
   credentialsType: {
     type: String,
     enum: ['nin', 'cacDoc', 'letter'],
-  }
-  // loginType: {
-  //   type: String,
-  //   enum: ['email', 'google', 'linkedin'],
-  //   required: [true, 'The login type is required']
-  // }
+  },
+  registered: {
+    type: Boolean,
+    default: false
+  },
 });
 
 const Organization = models.Organization || model("Organization", OrganizationSchema);

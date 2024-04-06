@@ -14,85 +14,74 @@ import Image from "next/image";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useState, ChangeEvent } from "react";
+import React, { useState, ChangeEvent, useRef } from 'react';
 import { updateUser } from "@/lib/actions/onboarding.action";
-import { isBase64Image } from "@/lib/utils";
-import { useUploadThing } from "@/lib/utils/useUploadthing";
+import { upload } from '@vercel/blob/client';
 
   
 import { NoOutlineButtonBig } from "@/components/shared/buttons";
 import { OnboardingValidation } from "@/lib/validations/onboarding";
-import { useSession } from "@/components/shared/shared";
 
 export default function Onboard(){
 
-    const session = useSession();
-
     const router = useRouter();
-    const { startUpload } = useUploadThing("media");
-    const [files, setFiles] = useState<File[]>([]);
-
-    if (session?.isOnboarded){
-      router.push("/")
-    }
+    const inputFileRef = useRef<HTMLInputElement>(null);
+    const [disable, setDisable] = useState(true)
 
     const form = useForm<z.infer<typeof OnboardingValidation>>({
         resolver: zodResolver(OnboardingValidation),
         defaultValues: {
-          firstName: "",
-          lastName: "",
-          middleName: "",
+          orgName: "",
+          adminFirstName: "",
+          adminLastName: "",
           streetAddress: "",
+          postalCode: "",
           city: "",
           country: "",
           image: "",
         },
       });
-
-      const handleImage = (
+      
+      const handleImage = async (
         e: ChangeEvent<HTMLInputElement>,
         fieldChange: (value: string) => void,
       ) => {
         e.preventDefault();
-    
+        console.log("I touched here");
+      
         const fileReader = new FileReader();
-    
-        if (e.target.files && e.target.files.length > 0) {
-          const file = e.target.files[0];
-          setFiles(Array.from(e.target.files));
-    
-          if (!file.type.includes("image")) return;
-    
-          fileReader.onload = async (event) => {
-            const imageDataUrl = event.target?.result?.toString() || "";
-            fieldChange(imageDataUrl);
-          };
-    
-          fileReader.readAsDataURL(file);
+        if (!inputFileRef.current?.files) {
+          throw new Error('No file selected');
         }
+        
+        const file = inputFileRef.current.files[0];
+        
+        fileReader.onload = async (e) => {
+          const fileData = e.target?.result;
+          if (typeof fileData === 'string') {
+            try {
+              const newBlob = await upload(file.name, file, {
+                access: 'public',
+                handleUploadUrl: '/api/avatar/upload',
+              });
+              
+              // Update the form data with the new blob URL
+              fieldChange(newBlob.url);
+              setDisable(false);
+            } catch (error) {
+              console.error('Error uploading file:', error);
+            }
+          }
+        };
+        fileReader.readAsDataURL(file);
+
       };
 
+
       const onSubmit = async (data: z.infer<typeof OnboardingValidation>) => {
-        const blob = data.image;
-    
-        const hasImageChanged = isBase64Image(blob);
-        if (hasImageChanged) {
-          const imgRes = await startUpload(files);
-    
-          if (imgRes && imgRes[0].url) {
-            data.image = imgRes[0].url;
-          }
-        }
         console.log(data);
-        await updateUser({
-          firstName: data.firstName,
-          lastName: data.lastName,
-          middleName: data.middleName,
-          streetAddress: data.streetAddress,
-          city: data.city,
-          country: data.country,
-          image: data.image,
-        });
+        await updateUser(data);
+        
         router.push("/auth/verify");
       };
 
@@ -108,14 +97,14 @@ export default function Onboard(){
               <div className="flex gap-[6.5rem] space-10 items-center justify-center">
                 <FormField
                   control={form.control}
-                  name="firstName"
+                  name="orgName"
                   render={({ field }) => (
                     <FormItem className="w-full">
                       <FormLabel className="font-medium text-[20px]">
-                        First Name
+                        Organization Name
                       </FormLabel>
                       <FormControl>
-                        <Input placeholder="John" {...field} />
+                        <Input placeholder="Acme Company Ltd" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -123,11 +112,11 @@ export default function Onboard(){
                 />
                 <FormField
                   control={form.control}
-                  name="lastName"
+                  name="adminFirstName"
                   render={({ field }) => (
                     <FormItem className="w-full">
                       <FormLabel className="font-medium text-[20px]">
-                        Password
+                        Admin Firstname
                       </FormLabel>
                       <FormControl>
                         <Input placeholder="Doe" {...field} />
@@ -140,11 +129,11 @@ export default function Onboard(){
               <div className="flex gap-[6.5rem] space-10 items-center justify-center">
                 <FormField
                   control={form.control}
-                  name="middleName"
+                  name="adminLastName"
                   render={({ field }) => (
                     <FormItem className="w-full">
                       <FormLabel className="font-medium text-[20px]">
-                        Other Names
+                        Admin Lastname
                       </FormLabel>
                       <FormControl>
                         <Input placeholder="Floyd" {...field} />
@@ -187,6 +176,23 @@ export default function Onboard(){
                 />
                   <FormField
                   control={form.control}
+                  name="postalCode"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel className="font-medium text-[20px]">
+                        Postal Code
+                      </FormLabel>
+                      <FormControl>
+                        <Input placeholder="25467" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="flex gap-[6.5rem] space-10">
+              <FormField
+                  control={form.control}
                   name="country"
                   render={({ field }) => (
                     <FormItem className="w-full">
@@ -200,8 +206,6 @@ export default function Onboard(){
                     </FormItem>
                   )}
                 />
-              </div>
-              <div className="flex gap-[6.5rem] space-10">
                 <FormField
                   control={form.control}
                   name="image"
@@ -231,6 +235,7 @@ export default function Onboard(){
                         <Input
                           type="file"
                           accept="image/*"
+                          ref={inputFileRef}
                           placeholder="Upload Profile Photo"
                           className="account-form_image-input"
                           onChange={(e) => handleImage(e, field.onChange)}
@@ -241,7 +246,7 @@ export default function Onboard(){
                 />
               </div>
               <div className="text-center">
-                <NoOutlineButtonBig type="submit" name="Save and Continue" />
+                <NoOutlineButtonBig type="submit" name="Save and Continue" disabled={disable} />
               </div>
             </form>
           </Form>
