@@ -1,7 +1,14 @@
-import Verification from "@/components/form/verification/page";
+import { redirect } from "next/navigation";
 
-export default function SignOut() {
-  return (
-    <Verification />
-  );
+import Verification from "@/components/form/verification/verification";
+import getSession from "@/lib/actions/server-hooks/getsession.action";
+
+export default async function SignOut() {
+  const session = await getSession();
+
+  if (session.isVerified) {
+    redirect("/");
+  }
+
+  return <Verification />;
 }

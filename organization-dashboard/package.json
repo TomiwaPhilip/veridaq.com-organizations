@@ -21,6 +21,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "date-fns": "^3.6.0",
+    "g": "^2.0.1",
     "google-auth-library": "^9.7.0",
     "iron-session": "^8.0.1",
     "jose": "^5.2.3",
@@ -38,6 +39,7 @@
     "tailwind-merge": "^2.2.2",
     "tailwindcss-animate": "^1.0.7",
     "uploadthing": "^6.6.0",
+    "vercel": "^33.7.0",
     "zod": "^3.22.4"
   },
   "devDependencies": {

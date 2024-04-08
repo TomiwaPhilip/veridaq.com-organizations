@@ -7,12 +7,11 @@ export default async function Home() {
 
     const session = await getSession();
 
-    const onboarded = session.isOnboarded;
-    console.log(onboarded)
-
-    // if (!onboarded) {
-    //   redirect('/auth/onboarding'); // Use redirect for redirection
-    // } 
+    if (!session.isOnboarded) {
+      redirect('/auth/onboarding'); // Use redirect for redirection
+    } else if (!session.isVerified) {
+      redirect('/auth/verification')
+    }
 
   return (
     <HomePage />

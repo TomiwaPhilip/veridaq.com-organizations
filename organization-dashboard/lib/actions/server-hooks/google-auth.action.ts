@@ -3,7 +3,7 @@ import { OAuth2Client } from 'google-auth-library';
 const client = new OAuth2Client({
   clientId: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-  redirectUri: 'https://legendary-zebra-45v97xp5wr5fjprq-3000.app.github.dev/api/auth/google-auth',
+  redirectUri: 'https://qsf5r9-3000.csb.app/api/auth/google-auth',
 });
 
 export async function getGoogleAuthUrl() {

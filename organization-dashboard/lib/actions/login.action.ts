@@ -20,7 +20,7 @@ export async function signIn(email: string) {
     // Generate token and URL for verification
     const { token, generatedAt, expiresIn } = generateToken();
 
-    const url = `https://legendary-zebra-45v97xp5wr5fjprq-3000.app.github.dev/auth/verify?token=${token}`;
+    const url = `https://qsf5r9-3000.csb.app/auth/verify?token=${token}`;
     
     // Send email with resend.dev
     await sendVerificationRequest({ url: url, email: email })

@@ -72,3 +72,22 @@ export const MembershipReferenceValidation2 = z.object({
     message: "Contact Person Phone number must be at least 1 character.",
   }),
   });
+
+
+  export const MembershipReferenceValidation3 = z.object({
+    firstName: z.string().min(1, {
+      message: "Last Name must be at least 1 character.",
+    }),
+    lastName: z.string().min(1, {
+      message: "Last Name must be at least 1 character.",
+    }),
+    middleName: z.string().optional(), // Allow empty string
+    id: z.string().min(1, {
+      message: "Employee Type must be at least 1 characters.",
+    }),
+    info: z.string().min(1, {
+      message: "Sub Type must be at least 1 character.",
+    }),
+    image: z.string().url().optional(),
+  });
+  

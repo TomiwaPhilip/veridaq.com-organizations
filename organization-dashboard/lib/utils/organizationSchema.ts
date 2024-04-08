@@ -1,4 +1,4 @@
-import { Schema, model, models } from 'mongoose';
+import { Schema, model, models } from "mongoose";
 
 const OrganizationSchema = new Schema({
   name: {
@@ -6,8 +6,8 @@ const OrganizationSchema = new Schema({
   },
   email: {
     type: String,
-    unique: [true, 'Email already exists!'],
-    required: [true, 'Email is required!'],
+    unique: [true, "Email already exists!"],
+    required: [true, "Email is required!"],
   },
   adminFirstName: {
     type: String,
@@ -45,14 +45,16 @@ const OrganizationSchema = new Schema({
   },
   credentialsType: {
     type: String,
-    enum: ['nin', 'cacDoc', 'letter'],
+    enum: ["nin", "cacDoc", "letter"],
   },
   registered: {
-    type: Boolean,
-    default: false
+    type: String,
+    enum: ["true", "false"],
+    default: "false",
   },
 });
 
-const Organization = models.Organization || model("Organization", OrganizationSchema);
+const Organization =
+  models.Organization || model("Organization", OrganizationSchema);
 
 export default Organization;
