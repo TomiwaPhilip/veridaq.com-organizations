@@ -8,15 +8,16 @@ import DocumentVerification from "../form/documentVerification/documentVerificat
 
 interface StepperFormProps {
   id: string;
+  docId?: string | null;
 }
 
-const StepperForm: React.FC<StepperFormProps> = ({ id }) => {
+const StepperForm: React.FC<StepperFormProps> = ({ id, docId }) => {
   let content;
   let title;
 
   switch (id) {
     case "1":
-      content = <WorkReference />;
+      content = <WorkReference docId={docId} />;
       title = "Request Work Reference Veridaq"; // Change the title based on the id
       break;
     case "2":

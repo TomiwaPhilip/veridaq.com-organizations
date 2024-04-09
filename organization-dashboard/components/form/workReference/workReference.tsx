@@ -32,10 +32,14 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { createWorkReferenceRequest } from "@/lib/actions/request.action";
-import { WorkReferenceValidation } from "@/lib/validations/workreference";
+import { WorkReferenceValidation3 } from "@/lib/validations/workreference";
 import { SuccessMessage, ErrorMessage } from "@/components/shared/shared";
 
-const WorkReference: React.FC = () => {
+interface WorkReferenceProps {
+  docId?: string | null;
+}
+
+const WorkReference: React.FC<WorkReferenceProps> = ({ docId }) => {
   const [step, setStep] = useState(1);
   const [requestResult, setRequestResult] = useState<boolean | null>(null);
 
@@ -47,31 +51,39 @@ const WorkReference: React.FC = () => {
     setStep(step - 1);
   };
 
-  const form = useForm<z.infer<typeof WorkReferenceValidation>>({
-    resolver: zodResolver(WorkReferenceValidation),
-    defaultValues: {
-      orgId: "",
-      firstName: "",
-      lastName: "",
-      middleName: "",
-      employeeType: "",
-      subType: "",
-      staffId: "",
-      designation: "",
-      department: "",
-      notableAchievement: "",
-      jobFunction: "",
-      personalitySummary: "",
-    },
-  });
+  let form: any;
+
+  console.log(docId);
+
+  if (docId !== null) {
+    form = useForm<z.infer<typeof WorkReferenceValidation3>>({
+      resolver: zodResolver(WorkReferenceValidation3),
+      defaultValues: {
+        firstName: "",
+        lastName: "",
+        middleName: "",
+        employeeType: "",
+        subType: "",
+        staffId: "",
+        designation: "",
+        department: "",
+        notableAchievement: "",
+        jobFunction: "",
+        personalitySummary: "",
+      },
+    });
+  } else {
+    form = useForm<z.infer<typeof WorkReferenceValidation3>>({
+      resolver: zodResolver(WorkReferenceValidation3),
+    });
+  }
 
   console.log(form.formState.errors);
 
-  const onSubmit = async (data: z.infer<typeof WorkReferenceValidation>) => {
+  const onSubmit = async (data: z.infer<typeof WorkReferenceValidation3>) => {
     console.log("I want to submit");
     try {
       const create = await createWorkReferenceRequest({
-        orgId: data.orgId,
         firstName: data.firstName,
         lastName: data.lastName,
         middleName: data.middleName,

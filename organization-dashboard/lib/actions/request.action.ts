@@ -3,17 +3,12 @@
 import getSession from "@/lib/actions/server-hooks/getsession.action";
 import connectToDB from "../model/database";
 import WorkReference from "../utils/workreference";
-import WorkReferenceAdmin from "../utils/workreferenceadmin";
 import StudentshipStatus from "../utils/studentshipstatus";
-import StudentshipStatusAdmin from "../utils/studentshipstatusadmin";
-import MembershipReferenceAdmin from "../utils/membershipReferenceAdmin";
 import DocumentVerification from "../utils/documentVerification";
-import DocumentVerificationAdmin from "../utils/documentVerificationAdmin";
 import User from "../utils/user";
 import MembershipReference from "../utils/membershipReference";
 
 interface Params {
-  orgId: string;
   firstName: string;
   lastName: string;
   middleName?: string; // Optional middleName field
@@ -30,7 +25,6 @@ interface Params {
 }
 
 export async function createWorkReferenceRequest({
-  orgId,
   firstName,
   lastName,
   middleName,
@@ -62,6 +56,8 @@ export async function createWorkReferenceRequest({
       throw new Error("User not found");
     }
 
+    const orgId = session.orgId;
+
     // Create a new WorkReference document
     const workReference = new WorkReference({
       orgId,
@@ -79,66 +75,7 @@ export async function createWorkReferenceRequest({
       jobFunction, // Changed from 'function' to 'jobFunction'
       personalitySummary,
       user: user._id,
-    });
-
-    // Save the WorkReference document to the database
-    await workReference.save();
-    return true;
-  } catch (error: any) {
-    throw new Error(`Failed to save WorkReference request: ${error.message}`);
-  }
-}
-
-interface Params2 {
-  firstName: string;
-  lastName: string;
-  middleName?: string; // Optional middleName field
-  employeeType: string;
-  subType: string;
-  staffId: string;
-  designation: string;
-  workStartDate: Date;
-  workEndDate?: Date; // Nullable workEndDate field
-  department: string;
-  notableAchievement?: string; // Optional notableAchievement field
-  jobFunction: string; // Renamed from 'function' to 'jobFunction'
-  personalitySummary?: string; // Optional personalitySummary field
-  orgName: string;
-  orgAddress: string;
-  orgPostalCode: string;
-  orgCountry: string;
-  orgEmail: string;
-  orgPhone: string;
-  contactName: string;
-  contactAddress: string;
-  contactPostalCode: string;
-  contactCountry: string;
-  contactEmail: string;
-  contactPhone: string;
-}
-
-export async function createWorkReferenceRequestForAdmin(params: Params2) {
-  try {
-    const session = await getSession();
-
-    if (!session) {
-      throw new Error("Unauthorized");
-    }
-
-    // Connect to the database
-    connectToDB();
-
-    // Find the user in the User collection by email
-    const user = await User.findOne({ email: session.email });
-
-    if (!user) {
-      throw new Error("User not found");
-    }
-
-    // Create a new WorkReference document
-    const workReference = new WorkReferenceAdmin({
-      ...params,
-      user: user._id,
+      issued: true,
     });
 
     // Save the WorkReference document to the database
@@ -210,90 +147,6 @@ export async function createStudentshipStatus(params: StudentshipParams) {
   }
 }
 
-interface StudentshipParamsAdmin {
-  firstName: string;
-  lastName: string;
-  middleName?: string; // Optional middleName field
-  currentLevel: string;
-  courseOfStudy: string;
-  studentId: string;
-  info?: string; // Optional info field
-  faculty: string;
-  entryYear: Date;
-  exitYear?: Date; // Optional exitYear field
-  image: string;
-  orgName: string;
-  orgAddress: string;
-  orgPostalCode: string;
-  orgCountry: string;
-  orgEmail: string;
-  orgPhone: string;
-  contactName: string;
-  contactAddress: string;
-  contactPostalCode: string;
-  contactCountry: string;
-  contactEmail: string;
-  contactPhone: string;
-}
-
-export async function createStudentshipStatusForAdmin(
-  params: StudentshipParamsAdmin,
-) {
-  try {
-    const session = await getSession();
-
-    if (!session) {
-      throw new Error("Unauthorized");
-    }
-
-    // Connect to the database
-    connectToDB();
-
-    // Find the user in the User collection by email
-    const user = await User.findOne({ email: session.email });
-
-    if (!user) {
-      throw new Error("User not found");
-    }
-
-    // Create a new StudentshipStatus2 document
-    const studentshipStatusAdmin = new StudentshipStatusAdmin({
-      firstName: params.firstName,
-      lastName: params.lastName,
-      middleName: params.middleName,
-      currentLevel: params.currentLevel,
-      courseOfStudy: params.courseOfStudy,
-      studentId: params.studentId,
-      info: params.info,
-      faculty: params.faculty,
-      entryYear: params.entryYear,
-      exitYear: params.exitYear,
-      image: params.image,
-      orgName: params.orgName,
-      orgAddress: params.orgAddress,
-      orgPostalCode: params.orgPostalCode,
-      orgCountry: params.orgCountry,
-      orgEmail: params.orgEmail,
-      orgPhone: params.orgPhone,
-      contactName: params.contactName,
-      contactAddress: params.contactAddress,
-      contactPostalCode: params.contactPostalCode,
-      contactCountry: params.contactCountry,
-      contactEmail: params.contactEmail,
-      contactPhone: params.contactPhone,
-      user: user._id,
-    });
-
-    // Save the StudentshipStatus2 document to the database
-    await studentshipStatusAdmin.save();
-    return true;
-  } catch (error: any) {
-    throw new Error(
-      `Failed to save StudentshipStatusAdmin request: ${error.message}`,
-    );
-  }
-}
-
 interface MembershipParams {
   orgId: string;
   firstName: string;
@@ -341,82 +194,6 @@ export async function createMembershipReference(params: MembershipParams) {
   } catch (error: any) {
     throw new Error(
       `Failed to save Membership Reference request: ${error.message}`,
-    );
-  }
-}
-
-// Define the interface for the parameters
-interface MembershipParamsAdmin {
-  firstName: string;
-  lastName: string;
-  middleName?: string;
-  id: string;
-  info: string;
-  image?: string;
-  orgName: string;
-  orgAddress: string;
-  orgPostalCode: string;
-  orgCountry: string;
-  orgEmail: string;
-  orgPhone: string;
-  contactName: string;
-  contactAddress: string;
-  contactPostalCode: string;
-  contactCountry: string;
-  contactEmail: string;
-  contactPhone: string;
-}
-
-// Define the function to save membership reference data to the database
-export async function createMembershipReferenceForAdmin(
-  params: MembershipParamsAdmin,
-) {
-  try {
-    const session = await getSession();
-
-    if (!session) {
-      throw new Error("Unauthorized");
-    }
-
-    // Connect to the database
-    connectToDB();
-
-    // Find the user in the User collection by email
-    const user = await User.findOne({ email: session.email });
-
-    if (!user) {
-      throw new Error("User not found");
-    }
-
-    // Create a new MembershipReferenceAdmin document
-    const membershipReferenceAdmin = new MembershipReferenceAdmin({
-      firstName: params.firstName,
-      lastName: params.lastName,
-      middleName: params.middleName,
-      id: params.id,
-      info: params.info,
-      image: params.image,
-      orgName: params.orgName,
-      orgAddress: params.orgAddress,
-      orgPostalCode: params.orgPostalCode,
-      orgCountry: params.orgCountry,
-      orgEmail: params.orgEmail,
-      orgPhone: params.orgPhone,
-      contactName: params.contactName,
-      contactAddress: params.contactAddress,
-      contactPostalCode: params.contactPostalCode,
-      contactCountry: params.contactCountry,
-      contactEmail: params.contactEmail,
-      contactPhone: params.contactPhone,
-      user: user._id,
-    });
-
-    // Save the MembershipReferenceAdmin document to the database
-    await membershipReferenceAdmin.save();
-    return true;
-  } catch (error: any) {
-    throw new Error(
-      `Failed to save MembershipReference request: ${error.message}`,
     );
   }
 }
@@ -472,86 +249,6 @@ export async function createDocumentVerificationRequest(
   } catch (error: any) {
     throw new Error(
       `Failed to save Document Verification request: ${error.message}`,
-    );
-  }
-}
-
-// Define the interface for MembershipParams
-interface DocumentAdminParams {
-  firstName: string;
-  lastName: string;
-  middleName?: string;
-  documentType: string;
-  documentName: string;
-  id: string;
-  info: string;
-  image: string;
-  orgName: string;
-  orgAddress: string;
-  orgPostalCode: string;
-  orgCountry: string;
-  orgEmail: string;
-  orgPhone: string;
-  contactName: string;
-  contactAddress: string;
-  contactPostalCode: string;
-  contactCountry: string;
-  contactEmail: string;
-  contactPhone: string;
-}
-
-// Define the createDocumentVerificationRequestForAdmin function
-export async function createDocumentVerificationRequestForAdmin(
-  params: DocumentAdminParams,
-) {
-  try {
-    const session = await getSession();
-
-    if (!session) {
-      throw new Error("Unauthorized");
-    }
-
-    // Connect to the database
-    connectToDB();
-
-    // Find the user in the User collection by email
-    const user = await User.findOne({ email: session.email });
-
-    if (!user) {
-      throw new Error("User not found");
-    }
-
-    // Create a new Document Verification Admin document
-    const documentVerificationAdmin = new DocumentVerificationAdmin({
-      firstName: params.firstName,
-      lastName: params.lastName,
-      middleName: params.middleName,
-      documentType: params.documentType,
-      documentName: params.documentName,
-      id: params.id,
-      info: params.info,
-      image: params.image,
-      orgName: params.orgName,
-      orgAddress: params.orgAddress,
-      orgPostalCode: params.orgPostalCode,
-      orgCountry: params.orgCountry,
-      orgEmail: params.orgEmail,
-      orgPhone: params.orgPhone,
-      contactName: params.contactName,
-      contactAddress: params.contactAddress,
-      contactPostalCode: params.contactPostalCode,
-      contactCountry: params.contactCountry,
-      contactEmail: params.contactEmail,
-      contactPhone: params.contactPhone,
-      user: user._id,
-    });
-
-    // Save the Document Verification Admin document to the database
-    await documentVerificationAdmin.save();
-    return true;
-  } catch (error: any) {
-    throw new Error(
-      `Failed to save Document Verification Admin request: ${error.message}`,
     );
   }
 }
