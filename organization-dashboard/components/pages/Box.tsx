@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
+import { RiLoader4Line } from "react-icons/ri";
 
 import ModalWithStepper from "@/components/shared/Modal";
 import {
@@ -30,6 +31,7 @@ export default function Box() {
   const [docVerificationDoc, setDocVerificationDoc] = useState<Documents[]>([]);
   const [studentStatusDoc, setStudentStatusDoc] = useState<Documents[]>([]);
   const session = useSession();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -45,6 +47,7 @@ export default function Box() {
 
         const doc4 = await getStudentshipStatus();
         if (doc4) setStudentStatusDoc(doc4);
+        setIsLoading(false);
       } catch (error) {
         console.error("Error fetching documents:", error);
       }
@@ -90,66 +93,76 @@ export default function Box() {
                 <SearchBar2 />
               </div>
               <div className="mt-10 overflow-auto">
-                {isAdmin ||
-                workReferenceDoc.length > 0 ||
-                memberReferenceDoc.length > 0 ||
-                docVerificationDoc.length > 0 ||
-                studentStatusDoc.length > 0 ? (
+                {!isLoading ? (
                   <>
-                    {workReferenceDoc.map((doc: Documents) => (
-                      <VeridaqDocument
-                        key={doc.DocId}
-                        DocDetails={doc.DocDetails}
-                        DocDate={doc.DocDate}
-                        docId={doc.DocId}
-                        id="1"
-                        onClick={handleOpenModal}
-                      />
-                    ))}
-                    {memberReferenceDoc.map((doc: Documents) => (
-                      <VeridaqDocument
-                        key={doc.DocId}
-                        DocDetails={doc.DocDetails}
-                        DocDate={doc.DocDate}
-                        docId={doc.DocId}
-                        id="3"
-                        onClick={handleOpenModal}
-                      />
-                    ))}
-                    {docVerificationDoc.map((doc: Documents) => (
-                      <VeridaqDocument
-                        key={doc.DocId}
-                        DocDetails={doc.DocDetails}
-                        DocDate={doc.DocDate}
-                        docId={doc.DocId}
-                        id="4"
-                        onClick={handleOpenModal}
-                      />
-                    ))}
-                    {studentStatusDoc.map((doc: Documents) => (
-                      <VeridaqDocument
-                        key={doc.DocId}
-                        DocDetails={doc.DocDetails}
-                        DocDate={doc.DocDate}
-                        docId={doc.DocId}
-                        id="2"
-                        onClick={handleOpenModal}
-                      />
-                    ))}
+                    {isAdmin ||
+                    workReferenceDoc.length > 0 ||
+                    memberReferenceDoc.length > 0 ||
+                    docVerificationDoc.length > 0 ||
+                    studentStatusDoc.length > 0 ? (
+                      <>
+                        {workReferenceDoc.map((doc: Documents) => (
+                          <VeridaqDocument
+                            key={doc.DocId}
+                            DocDetails={doc.DocDetails}
+                            DocDate={doc.DocDate}
+                            docId={doc.DocId}
+                            id="1"
+                            onClick={handleOpenModal}
+                          />
+                        ))}
+                        {memberReferenceDoc.map((doc: Documents) => (
+                          <VeridaqDocument
+                            key={doc.DocId}
+                            DocDetails={doc.DocDetails}
+                            DocDate={doc.DocDate}
+                            docId={doc.DocId}
+                            id="3"
+                            onClick={handleOpenModal}
+                          />
+                        ))}
+                        {docVerificationDoc.map((doc: Documents) => (
+                          <VeridaqDocument
+                            key={doc.DocId}
+                            DocDetails={doc.DocDetails}
+                            DocDate={doc.DocDate}
+                            docId={doc.DocId}
+                            id="4"
+                            onClick={handleOpenModal}
+                          />
+                        ))}
+                        {studentStatusDoc.map((doc: Documents) => (
+                          <VeridaqDocument
+                            key={doc.DocId}
+                            DocDetails={doc.DocDetails}
+                            DocDate={doc.DocDate}
+                            docId={doc.DocId}
+                            id="2"
+                            onClick={handleOpenModal}
+                          />
+                        ))}
+                      </>
+                    ) : (
+                      <div className="flex flex-col items-center justify-center h-full">
+                        <Image
+                          src="/assets/images/error.png"
+                          alt="No Document Found"
+                          width={200}
+                          height={200}
+                        />
+                        <p className="text-center mt-2">
+                          You have no Documents yet!
+                        </p>
+                      </div>
+                    )}
                   </>
                 ) : (
-                  <div className="flex flex-col items-center justify-center h-full">
-                    <Image
-                      src="/assets/images/error.png"
-                      alt="No Document Found"
-                      width={200}
-                      height={200}
-                    />
-                    <p className="text-center mt-2">
-                      You have no Documents yet!
-                    </p>
+                  <div className="flex items-center justify-center h-full">
+                    <RiLoader4Line className="animate-spin text-2xl mb-4" />
+                    <p>Loading...</p>
                   </div>
                 )}
+
                 {!isAdmin && workRefVeridaqRole && (
                   <>
                     {workReferenceDoc.length > 0 ? (

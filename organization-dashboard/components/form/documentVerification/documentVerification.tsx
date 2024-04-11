@@ -27,12 +27,14 @@ import {
   createOrUpdateDocumentVerificationRequest,
   getDocVerificationById,
 } from "@/lib/actions/request.action";
-import {
-  DocumentVerificationValidation3,
-} from "@/lib/validations/documentverification";
+import { DocumentVerificationValidation3 } from "@/lib/validations/documentverification";
 import { SuccessMessage, ErrorMessage } from "@/components/shared/shared";
 
-const DocumentVerification: React.FC = (  ) => {
+interface docVerificationProps {
+  docId?: string | null;
+}
+
+const DocumentVerification: React.FC<docVerificationProps> = ({ docId }) => {
   const [step, setStep] = useState(1);
   const [requestResult, setRequestResult] = useState<boolean | null>(null);
   const inputFileRef = useRef<HTMLInputElement>(null);
@@ -55,7 +57,7 @@ const DocumentVerification: React.FC = (  ) => {
     const fetchDocVerificationDoc = async () => {
       if (!docId) return;
       try {
-        const doc = await getDocVerificationDocById(docId);
+        const doc = await getDocVerificationById(docId);
         console.log("Fetched document:", doc); // Log fetched document
         // Set default values for form fields if available
         if (doc) {
@@ -67,7 +69,7 @@ const DocumentVerification: React.FC = (  ) => {
             documentName, // Assuming info in Membershipdata corresponds to documentName
             id,
             info,
-            image, 
+            image,
           } = doc;
           form.reset({
             firstName,
@@ -77,7 +79,7 @@ const DocumentVerification: React.FC = (  ) => {
             documentName, // Assuming info in Membershipdata corresponds to documentName
             id,
             info,
-            image, 
+            image,
           });
         }
       } catch (error) {
@@ -123,12 +125,12 @@ const DocumentVerification: React.FC = (  ) => {
   };
 
   const onSubmit = async (
-    data: z.infer<typeof DocumentVerificationValidation>,
+    data: z.infer<typeof DocumentVerificationValidation3>,
   ) => {
     console.log("I want to submit");
 
     try {
-      const create = await createDocumentVerificationRequest({
+      const create = await createOrUpdateDocumentVerificationRequest({
         firstName: data.firstName,
         lastName: data.lastName,
         middleName: data.middleName,
@@ -136,7 +138,7 @@ const DocumentVerification: React.FC = (  ) => {
         documentName: data.info, // Assuming info in Membershipdata corresponds to documentName
         id: data.id,
         info: data.info,
-        image: data.image, 
+        image: data.image,
         _id: docId as string,
       });
       setRequestResult(create);
