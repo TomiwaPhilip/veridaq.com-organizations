@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, ChangeEvent, useRef } from "react";
+import React, { useState, ChangeEvent, useRef, useEffect } from "react";
 import {
   Form,
   FormControl,
@@ -31,21 +31,20 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import Image from "next/image";
-import { type PutBlobResult } from "@vercel/blob";
 import { upload } from "@vercel/blob/client";
-import { isBase64Image } from "@/lib/utils";
 
 import {
-  createStudentshipStatus,
-  createStudentshipStatusForAdmin,
+  createOrUpdateStudentshipStatus,
+  getStudentshipStatusById,
 } from "@/lib/actions/request.action";
-import {
-  StudentshipStatusValidation,
-  StudentshipStatusValidation2,
-} from "@/lib/validations/studentshipstatus";
+import { StudentshipStatusValidation3 } from "@/lib/validations/studentshipstatus";
 import { SuccessMessage, ErrorMessage } from "@/components/shared/shared";
 
-const StudentshipStatus: React.FC = () => {
+interface studentshipStatusProps {
+  docId?: string | null;
+}
+
+const StudentshipStatus: React.FC<studentshipStatusProps> = ({ docId }) => {
   const [step, setStep] = useState(1);
   const [requestResult, setRequestResult] = useState<boolean | null>(null);
   const inputFileRef = useRef<HTMLInputElement>(null);
@@ -58,11 +57,55 @@ const StudentshipStatus: React.FC = () => {
     setStep(step - 1);
   };
 
-  const form = useForm<z.infer<typeof StudentshipStatusValidation>>({
-    resolver: zodResolver(StudentshipStatusValidation),
+  const form = useForm<z.infer<typeof StudentshipStatusValidation3>>({
+    resolver: zodResolver(StudentshipStatusValidation3),
   });
 
   console.log(form.formState.errors);
+
+  useEffect(() => {
+    const fetchStudentshipStatusDoc = async () => {
+      if (!docId) return;
+      try {
+        const doc = await getStudentshipStatusById(docId);
+        console.log("Fetched document:", doc); // Log fetched document
+        // Set default values for form fields if available
+        if (doc) {
+          const {
+            firstName,
+            lastName,
+            middleName,
+            courseOfStudy,
+            currentLevel,
+            studentId,
+            faculty,
+            entryYear,
+            image,
+            exitYear,
+            info,
+          } = doc;
+          form.reset({
+            firstName,
+            lastName,
+            middleName,
+            courseOfStudy,
+            currentLevel,
+            studentId,
+            faculty,
+            entryYear,
+            image,
+            exitYear,
+            info,
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching organizations:", error);
+        // Handle error state if needed
+      }
+    };
+
+    fetchStudentshipStatusDoc();
+  }, [docId]);
 
   const handleImage = async (
     e: ChangeEvent<HTMLInputElement>,
@@ -98,12 +141,25 @@ const StudentshipStatus: React.FC = () => {
   };
 
   const onSubmit = async (
-    data: z.infer<typeof StudentshipStatusValidation>,
+    data: z.infer<typeof StudentshipStatusValidation3>,
   ) => {
     console.log("I want to submit");
 
     try {
-      const create = await createStudentshipStatus(data);
+      const create = await createOrUpdateStudentshipStatus({
+        firstName: data.firstName,
+        lastName: data.lastName,
+        middleName: data.middleName,
+        currentLevel: data.currentLevel,
+        courseOfStudy: data.courseOfStudy,
+        studentId: data.studentId,
+        info: data.info,
+        faculty: data.faculty,
+        entryYear: data.entryYear,
+        exitYear: data.exitYear,
+        image: data.image,
+        id: docId as string,
+      });
       setRequestResult(create);
       if (create) {
         handleNextStep();

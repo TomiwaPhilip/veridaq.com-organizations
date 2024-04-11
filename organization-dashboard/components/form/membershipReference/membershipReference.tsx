@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, ChangeEvent, useRef } from "react";
+import React, { useState, ChangeEvent, useRef, useEffect } from "react";
 import {
   Form,
   FormControl,
@@ -17,16 +17,17 @@ import Image from "next/image";
 import { upload } from "@vercel/blob/client";
 
 import {
-  createMembershipReference,
-  createMembershipReferenceForAdmin,
+  createOrUpdateMembershipReference,
+  getMemberReferenceById,
 } from "@/lib/actions/request.action";
-import {
-  MembershipReferenceValidation,
-  MembershipReferenceValidation2,
-} from "@/lib/validations/membershipreference";
+import { MembershipReferenceValidation3 } from "@/lib/validations/membershipreference";
 import { SuccessMessage, ErrorMessage } from "@/components/shared/shared";
 
-const MembershipReference: React.FC = () => {
+interface membershipReferenceProps {
+  docId?: string | null;
+}
+
+const MembershipReference: React.FC<membershipReferenceProps> = ({ docId }) => {
   const [step, setStep] = useState(1);
   const [requestResult, setRequestResult] = useState<boolean | null>(null);
   const inputFileRef = useRef<HTMLInputElement>(null);
@@ -39,11 +40,38 @@ const MembershipReference: React.FC = () => {
     setStep(step - 1);
   };
 
-  const form = useForm<z.infer<typeof MembershipReferenceValidation>>({
-    resolver: zodResolver(MembershipReferenceValidation),
+  const form = useForm<z.infer<typeof MembershipReferenceValidation3>>({
+    resolver: zodResolver(MembershipReferenceValidation3),
   });
 
   console.log(form.formState.errors);
+
+  useEffect(() => {
+    const fetchMemeberReferenceDoc = async () => {
+      if (!docId) return;
+      try {
+        const doc = await getMemberReferenceById(docId);
+        console.log("Fetched document:", doc); // Log fetched document
+        // Set default values for form fields if available
+        if (doc) {
+          const { firstName, lastName, middleName, id, info, image } = doc;
+          form.reset({
+            firstName,
+            lastName,
+            middleName,
+            id,
+            info,
+            image,
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching organizations:", error);
+        // Handle error state if needed
+      }
+    };
+
+    fetchMemeberReferenceDoc();
+  }, [docId]);
 
   const handleImage = async (
     e: ChangeEvent<HTMLInputElement>,
@@ -79,12 +107,20 @@ const MembershipReference: React.FC = () => {
   };
 
   const onSubmit = async (
-    data: z.infer<typeof MembershipReferenceValidation>,
+    data: z.infer<typeof MembershipReferenceValidation3>,
   ) => {
     console.log("I want to submit");
 
     try {
-      const create = await createMembershipReference(data);
+      const create = await createOrUpdateMembershipReference({
+        firstName: data.firstName,
+        lastName: data.lastName,
+        middleName: data.middleName,
+        id: data.id,
+        info: data.info,
+        image: data.image,
+        _id: docId as string,
+      });
       setRequestResult(create);
       if (create) {
         handleNextStep();

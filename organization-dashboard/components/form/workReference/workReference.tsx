@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Form,
   FormControl,
@@ -31,7 +31,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { createWorkReferenceRequest } from "@/lib/actions/request.action";
+import {
+  createOrUpdateWorkReferenceRequest,
+  getWorkReferenceById,
+} from "@/lib/actions/request.action";
 import { WorkReferenceValidation3 } from "@/lib/validations/workreference";
 import { SuccessMessage, ErrorMessage } from "@/components/shared/shared";
 
@@ -51,39 +54,64 @@ const WorkReference: React.FC<WorkReferenceProps> = ({ docId }) => {
     setStep(step - 1);
   };
 
-  let form: any;
-
-  console.log(docId);
-
-  if (docId !== null) {
-    form = useForm<z.infer<typeof WorkReferenceValidation3>>({
-      resolver: zodResolver(WorkReferenceValidation3),
-      defaultValues: {
-        firstName: "",
-        lastName: "",
-        middleName: "",
-        employeeType: "",
-        subType: "",
-        staffId: "",
-        designation: "",
-        department: "",
-        notableAchievement: "",
-        jobFunction: "",
-        personalitySummary: "",
-      },
-    });
-  } else {
-    form = useForm<z.infer<typeof WorkReferenceValidation3>>({
-      resolver: zodResolver(WorkReferenceValidation3),
-    });
-  }
+  const form = useForm<z.infer<typeof WorkReferenceValidation3>>({
+    resolver: zodResolver(WorkReferenceValidation3),
+  });
 
   console.log(form.formState.errors);
+
+  useEffect(() => {
+    const fetchWorkReferenceDoc = async () => {
+      if (!docId) return;
+      try {
+        const doc = await getWorkReferenceById(docId);
+        console.log("Fetched document:", doc); // Log fetched document
+        // Set default values for form fields if available
+        if (doc) {
+          const {
+            firstName,
+            lastName,
+            middleName,
+            employeeType,
+            subType,
+            staffId,
+            designation,
+            department,
+            notableAchievement,
+            jobFunction,
+            personalitySummary,
+            workStartDate,
+            workEndDate,
+          } = doc;
+          form.reset({
+            firstName,
+            lastName,
+            middleName,
+            employeeType,
+            subType,
+            staffId,
+            designation,
+            department,
+            notableAchievement,
+            jobFunction,
+            personalitySummary,
+            workStartDate,
+            workEndDate,
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching organizations:", error);
+        // Handle error state if needed
+      }
+    };
+
+    fetchWorkReferenceDoc();
+  }, [docId]);
 
   const onSubmit = async (data: z.infer<typeof WorkReferenceValidation3>) => {
     console.log("I want to submit");
     try {
-      const create = await createWorkReferenceRequest({
+      const create = await createOrUpdateWorkReferenceRequest({
         firstName: data.firstName,
         lastName: data.lastName,
         middleName: data.middleName,
@@ -97,6 +125,7 @@ const WorkReference: React.FC<WorkReferenceProps> = ({ docId }) => {
         notableAchievement: data.notableAchievement,
         jobFunction: data.jobFunction,
         personalitySummary: data.personalitySummary,
+        id: docId as string,
       });
       setRequestResult(create);
       if (create) {
@@ -429,7 +458,7 @@ const WorkReference: React.FC<WorkReferenceProps> = ({ docId }) => {
                       type="submit"
                       className="bg-[#38313A] px-7 py-5 rounded-md text-white"
                     >
-                      Submit
+                      Generate Veridaq
                     </button>
                   </div>
                 </div>

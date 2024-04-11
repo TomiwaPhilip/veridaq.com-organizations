@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { signOut } from "@/lib/actions/login.action";
-import getSession from "@/lib/actions/server-hooks/getsession.action";
+import { getSession2 } from "@/lib/actions/server-hooks/getsession.action";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { SessionData } from "@/lib/iron-session/session";
@@ -14,7 +14,7 @@ export function useSession() {
   useEffect(() => {
     async function fetchSession() {
       try {
-        const sessionData = await getSession();
+        const sessionData = await getSession2();
         setSession(sessionData);
       } catch (error) {
         console.error("Error getting session:", error);
@@ -131,10 +131,10 @@ const handleSignOut = async () => {
   await signOut();
 };
 
-export async function Header() {
+export function Header() {
   const pathname = usePathname();
-  // const session = useSession()
-  const name = "session?.firstName";
+  const session = useSession();
+  const name = session?.firstName;
 
   return (
     <header className="flex items-center gap-4">
@@ -171,7 +171,8 @@ export async function Header() {
       />
       <Image
         alt="user"
-        src="/assets/images/user.png"
+        src={session?.image as string}
+        className="rounded-full normal-border"
         width={50}
         height={50}
         onClick={handleSignOut}
@@ -530,7 +531,7 @@ export function VeridaqDocument({
 
   return (
     <div
-      className="flex items-start gap-3 hover:cursor-pointer"
+      className="flex items-start gap-3 pt-4 pb-4 hover:cursor-pointer"
       onClick={handleClick}
     >
       <div className="">

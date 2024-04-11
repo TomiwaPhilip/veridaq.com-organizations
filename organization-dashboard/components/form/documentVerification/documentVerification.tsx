@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, ChangeEvent, useRef } from "react";
+import React, { useState, ChangeEvent, useRef, useEffect } from "react";
 import {
   Form,
   FormControl,
@@ -24,16 +24,15 @@ import Image from "next/image";
 import { upload } from "@vercel/blob/client";
 
 import {
-  createDocumentVerificationRequest,
-  createDocumentVerificationRequestForAdmin,
+  createOrUpdateDocumentVerificationRequest,
+  getDocVerificationById,
 } from "@/lib/actions/request.action";
 import {
-  DocumentVerificationValidation,
-  DocumentVerificationValidation2,
+  DocumentVerificationValidation3,
 } from "@/lib/validations/documentverification";
 import { SuccessMessage, ErrorMessage } from "@/components/shared/shared";
 
-const DocumentVerification: React.FC = () => {
+const DocumentVerification: React.FC = (  ) => {
   const [step, setStep] = useState(1);
   const [requestResult, setRequestResult] = useState<boolean | null>(null);
   const inputFileRef = useRef<HTMLInputElement>(null);
@@ -46,11 +45,49 @@ const DocumentVerification: React.FC = () => {
     setStep(step - 1);
   };
 
-  const form = useForm<z.infer<typeof DocumentVerificationValidation>>({
-    resolver: zodResolver(DocumentVerificationValidation),
+  const form = useForm<z.infer<typeof DocumentVerificationValidation3>>({
+    resolver: zodResolver(DocumentVerificationValidation3),
   });
 
   console.log(form.formState.errors);
+
+  useEffect(() => {
+    const fetchDocVerificationDoc = async () => {
+      if (!docId) return;
+      try {
+        const doc = await getDocVerificationDocById(docId);
+        console.log("Fetched document:", doc); // Log fetched document
+        // Set default values for form fields if available
+        if (doc) {
+          const {
+            firstName,
+            lastName,
+            middleName,
+            documentType, // Assuming id in Membershipdata corresponds to documentType
+            documentName, // Assuming info in Membershipdata corresponds to documentName
+            id,
+            info,
+            image, 
+          } = doc;
+          form.reset({
+            firstName,
+            lastName,
+            middleName,
+            documentType, // Assuming id in Membershipdata corresponds to documentType
+            documentName, // Assuming info in Membershipdata corresponds to documentName
+            id,
+            info,
+            image, 
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching organizations:", error);
+        // Handle error state if needed
+      }
+    };
+
+    fetchDocVerificationDoc();
+  }, [docId]);
 
   const handleImage = async (
     e: ChangeEvent<HTMLInputElement>,
@@ -91,7 +128,17 @@ const DocumentVerification: React.FC = () => {
     console.log("I want to submit");
 
     try {
-      const create = await createDocumentVerificationRequest(data);
+      const create = await createDocumentVerificationRequest({
+        firstName: data.firstName,
+        lastName: data.lastName,
+        middleName: data.middleName,
+        documentType: data.id, // Assuming id in Membershipdata corresponds to documentType
+        documentName: data.info, // Assuming info in Membershipdata corresponds to documentName
+        id: data.id,
+        info: data.info,
+        image: data.image, 
+        _id: docId as string,
+      });
       setRequestResult(create);
       if (create) {
         handleNextStep();

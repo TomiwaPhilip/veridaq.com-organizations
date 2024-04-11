@@ -6,46 +6,44 @@ import { getGoogleAuthUrl } from "@/lib/actions/server-hooks/google-auth.action"
 import VerificationToken from "../utils/emailTokenSchema";
 import { generateToken, sendVerificationRequest, verifyToken } from "../utils";
 import connectToDB from "../model/database";
-import Role from '@/lib/utils/roleSchema';
+import Role from "@/lib/utils/roleSchema";
 import Organization from "@/lib/utils/organizationSchema";
-import { saveSession } from '@/lib/utils';
+import { saveSession } from "@/lib/utils";
 import { getLinkedInAuthUrl } from "./server-hooks/linkedin-auth.action";
 
-
 export async function signIn(email: string) {
-  console.log("I want to send emails")
+  console.log("I want to send emails");
   try {
-    connectToDB()
+    connectToDB();
 
     // Generate token and URL for verification
     const { token, generatedAt, expiresIn } = generateToken();
 
     const url = `https://qsf5r9-3000.csb.app/auth/verify?token=${token}`;
-    
+
     // Send email with resend.dev
-    await sendVerificationRequest({ url: url, email: email })
-    
-    console.log("Email sent!")
-    
+    await sendVerificationRequest({ url: url, email: email });
+
+    console.log("Email sent!");
+
     // Save email address, verification token, and expiration time in the database
     const save = await VerificationToken.create({
       token: token,
       email: email,
       createdAt: generatedAt, // Since generated in the function, set current time
       expiresAt: expiresIn,
-    })
+    });
 
-    if(save) {
-      console.log("saved token to DB")
+    if (save) {
+      console.log("saved token to DB");
     }
-    
+
     // Return a response
     return true;
   } catch (error) {
     return false;
   }
 }
-
 
 export async function verifyUserToken(token: string): Promise<boolean> {
   try {
@@ -74,7 +72,6 @@ export async function verifyUserToken(token: string): Promise<boolean> {
     const email = existingToken.email;
 
     try {
-
       // Check if the user already exists in the Role collection with the correct login type
       const existingUser = await Role.findOne({ email: email });
 
@@ -84,16 +81,16 @@ export async function verifyUserToken(token: string): Promise<boolean> {
 
         // Create session data
         let sessionData = {
-          userId: existingUser._id,
+          userId: existingUser._id.toString(),
           email: existingUser.email,
           firstName: existingUser.firstName,
           lastName: existingUser.lastName,
-          image: '', // Initialize image as an empty string
+          image: "", // Initialize image as an empty string
           isOnboarded: false,
           isVerified: false,
           role: existingUser.role,
-          orgId: organizationId,
-          isLoggedIn: true
+          orgId: organizationId.toString(),
+          isLoggedIn: true,
         };
 
         // Retrieve organization details
@@ -114,7 +111,7 @@ export async function verifyUserToken(token: string): Promise<boolean> {
 
         // Redirect to the dashboard or appropriate page
         return true;
-        } else {
+      } else {
         // User does not exist, create a new organization and role with the received email
 
         // Check if the organization already exists based on the received email
@@ -123,7 +120,7 @@ export async function verifyUserToken(token: string): Promise<boolean> {
         // If the organization doesn't exist, create a new one
         if (!organization) {
           console.log("Organization not found, creating new organization");
-        
+
           organization = await Organization.create({
             email: email,
           });
@@ -137,20 +134,20 @@ export async function verifyUserToken(token: string): Promise<boolean> {
         // Create a new role for the user with the received email
         const newRole = await Role.create({
           email: email,
-          role: 'admin', // or whatever default role you want to assign
-          loginType: 'email', // or the appropriate login type
-          organization: organizationId
+          role: "admin", // or whatever default role you want to assign
+          loginType: "email", // or the appropriate login type
+          organization: organizationId,
         });
 
         // Create session data
         const sessionData = {
-          userId: newRole._id,
+          userId: newRole._id.toString(),
           email: newRole.email,
           isOnboarded: organization.onboarded,
           isVerified: organization.verified,
           role: newRole.role,
-          orgId: organizationId,
-          isLoggedIn: true
+          orgId: organizationId.toString(),
+          isLoggedIn: true,
         };
 
         // Save session
@@ -162,16 +159,15 @@ export async function verifyUserToken(token: string): Promise<boolean> {
         // Redirect to the dashboard or appropriate page
         return true;
       }
-    } catch(error: any) {
-      console.error('Error logging user in', error.message);
+    } catch (error: any) {
+      console.error("Error logging user in", error.message);
       return false;
     }
   } catch (error: any) {
-    console.error('Error verifying token:', error.message);
+    console.error("Error verifying token:", error.message);
     return false;
   }
 }
-
 
 export const signOut = async () => {
   const session = await getSession();
@@ -179,32 +175,30 @@ export const signOut = async () => {
   redirect("/auth/signin");
 };
 
-
-
-let googleAuthUrl: string
+let googleAuthUrl: string;
 export async function handleGoogleLogin() {
   try {
     // Get the Google OAuth URL
     googleAuthUrl = await getGoogleAuthUrl();
   } catch (error) {
-    console.error('Error:', error);
+    console.error("Error:", error);
     // Handle error
   } finally {
     // Redirect the user to the Google OAuth URL
-    redirect (googleAuthUrl)
+    redirect(googleAuthUrl);
   }
 }
 
-let linkedinAuthUrl: string
+let linkedinAuthUrl: string;
 export async function handleLinkedInLogin() {
   try {
     // Get the Google OAuth URL
     linkedinAuthUrl = await getLinkedInAuthUrl();
   } catch (error) {
-    console.error('Error:', error);
+    console.error("Error:", error);
     // Handle error
   } finally {
     // Redirect the user to the Google OAuth URL
-    redirect (linkedinAuthUrl)
+    redirect(linkedinAuthUrl);
   }
 }
