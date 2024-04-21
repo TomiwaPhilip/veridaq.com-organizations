@@ -12,7 +12,7 @@ import { Input } from "@/components/form/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { updateUser } from "@/lib/actions/onboarding.action";
 
 import { BlackButton } from "@/components/shared/buttons";
@@ -25,8 +25,8 @@ export default function BankDetails() {
     resolver: zodResolver(BankDetailsValidation),
     defaultValues: {
       accountName: "",
-      accountNumber: 0,
-      bankCode: 0,
+      accountNumber: 9123456789,
+      bankCode: 911101,
     },
   });
 
