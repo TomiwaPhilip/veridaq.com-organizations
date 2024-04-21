@@ -61,6 +61,7 @@ export async function withDrawFunds() {
             // Update organization balance
             const org = await Organization.findByIdAndUpdate(session.orgId, { walletBalance: session.walletBalance });
             console.log(org);
+            return true;
         } else if (transactionResponse.status === 424) {
             // Requery transaction
             const transactionQuery: any = await got.post('https://api-d.squadco.com/payout/requery', {
@@ -79,6 +80,8 @@ export async function withDrawFunds() {
                 // Update organization balance
                 const org = await Organization.findByIdAndUpdate(session.orgId, { walletBalance: session.walletBalance });
                 console.log(org);
+
+                return true;
             } else {
                 throw new Error("Unable to make payments");
             }

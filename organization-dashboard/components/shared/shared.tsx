@@ -352,8 +352,8 @@ export function SearchBar2() {
 
 export function Wallet() {
   const session = useSession();
-  const email = session?.email as string
-  const balance = session?.walletBalance as string
+  const balance = session?.walletBalance as string;
+  const isZeroBalance: boolean = balance === "0.00";
   
   return (
     <div className="flex items-center justify-center gap-1">
@@ -362,24 +362,10 @@ export function Wallet() {
         <p className="text-[32px] text-white font-bold">{`N${balance}`}</p>
       </div>
       <div className="flex-col justify-center items-center text-center text-white">
-        {/* <button
-          type="button"
-          className="text-[20px] bg-[#EA098D] rounded-full p-1 px-9 mb-[7px] flex items-center justify-center"
-          onClick={() => getPaymentLink({email: email, amount: 10000})}
-        >
-          <div style={{ display: "inline-flex", alignItems: "center" }}>
-            <Image
-              src={"/assets/icons/plus.png"}
-              alt="plus_icon"
-              width={30}
-              height={30}
-            />
-            <span style={{ marginLeft: "5px" }}>Add funds</span>
-          </div>
-        </button> */}
         <button
           type="submit"
           className="text-[20px] bg-[#694C9F] rounded-full p-1 px-2 flex items-center justify-center"
+          disabled={isZeroBalance}
         >
           <div style={{ display: "inline-flex", alignItems: "center" }}>
             <Image

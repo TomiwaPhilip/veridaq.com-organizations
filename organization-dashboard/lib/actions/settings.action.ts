@@ -63,7 +63,7 @@ export async function updateBankDetails(params: BankDetailsInterface) {
                 bankCode: params.bankCode, 
             }
         )
-        return false;
+        return true;
     } catch (error) {
         console.error("Error querying DB for bank details", error);
         throw new Error("Error querying DB for bank details");
