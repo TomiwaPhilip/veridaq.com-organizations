@@ -169,15 +169,27 @@ export function Header() {
         width={35}
         height={35}
       />
-      <Image
-        alt="user"
-        src={session?.image as string}
-        className="rounded-full normal-border"
-        width={50}
-        height={50}
-        onClick={handleSignOut}
-        style={{ cursor: "pointer" }}
-      />
+      {session?.image ? (
+              <Image
+                alt="user"
+                src={session.image as string}
+                className="rounded-full aspect-square object-cover normal-border"
+                width={50}
+                height={50}
+                onClick={handleSignOut}
+                style={{ cursor: "pointer" }}
+              />
+            ) : (
+              <Image
+                alt="fallback"
+                src="/assets/images/user.png"
+                className="rounded-full aspect-square object-cover normal-border"
+                width={50}
+                height={50}
+                onClick={handleSignOut}
+                style={{ cursor: "pointer" }}
+              />
+            )}
     </header>
   );
 }
@@ -350,7 +362,7 @@ export function Wallet() {
         <p className="text-[32px] text-white font-bold">{`N${balance}`}</p>
       </div>
       <div className="flex-col justify-center items-center text-center text-white">
-        <button
+        {/* <button
           type="button"
           className="text-[20px] bg-[#EA098D] rounded-full p-1 px-9 mb-[7px] flex items-center justify-center"
           onClick={() => getPaymentLink({email: email, amount: 10000})}
@@ -364,7 +376,7 @@ export function Wallet() {
             />
             <span style={{ marginLeft: "5px" }}>Add funds</span>
           </div>
-        </button>
+        </button> */}
         <button
           type="submit"
           className="text-[20px] bg-[#694C9F] rounded-full p-1 px-2 flex items-center justify-center"
