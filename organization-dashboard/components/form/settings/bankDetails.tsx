@@ -13,26 +13,33 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import React, { useState } from "react";
-import { updateUser } from "@/lib/actions/onboarding.action";
+import { updateBankDetails } from "@/lib/actions/settings.action";
 
 import { BlackButton } from "@/components/shared/buttons";
 import { BankDetailsValidation } from "@/lib/validations/onboarding";
 
-export default function BankDetails() {
-  const [disable, setDisable] = useState(true);
+export interface BankDetailsInterface {
+    accountName: string;
+    accountNumber: number;
+    bankCode: number;
+}
+
+export default function BankDetails(params: BankDetailsInterface) {
+  const [disable, setDisable] = useState(false);
 
   const form = useForm<z.infer<typeof BankDetailsValidation>>({
     resolver: zodResolver(BankDetailsValidation),
     defaultValues: {
-      accountName: "",
-      accountNumber: 9123456789,
-      bankCode: 911101,
+      accountName: params.accountName,
+      accountNumber: params.accountNumber,
+      bankCode: params.bankCode,
     },
   });
 
-  const onSubmit = async (data1: z.infer<typeof BankDetailsValidation>) => {
-    console.log(data1);
-    // await updateUser(data1);
+  const onSubmit = async (data: z.infer<typeof BankDetailsValidation>) => {
+    console.log(data);
+    setDisable(true);
+    await updateBankDetails(data)
   };
   
   return (

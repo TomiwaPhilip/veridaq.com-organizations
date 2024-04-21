@@ -15,28 +15,39 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import React, { useState, ChangeEvent, useRef } from "react";
-import { updateUser } from "@/lib/actions/onboarding.action";
 import { upload } from "@vercel/blob/client";
 
-import { BlackButton, NoOutlineButtonBig } from "@/components/shared/buttons";
+import { BlackButton } from "@/components/shared/buttons";
 import { OnboardingValidation } from "@/lib/validations/onboarding";
+import { updateOrgDetails } from "@/lib/actions/settings.action";
 
-export default function Settings() {
-  const router = useRouter();
+export interface SettingsProps {
+    orgName: string;
+    adminFirstName: string;
+    adminLastName: string;
+    streetAddress: string;
+    postalCode: string;
+    city: string;
+    country: string;
+    image: string;
+}
+
+export default function Settings(params: SettingsProps) {
+
   const inputFileRef = useRef<HTMLInputElement>(null);
   const [disable, setDisable] = useState(true);
 
   const form = useForm<z.infer<typeof OnboardingValidation>>({
     resolver: zodResolver(OnboardingValidation),
     defaultValues: {
-      orgName: "",
-      adminFirstName: "",
-      adminLastName: "",
-      streetAddress: "",
-      postalCode: "",
-      city: "",
-      country: "",
-      image: "",
+      orgName: params.orgName,
+      adminFirstName: params.adminFirstName,
+      adminLastName: params.adminLastName,
+      streetAddress: params.streetAddress,
+      postalCode: params.postalCode,
+      city: params.city,
+      country: params.country,
+      image: params.image,
     },
   });
 
@@ -74,9 +85,18 @@ export default function Settings() {
     fileReader.readAsDataURL(file);
   };
 
-  const onSubmit = async (data1: z.infer<typeof OnboardingValidation>) => {
-    console.log(data1);
-    await updateUser(data1);
+  const onSubmit = async (data: z.infer<typeof OnboardingValidation>) => {
+    console.log(data);
+    await updateOrgDetails({
+        orgName: data.orgName,
+        adminFirstName: data.adminFirstName,
+        adminLastName: data.adminLastName,
+        streetAddress: data.streetAddress,
+        postalCode: data.postalCode,
+        city: data.city,
+        country: data.country,
+        image: data.image,
+    });
   };
   
   return (
