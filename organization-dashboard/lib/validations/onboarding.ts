@@ -29,10 +29,10 @@ export const BankDetailsValidation = z.object({
   accountName: z.string().min(1, {
     message: "Account name must be at least 1 character.",
   }),
-  accountNumber: z.number().min(1, {
+  accountNumber: z.coerce.number().min(1, {
     message: "Account number must be at least 1 character.",
   }),
-  bankCode: z.number().min(1, {
+  bankCode: z.coerce.number().min(1, {
     message: "Bank code must be at least 1 character.",
   }),
 });

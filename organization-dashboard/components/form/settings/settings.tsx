@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import {
   Form,
   FormControl,
@@ -20,6 +19,7 @@ import { upload } from "@vercel/blob/client";
 import { BlackButton } from "@/components/shared/buttons";
 import { OnboardingValidation } from "@/lib/validations/onboarding";
 import { updateOrgDetails } from "@/lib/actions/settings.action";
+import StatusMessage from "@/components/shared/shared";
 
 export interface SettingsProps {
     orgName: string;
@@ -35,7 +35,9 @@ export interface SettingsProps {
 export default function Settings(params: SettingsProps) {
 
   const inputFileRef = useRef<HTMLInputElement>(null);
-  const [disable, setDisable] = useState(true);
+  const [disable, setDisable] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [isSuccessful, setIsSuccessful] = useState(false);
 
   const form = useForm<z.infer<typeof OnboardingValidation>>({
     resolver: zodResolver(OnboardingValidation),
@@ -87,7 +89,7 @@ export default function Settings(params: SettingsProps) {
 
   const onSubmit = async (data: z.infer<typeof OnboardingValidation>) => {
     console.log(data);
-    await updateOrgDetails({
+    const result = await updateOrgDetails({
         orgName: data.orgName,
         adminFirstName: data.adminFirstName,
         adminLastName: data.adminLastName,
@@ -97,6 +99,12 @@ export default function Settings(params: SettingsProps) {
         country: data.country,
         image: data.image,
     });
+    if(result) {
+        setIsSuccessful(true);
+    } else {
+        setIsError(true)
+    };
+    setDisable(false)
   };
   
   return (
@@ -270,6 +278,8 @@ export default function Settings(params: SettingsProps) {
           </Form>
         </div>
       </div>
+      {isError ? <StatusMessage message="An Error occurred!" type="error" /> : null}
+      {isSuccessful ? <StatusMessage message="Saved Successfully!" type="success" /> : null}
     </div>
   );
 }

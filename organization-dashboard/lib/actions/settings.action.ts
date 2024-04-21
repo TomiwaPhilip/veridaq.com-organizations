@@ -63,7 +63,7 @@ export async function updateBankDetails(params: BankDetailsInterface) {
                 bankCode: params.bankCode, 
             }
         )
-        return true;
+        return false;
     } catch (error) {
         console.error("Error querying DB for bank details", error);
         throw new Error("Error querying DB for bank details");
@@ -75,11 +75,11 @@ export async function updateOrgDetails(params: SettingsProps) {
     try {
         
         const session = await getSession()
-        
+
         // Connect To Db
         connectToDB()
 
-        const organizationDetails = await Organization.findByIdAndUpdate(
+        await Organization.findByIdAndUpdate(
             session.orgId, 
             {
                 name: params.orgName,
@@ -91,7 +91,7 @@ export async function updateOrgDetails(params: SettingsProps) {
                 country: params.country,
                 image: params.image,
             })
-        return organizationDetails;
+        return true;
     } catch (error) {
         console.error("Error querying DB for organization details", error);
         throw new Error("Error querying DB for organization details")

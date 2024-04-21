@@ -1,16 +1,16 @@
 import { getBankDetails, getOrgDetails } from "@/lib/actions/settings.action";
 import BankDetails, { BankDetailsInterface } from "../form/settings/bankDetails";
-import Settings, { SettingsProps } from "../form/settings/settings";
+import Settings from "../form/settings/settings";
 
 export default async function SettingsPage() {
 
     const bankDetailsfromDB: BankDetailsInterface = await getBankDetails();
-    const orgDetaisfromDB: SettingsProps = await getOrgDetails();
+    const orgDetaisfromDB = await getOrgDetails();
 
     return (
         <>
             <Settings 
-                    orgName= {orgDetaisfromDB.orgName}
+                    orgName= {orgDetaisfromDB.name}
                     adminFirstName= {orgDetaisfromDB.adminFirstName}
                     adminLastName= {orgDetaisfromDB.adminLastName}
                     streetAddress= {orgDetaisfromDB.streetAddress}

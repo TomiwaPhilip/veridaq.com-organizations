@@ -17,6 +17,7 @@ import { updateBankDetails } from "@/lib/actions/settings.action";
 
 import { BlackButton } from "@/components/shared/buttons";
 import { BankDetailsValidation } from "@/lib/validations/onboarding";
+import StatusMessage from "@/components/shared/shared";
 
 export interface BankDetailsInterface {
     accountName: string;
@@ -26,6 +27,8 @@ export interface BankDetailsInterface {
 
 export default function BankDetails(params: BankDetailsInterface) {
   const [disable, setDisable] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [isSuccessful, setIsSuccessful] = useState(false);
 
   const form = useForm<z.infer<typeof BankDetailsValidation>>({
     resolver: zodResolver(BankDetailsValidation),
@@ -39,7 +42,13 @@ export default function BankDetails(params: BankDetailsInterface) {
   const onSubmit = async (data: z.infer<typeof BankDetailsValidation>) => {
     console.log(data);
     setDisable(true);
-    await updateBankDetails(data)
+    const result = await updateBankDetails(data);
+    if(result) {
+        setIsSuccessful(true);
+    } else {
+        setIsError(true)
+    };
+    setDisable(false)
   };
   
   return (
@@ -76,7 +85,7 @@ export default function BankDetails(params: BankDetailsInterface) {
                         Account Number
                       </FormLabel>
                       <FormControl>
-                        <Input placeholder="0123456789" {...field} />
+                        <Input type="number" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -93,7 +102,7 @@ export default function BankDetails(params: BankDetailsInterface) {
                         Bank Code
                       </FormLabel>
                       <FormControl>
-                        <Input placeholder="Floyd" {...field} />
+                        <Input type="number" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -111,6 +120,8 @@ export default function BankDetails(params: BankDetailsInterface) {
           </Form>
         </div>
       </div>
+      {isError ? <StatusMessage message="An Error occurred!" type="error" /> : null}
+      {isSuccessful ? <StatusMessage message="Saved Successfully!" type="success" /> : null}
     </div>
   );
 }
