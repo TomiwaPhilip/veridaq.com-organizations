@@ -55,6 +55,19 @@ const OrganizationSchema = new Schema({
   walletBalance: {
     type: String,
     default: "0.00",
+  },
+  accountName: {
+    type: String,
+  },
+  accountNumber: {
+    type: Number,
+  },
+  bankCode: {
+    type: Number,
+  },
+  active: {
+    type: Boolean,
+    default: false,
   }
 });
 

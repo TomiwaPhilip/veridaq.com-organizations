@@ -24,3 +24,15 @@ export const OnboardingValidation = z.object({
   }),
   image: z.string().url().min(1),
 });
+
+export const BankDetailsValidation = z.object({
+  accountName: z.string().min(1, {
+    message: "Account name must be at least 1 character.",
+  }),
+  accountNumber: z.number().min(1, {
+    message: "Account number must be at least 1 character.",
+  }),
+  bankCode: z.number().min(1, {
+    message: "Bank code must be at least 1 character.",
+  }),
+});
