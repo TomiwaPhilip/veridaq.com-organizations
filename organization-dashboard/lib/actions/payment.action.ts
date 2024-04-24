@@ -1,6 +1,8 @@
 "use server";
 
 import got from "got";
+const Flutterwave = require("flutterwave-node-v3");
+
 import getSession from "./server-hooks/getsession.action";
 import Organization from "../utils/organizationSchema";
 import connectToDB from "../model/database";
@@ -11,7 +13,7 @@ function generateRandomString(length: any) {
     for (let i = 0; i < length; i++) {
       result += characters.charAt(Math.floor(Math.random() * characters.length));
     }
-    return `AHLR22LU_${result}`;
+    return `${result}_PMCKDU_1`;
 }
 
 export async function withDrawFunds() {
@@ -30,67 +32,52 @@ export async function withDrawFunds() {
         console.log(orgBankDetails)
 
         // First lookup account
-        response = await got.post('https://api-d.squadco.com/payout/account/lookup', {
-            headers: {
-                Authorization: "Bearer sk_2c7f4b78988dab6be5667fb11a091a24e09b4bc6",
-            },
-            json: {
-                bank_code: bankCode,
-                account_number: accountNumber,
-            },
-        }).json();
-        console.log(response)
+        const flw = new Flutterwave(process.env.FLW_PUBLIC_KEY, process.env.FLW_SECRET_KEY);
+        const details = {
+          account_number: "0690000031",
+          account_bank: "044",
+        };
+        response = await flw.Misc.verify_Account(details)
 
-        if (response.status !== 200 || response.data.account_name !== orgBankDetails.accountName) {
-            throw new Error("Invalid bank account details");
-        }
+        console.log(response);
 
-        const transactionResponse: any = await got.post('https://api-d.squadco.com/payout/transfer', {
-            headers: {
-                Authorization: "Bearer sk_bffcefd1f820a26fcf3d8a5e5d7976cb1b46d80d",
-            },
-            json: {
-                remark: "for test transfer to my customer",
-                bank_code: orgBankDetails.bankCode,
-                currency_id: "NGN",
-                amount: session.walletBalance,
-                account_number: orgBankDetails.accountNumber,
-                transaction_reference: transaction_ref,
-                account_name: orgBankDetails.accountName,
-            },
-        }).json();
+        if (response.status === "error") return false;
 
-        if (transactionResponse.status === 200) {
-            session.walletBalance = "0.00";
-            await session.save();
+        const transferDetails = {
+            account_bank: bankCode,
+            account_number: accountNumber,
+            amount: 200, // session.walletBalance,
+            currency: "NGN",
+            narration: "Payment for things",
+            reference: transaction_ref,
+        };
 
-            // Update organization balance
-            const org = await Organization.findByIdAndUpdate(session.orgId, { walletBalance: session.walletBalance });
-            console.log(org);
-            return true;
-        } else if (transactionResponse.status === 424) {
-            // Requery transaction
-            const transactionQuery: any = await got.post('https://api-d.squadco.com/payout/requery', {
-                headers: {
-                    Authorization: "Bearer sk_bffcefd1f820a26fcf3d8a5e5d7976cb1b46d80d",
-                },
-                json: {
-                    transaction_reference: transaction_ref,
-                },
-            }).json();
+        console.log("Initiating transfer...")
+        const transactionResponse: any = await flw.Transfer.initiate(transferDetails)
+        console.log(transactionResponse);
 
-            if (transactionQuery.status === 200) {
+        if (transactionResponse.status === "success") {
+
+            // Transaction status is successful and ongoing, now wait for 2 mins and confirm transaction
+            await new Promise(resolve => setTimeout(resolve, 2 * 60 * 1000));
+            
+            const response = await flw.Transfer.get_a_transfer({id: transactionResponse.data.id});
+
+            if (response.data.status === "SUCCESSFUL") {
+
+                // Transaction is successful empty wallet balance in DB and session
                 session.walletBalance = "0.00";
                 await session.save();
-
+    
                 // Update organization balance
                 const org = await Organization.findByIdAndUpdate(session.orgId, { walletBalance: session.walletBalance });
                 console.log(org);
-
                 return true;
-            } else {
-                throw new Error("Unable to make payments");
-            }
+            } else if (response.data.status === "FAILED") return false;
+
+        } else if (transactionResponse.status === "error") {
+            // Return false for failed transaction initiation
+            return false;
         } else {
             throw new Error("Unable to make payments");
         }

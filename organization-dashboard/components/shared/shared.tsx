@@ -2,6 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { RiLoader4Line } from 'react-icons/ri';
+
 import { signOut } from "@/lib/actions/login.action";
 import { getSession2 } from "@/lib/actions/server-hooks/getsession.action";
 import { usePathname } from "next/navigation";
@@ -355,18 +357,24 @@ export function Wallet() {
 
   const [isError, setIsError] = useState(false);
   const [isSuccessful, setIsSuccessful] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const session = useSession();
   const balance = session?.walletBalance as string;
   const isZeroBalance: boolean = balance === "0.00";
 
   async function handleWithdraw() {
+    setIsLoading(true);
+    setIsError(false);
     const result = await withDrawFunds();
 
     if(result) {
+        setIsLoading(false);
         setIsSuccessful(true);
     } else {
         setIsError(true)
+        console.log("I returned false")
+        setIsLoading(false);
     };
   }
   
@@ -380,7 +388,7 @@ export function Wallet() {
         <button
           type="submit"
           className="text-[20px] bg-[#694C9F] rounded-full p-1 px-2 flex items-center justify-center"
-          disabled={!isZeroBalance}
+          disabled={!isZeroBalance || isLoading}
           onClick={handleWithdraw}
         >
           <div style={{ display: "inline-flex", alignItems: "center" }}>
@@ -390,12 +398,19 @@ export function Wallet() {
               width={30}
               height={30}
             />
-            <span style={{ marginLeft: "5px" }}>Withdraw funds</span>
+            <span style={{ marginLeft: "5px" }}>
+                {isLoading ? (
+                    <>
+                        Withdrawing...
+                        <RiLoader4Line className="animate-spin text-2xl inline" />
+                    </>
+                ) : 'Withdraw funds'}
+            </span>
           </div>
         </button>
       </div>
-      {isError ? <StatusMessage message="An Error occurred!" type="error" /> : null}
-      {isSuccessful ? <StatusMessage message="Saved Successfully!" type="success" /> : null}
+      {isError ? <StatusMessage message="An Error occurred! Ensure your bank details is correct" type="error" /> : null}
+      {isSuccessful ? <StatusMessage message="Your money is on its way!" type="success" /> : null}
     </div>
   );
 }
