@@ -1,5 +1,9 @@
 import React from "react";
 
+import SettingsPage from "@/components/pages/Settings";
+
 export default function Page(){
-    return <h1>This is the settings page</h1>
+    return (
+        <SettingsPage />
+    )
 }

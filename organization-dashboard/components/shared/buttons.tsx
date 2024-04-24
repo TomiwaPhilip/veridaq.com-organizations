@@ -34,3 +34,14 @@ export function OutlineButtonSmall({ name }: { name: string }) {
     );
   }
   
+  export function BlackButton({ name, type, disabled }: { name: string, type: "submit" | "button", disabled?: boolean }) {
+    return (
+      <button 
+        type={type} 
+        className="bg-[#38313A] mt-5 text-white text-[20px] font-medium px-[3rem] py-5 rounded-md"
+        disabled={disabled}
+      >
+        {name}
+      </button>
+    );
+  }

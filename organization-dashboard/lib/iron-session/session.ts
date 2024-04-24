@@ -7,6 +7,8 @@ export interface SessionData {
   firstName?: string;
   lastName?: string
   image?: string;
+  walletBalance?: string;
+  active?: boolean;
   role?: string;
   isOnboarded?: boolean;
   isVerified?: boolean;

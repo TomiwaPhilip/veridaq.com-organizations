@@ -52,6 +52,23 @@ const OrganizationSchema = new Schema({
     enum: ["true", "false"],
     default: "false",
   },
+  walletBalance: {
+    type: String,
+    default: "0.00",
+  },
+  accountName: {
+    type: String,
+  },
+  accountNumber: {
+    type: Number,
+  },
+  bankCode: {
+    type: Number,
+  },
+  active: {
+    type: Boolean,
+    default: false,
+  }
 });
 
 const Organization =

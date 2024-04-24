@@ -2,11 +2,14 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { RiLoader4Line } from 'react-icons/ri';
+
 import { signOut } from "@/lib/actions/login.action";
 import { getSession2 } from "@/lib/actions/server-hooks/getsession.action";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { SessionData } from "@/lib/iron-session/session";
+import { withDrawFunds } from "@/lib/actions/payment.action";
 
 export function useSession() {
   const [session, setSession] = useState<SessionData | null>(null);
@@ -169,15 +172,27 @@ export function Header() {
         width={35}
         height={35}
       />
-      <Image
-        alt="user"
-        src={session?.image as string}
-        className="rounded-full normal-border"
-        width={50}
-        height={50}
-        onClick={handleSignOut}
-        style={{ cursor: "pointer" }}
-      />
+      {session?.image ? (
+              <Image
+                alt="user"
+                src={session.image as string}
+                className="rounded-full aspect-square object-cover normal-border"
+                width={50}
+                height={50}
+                onClick={handleSignOut}
+                style={{ cursor: "pointer" }}
+              />
+            ) : (
+              <Image
+                alt="fallback"
+                src="/assets/images/user.png"
+                className="rounded-full aspect-square object-cover normal-border"
+                width={50}
+                height={50}
+                onClick={handleSignOut}
+                style={{ cursor: "pointer" }}
+              />
+            )}
     </header>
   );
 }
@@ -339,30 +354,42 @@ export function SearchBar2() {
 }
 
 export function Wallet() {
+
+  const [isError, setIsError] = useState(false);
+  const [isSuccessful, setIsSuccessful] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const session = useSession();
+  const balance = session?.walletBalance as string;
+  const isZeroBalance: boolean = balance === "0.00";
+
+  async function handleWithdraw() {
+    setIsLoading(true);
+    setIsError(false);
+    const result = await withDrawFunds();
+
+    if(result) {
+        setIsLoading(false);
+        setIsSuccessful(true);
+    } else {
+        setIsError(true)
+        console.log("I returned false")
+        setIsLoading(false);
+    };
+  }
+  
   return (
     <div className="flex items-center justify-center gap-1">
       <div className="bg-[#554957] px-4 rounded-lg py-4 text-center">
         <p className="text-sm text-[#FAEBEB] mb-5">Your Wallet Balance:</p>
-        <p className="text-[32px] text-white font-bold">N43,000.00</p>
+        <p className="text-[32px] text-white font-bold">{`N${balance}`}</p>
       </div>
       <div className="flex-col justify-center items-center text-center text-white">
         <button
           type="submit"
-          className="text-[20px] bg-[#EA098D] rounded-full p-1 px-9 mb-[7px] flex items-center justify-center"
-        >
-          <div style={{ display: "inline-flex", alignItems: "center" }}>
-            <Image
-              src={"/assets/icons/plus.png"}
-              alt="plus_icon"
-              width={30}
-              height={30}
-            />
-            <span style={{ marginLeft: "5px" }}>Add funds</span>
-          </div>
-        </button>
-        <button
-          type="submit"
           className="text-[20px] bg-[#694C9F] rounded-full p-1 px-2 flex items-center justify-center"
+          disabled={!isZeroBalance || isLoading}
+          onClick={handleWithdraw}
         >
           <div style={{ display: "inline-flex", alignItems: "center" }}>
             <Image
@@ -371,10 +398,19 @@ export function Wallet() {
               width={30}
               height={30}
             />
-            <span style={{ marginLeft: "5px" }}>Withdraw funds</span>
+            <span style={{ marginLeft: "5px" }}>
+                {isLoading ? (
+                    <>
+                        Withdrawing...
+                        <RiLoader4Line className="animate-spin text-2xl inline" />
+                    </>
+                ) : 'Withdraw funds'}
+            </span>
           </div>
         </button>
       </div>
+      {isError ? <StatusMessage message="An Error occurred! Ensure your bank details is correct" type="error" /> : null}
+      {isSuccessful ? <StatusMessage message="Your money is on its way!" type="success" /> : null}
     </div>
   );
 }
@@ -553,3 +589,33 @@ export function VeridaqDocument({
     </div>
   );
 }
+
+
+interface StatusMessageProps {
+  message: string;
+  type: 'error' | 'success';
+}
+
+const StatusMessage: React.FC<StatusMessageProps> = ({ message, type }) => {
+  const [isVisible, setIsVisible] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsVisible(false);
+    }, 3000); // Message disappears after 3 seconds
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  return (
+    <div
+      className={`fixed bottom-5 right-5 p-3 rounded-md text-white ${
+        type === 'error' ? 'bg-red-500' : 'bg-green-500'
+      } ${isVisible ? 'opacity-100' : 'opacity-0'}`}
+    >
+      {message}
+    </div>
+  );
+};
+
+export default StatusMessage;

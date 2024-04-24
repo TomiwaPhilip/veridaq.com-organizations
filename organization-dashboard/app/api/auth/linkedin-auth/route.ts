@@ -50,6 +50,7 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
             firstName: existingUser.firstName,
             lastName: existingUser.lastName,
             image: "", // Initialize image as an empty string
+            walletBalance: "",
             isOnboarded: false,
             isVerified: false,
             role: existingUser.role,
@@ -65,6 +66,7 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
             sessionData.image = existingOrg.image;
             sessionData.isOnboarded = existingOrg.onboarded;
             sessionData.isVerified = existingOrg.verified;
+            sessionData.walletBalance = existingOrg.walletBalance;
           }
 
           if (existingUser.loginType === "linkedin") {
@@ -137,6 +139,7 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
             firstName: newRole.firstName,
             lastName: newRole.lastName,
             image: organization.image,
+            walletBalance: organization.walletBalance,
             isOnboarded: organization.onboarded,
             isVerified: organization.verified,
             role: newRole.role,
