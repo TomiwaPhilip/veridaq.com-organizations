@@ -1,6 +1,7 @@
 import { getBankDetails, getOrgDetails } from "@/lib/actions/settings.action";
 import BankDetails, { BankDetailsInterface } from "../form/settings/bankDetails";
 import Settings from "../form/settings/settings";
+import RequestPrice from "../form/settings/requestPrice";
 
 export default async function SettingsPage() {
 
@@ -23,6 +24,11 @@ export default async function SettingsPage() {
                 accountName={bankDetailsfromDB.accountName} 
                 accountNumber={bankDetailsfromDB.accountNumber} 
                 bankCode={bankDetailsfromDB.bankCode} 
+            />
+            <RequestPrice
+                studentStatusFee={orgDetaisfromDB.studentStatusFee}
+                docVerificationFee={orgDetaisfromDB.docVerificationFee}
+                membershipRefFee={orgDetaisfromDB.membershipRefFee}
             />
         </>
     )

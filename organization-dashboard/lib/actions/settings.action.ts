@@ -5,6 +5,7 @@ import connectToDB from "../model/database";
 import Organization from "../utils/organizationSchema";
 import getSession from "./server-hooks/getsession.action";
 import { SettingsProps } from "@/components/form/settings/settings";
+import { RequestPriceInterface } from "@/components/form/settings/requestPrice";
 
 export async function getBankDetails() {
     try {
@@ -39,6 +40,9 @@ export async function getOrgDetails() {
                 city: 1,
                 country: 1,
                 image: 1,
+                studentStatusFee: 1,
+                docVerificationFee: 1,
+                membershipRefFee: 1,
                 _id: 0
             })
         return organizationDetails;
@@ -65,8 +69,8 @@ export async function updateBankDetails(params: BankDetailsInterface) {
         )
         return true;
     } catch (error) {
-        console.error("Error querying DB for bank details", error);
-        throw new Error("Error querying DB for bank details");
+        console.error("Error updating bank details in DB", error);
+        throw new Error("Error updating bank details in DB");
     }   
 }
 
@@ -93,7 +97,29 @@ export async function updateOrgDetails(params: SettingsProps) {
             })
         return true;
     } catch (error) {
-        console.error("Error querying DB for organization details", error);
-        throw new Error("Error querying DB for organization details")
+        console.error("Error updating organization details in DB", error);
+        throw new Error("Error updating organization details in DB")
+    }   
+}
+
+export async function updatePricingDetails(params: RequestPriceInterface) {
+    try {
+        
+        const session = await getSession()
+        // Connect To Db
+        connectToDB()
+
+        await Organization.findByIdAndUpdate(
+            session.orgId, 
+            {
+                studentStatusFee: params.studentStatusFee, 
+                docVerificationFee: params.docVerificationFee, 
+                membershipRefFee: params.membershipRefFee, 
+            }
+        )
+        return true;
+    } catch (error) {
+        console.error("Error updating request pricing in DB", error);
+        throw new Error("Error updating request pricing in DB");
     }   
 }

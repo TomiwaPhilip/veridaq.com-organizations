@@ -68,6 +68,18 @@ const OrganizationSchema = new Schema({
   active: {
     type: Boolean,
     default: false,
+  },
+  studentStatusFee: {
+    type: Number,
+    default: "4000",
+  },
+  docVerificationFee: {
+    type: Number,
+    default: "6250",
+  },
+  membershipRefFee: {
+    type: Number,
+    default: "4000",
   }
 });
 
