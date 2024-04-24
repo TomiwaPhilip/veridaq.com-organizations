@@ -71,12 +71,15 @@ const OrganizationSchema = new Schema({
   },
   studentStatusFee: {
     type: String,
+    default: "4000.00"
   },
   docVerificationFee: {
     type: String,
+    default: "6250.00",
   },
   membershipRefFee: {
     type: String,
+    default: "4000.00"
   }
 });
 
