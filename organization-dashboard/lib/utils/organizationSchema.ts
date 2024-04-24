@@ -70,16 +70,16 @@ const OrganizationSchema = new Schema({
     default: false,
   },
   studentStatusFee: {
-    type: String,
-    default: "4000.00"
+    type: Number,
+    default: "4000",
   },
   docVerificationFee: {
-    type: String,
-    default: "6250.00",
+    type: Number,
+    default: "6250",
   },
   membershipRefFee: {
-    type: String,
-    default: "4000.00"
+    type: Number,
+    default: "4000",
   }
 });
 

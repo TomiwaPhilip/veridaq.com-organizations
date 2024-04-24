@@ -36,3 +36,15 @@ export const BankDetailsValidation = z.object({
     message: "Bank code must be at least 1 character.",
   }),
 });
+
+export const RequestPriceValidation = z.object({
+  studentStatusFee: z.coerce.number().min(4000, {
+    message: "Studentship Status Fee must be at least 4000 character.",
+  }),
+  docVerificationFee: z.coerce.number().min(5000, {
+    message: "Document Verification Fee must be at least 5000 character.",
+  }),
+  membershipRefFee: z.coerce.number().min(2000, {
+    message: "Membership Reference must be at least 2000 character.",
+  }),
+});
