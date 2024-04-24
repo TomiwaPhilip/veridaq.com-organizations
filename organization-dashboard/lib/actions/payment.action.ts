@@ -1,3 +1,5 @@
+"use server";
+
 import got from "got";
 import getSession from "./server-hooks/getsession.action";
 import Organization from "../utils/organizationSchema";
@@ -10,7 +12,7 @@ function generateRandomString(length: any) {
       result += characters.charAt(Math.floor(Math.random() * characters.length));
     }
     return `AHLR22LU_${result}`;
-  }
+}
 
 export async function withDrawFunds() {
     try {
@@ -20,20 +22,24 @@ export async function withDrawFunds() {
         const session = await getSession();
 
         const orgBankDetails = await Organization.findById(session.orgId, { accountName: 1, accountNumber: 1, bankCode: 1 });
-
+        const bankCode = orgBankDetails.bankCode.toString();
+        const accountNumber = orgBankDetails.accountNumber.toString();
         const transaction_ref = generateRandomString(8);
         let response: any;
+
+        console.log(orgBankDetails)
 
         // First lookup account
         response = await got.post('https://api-d.squadco.com/payout/account/lookup', {
             headers: {
-                Authorization: "Bearer sk_bffcefd1f820a26fcf3d8a5e5d7976cb1b46d80d",
+                Authorization: "Bearer sk_2c7f4b78988dab6be5667fb11a091a24e09b4bc6",
             },
             json: {
-                bank_code: orgBankDetails.bankCode,
-                account_number: orgBankDetails.accountNumber,
+                bank_code: bankCode,
+                account_number: accountNumber,
             },
         }).json();
+        console.log(response)
 
         if (response.status !== 200 || response.data.account_name !== orgBankDetails.accountName) {
             throw new Error("Invalid bank account details");

@@ -7,6 +7,7 @@ import { getSession2 } from "@/lib/actions/server-hooks/getsession.action";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { SessionData } from "@/lib/iron-session/session";
+import { withDrawFunds } from "@/lib/actions/payment.action";
 
 export function useSession() {
   const [session, setSession] = useState<SessionData | null>(null);
@@ -351,9 +352,23 @@ export function SearchBar2() {
 }
 
 export function Wallet() {
+
+  const [isError, setIsError] = useState(false);
+  const [isSuccessful, setIsSuccessful] = useState(false);
+
   const session = useSession();
   const balance = session?.walletBalance as string;
   const isZeroBalance: boolean = balance === "0.00";
+
+  async function handleWithdraw() {
+    const result = await withDrawFunds();
+
+    if(result) {
+        setIsSuccessful(true);
+    } else {
+        setIsError(true)
+    };
+  }
   
   return (
     <div className="flex items-center justify-center gap-1">
@@ -365,7 +380,8 @@ export function Wallet() {
         <button
           type="submit"
           className="text-[20px] bg-[#694C9F] rounded-full p-1 px-2 flex items-center justify-center"
-          disabled={isZeroBalance}
+          disabled={!isZeroBalance}
+          onClick={handleWithdraw}
         >
           <div style={{ display: "inline-flex", alignItems: "center" }}>
             <Image
@@ -378,6 +394,8 @@ export function Wallet() {
           </div>
         </button>
       </div>
+      {isError ? <StatusMessage message="An Error occurred!" type="error" /> : null}
+      {isSuccessful ? <StatusMessage message="Saved Successfully!" type="success" /> : null}
     </div>
   );
 }
