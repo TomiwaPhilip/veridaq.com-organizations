@@ -5,7 +5,12 @@ import connectToDB from "../model/database";
 import WorkReference from "../utils/workreference";
 import StudentshipStatus from "../utils/studentshipstatus";
 import DocumentVerification from "../utils/documentVerification";
-import User from "../utils/user";
+import {
+  generateVeridaqID,
+  concatenateDates,
+  getCurrentDateTime,
+} from "../utils";
+import { getDocAndUpload } from "./server-hooks/requestWithUpload.action";
 import MembershipReference from "../utils/membershipReference";
 
 interface Params {
@@ -45,13 +50,78 @@ export async function createOrUpdateWorkReferenceRequest({
     // Connect to the database
     connectToDB();
 
+    const session = await getSession();
+
+    if (!session) {
+      throw new Error("Unauthorized");
+    }
+
+    const orgId = session.orgId;
+    const adminDesignation = session.designation;
+    const adminName = (session.firstName + " " + session.lastName) as string;
+    const orgName = session.orgName as string;
+    const period = concatenateDates(workStartDate, workEndDate);
+    const currentDateTime = getCurrentDateTime();
+    const badgeID = generateVeridaqID();
+    const issuingAdminDetails = session.userId;
+
     console.log(id);
 
-    // If id is provided, find and update the document
-    if (id) {
-      await WorkReference.findByIdAndUpdate(
-        id,
-        {
+    const data = {
+      nameOfEmployee: firstName + " " + lastName,
+      employeeID: staffId,
+      employeeStatus: subType,
+      nameOfInstitution: orgName,
+      subType: employeeType,
+      designation: designation,
+      department: department,
+      period: period,
+      jobFunctions: jobFunction,
+      notableAchievement: notableAchievement,
+      personalitySummary: personalitySummary,
+      nameOfAdmin: adminName,
+      adminDesignation: adminDesignation,
+      currentDateTime: currentDateTime,
+      badgeID: badgeID,
+    };
+    const url = "";
+    const docName = "workReference";
+
+    const result = await getDocAndUpload(data, url, docName);
+
+    if (result) {
+      // If id is provided, find and update the document
+      if (id) {
+        await WorkReference.findByIdAndUpdate(
+          id,
+          {
+            firstName,
+            lastName,
+            middleName,
+            employeeType,
+            subType,
+            staffId,
+            designation,
+            workStartDate,
+            workEndDate,
+            department,
+            notableAchievement,
+            jobFunction,
+            personalitySummary,
+            issued: true,
+            dateIssued: new Date(),
+            badgeUrl: result,
+            issuingAdminDetails,
+          },
+          { new: true },
+        );
+
+        return true; // Return true if update is successful
+      } else {
+        // If id is not provided, create a new document
+        // Create a new WorkReference document
+        const workReference = new WorkReference({
+          orgId,
           firstName,
           lastName,
           middleName,
@@ -67,43 +137,14 @@ export async function createOrUpdateWorkReferenceRequest({
           personalitySummary,
           issued: true,
           dateIssued: new Date(),
-        },
-        { new: true },
-      );
-      return true; // Return true if update is successful
-    } else {
-      // If id is not provided, create a new document
-      const session = await getSession();
+          badgeUrl: result,
+          issuingAdminDetails,
+        });
 
-      if (!session) {
-        throw new Error("Unauthorized");
+        // Save the WorkReference document to the database
+        await workReference.save();
+        return true; // Return true if creation is successful
       }
-
-      const orgId = session.orgId;
-
-      // Create a new WorkReference document
-      const workReference = new WorkReference({
-        orgId,
-        firstName,
-        lastName,
-        middleName,
-        employeeType,
-        subType,
-        staffId,
-        designation,
-        workStartDate,
-        workEndDate,
-        department,
-        notableAchievement,
-        jobFunction,
-        personalitySummary,
-        issued: true,
-        dateIssued: new Date(),
-      });
-
-      // Save the WorkReference document to the database
-      await workReference.save();
-      return true; // Return true if creation is successful
     }
   } catch (error: any) {
     throw new Error(

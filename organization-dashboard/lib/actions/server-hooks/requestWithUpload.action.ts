@@ -4,7 +4,7 @@ import { put } from "@vercel/blob";
 import got from "got";
 
 export async function getDocAndUpload(
-  data: Record<string, string>,
+  data: Record<string, string | undefined>,
   url: string,
   docName: string,
 ): Promise<string | undefined> {

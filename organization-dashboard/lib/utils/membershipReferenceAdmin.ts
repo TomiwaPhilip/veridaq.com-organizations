@@ -25,6 +25,10 @@ const MembershipReferenceAdminSchema = new Schema({
         ref: 'User', // Reference to the User collection
         required: true, // Assuming a StudentshipStatusAdmin must be associated with a User
       },
+      badgeUrl: {
+        type: String,
+        default: null,
+      }
 });
 
 // Create and export the Mongoose model based on the schema

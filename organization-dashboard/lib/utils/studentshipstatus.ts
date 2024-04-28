@@ -35,6 +35,10 @@ const StudentshipStatusSchema = new Schema({
     type: Date,
     default: Date.now,
   },
+  badgeUrl: {
+    type: String,
+    default: null,
+  }
 });
 
 // Create and export the Mongoose model based on the schema
