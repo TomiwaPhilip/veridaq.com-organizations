@@ -8,6 +8,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  FormDescription,
 } from "@/components/form/form";
 import { Input } from "@/components/form/input";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -41,6 +42,7 @@ const MembershipReference: React.FC<membershipReferenceProps> = ({ docId }) => {
   const [step, setStep] = useState(1);
   const [requestResult, setRequestResult] = useState<boolean | null>(null);
   const inputFileRef = useRef<HTMLInputElement>(null);
+  const [isImageDisabled, setIsImageDisabled] = useState(true);
 
   const handleNextStep = () => {
     setStep(step + 1);
@@ -127,6 +129,7 @@ const MembershipReference: React.FC<membershipReferenceProps> = ({ docId }) => {
         firstName: data.firstName,
         lastName: data.lastName,
         middleName: data.middleName,
+        alumniCategory: data.alumniCategory,
         id: data.id,
         memberSince: data.memberSince,
         image: data.image,
@@ -216,7 +219,7 @@ const MembershipReference: React.FC<membershipReferenceProps> = ({ docId }) => {
                     render={({ field }) => (
                       <FormItem className="flex flex-col">
                         <FormLabel className="font-medium text-[16px]">
-                          Year of Entry
+                          Member/Alumni Since
                         </FormLabel>
                         <Popover>
                           <PopoverTrigger asChild>
@@ -255,6 +258,21 @@ const MembershipReference: React.FC<membershipReferenceProps> = ({ docId }) => {
                   />
                   <FormField
                     control={form.control}
+                    name="alumniCategory"
+                    render={({ field }) => (
+                      <FormItem className="w-full">
+                        <FormLabel className="font-medium text-[16px]">
+                          Alumni Category
+                        </FormLabel>
+                        <FormControl>
+                          <Input placeholder="Post Graduate" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
                     name="image"
                     render={({ field }) => (
                       <FormItem className="flex items-center gap-4">
@@ -283,6 +301,7 @@ const MembershipReference: React.FC<membershipReferenceProps> = ({ docId }) => {
                             type="file"
                             accept="image/*"
                             ref={inputFileRef}
+                            disabled={isImageDisabled}
                             placeholder="Upload Profile Photo"
                             className="account-form_image-input"
                             onChange={(e) => handleImage(e, field.onChange)}

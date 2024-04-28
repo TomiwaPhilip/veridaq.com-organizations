@@ -283,6 +283,7 @@ interface MembershipParams {
   middleName?: string;
   id: string;
   memberSince: Date;
+  alumniCategory: string;
   image?: string;
   _id?: string;
 }
@@ -312,23 +313,45 @@ export async function createOrUpdateMembershipReference(
 
     console.log(params.id);
 
-    const data = {
-      memberName: params.firstName + " " + params.lastName,
-      memberID: params.id,
-      nameOfInstitution: orgName,
-      passportUrl: params.image,
-      memberSince: period,
-      nameOfOrganization: orgName,
-      nameOfAdmin: adminName,
-      adminDesignation: adminDesignation,
-      currentDateTime: currentDateTime,
-      badgeID: badgeID,
-    };
-    const url =
-      "https://silver-adventure-wr7r4g7g77jwcg7jp-5000.app.github.dev/member-reference";
-    const docName = "memberReference.pdf";
+    let result;
 
-    const result = await getDocAndUpload(data, url, docName);
+    if (!params.alumniCategory) {
+      const data = {
+        memberName: params.firstName + " " + params.lastName,
+        memberID: params.id,
+        nameOfInstitution: orgName,
+        passportUrl: params.image,
+        memberSince: period,
+        nameOfOrganization: orgName,
+        nameOfAdmin: adminName,
+        adminDesignation: adminDesignation,
+        currentDateTime: currentDateTime,
+        badgeID: badgeID,
+      };
+      const url =
+        "https://silver-adventure-wr7r4g7g77jwcg7jp-5000.app.github.dev/member-reference";
+      const docName = "memberReference.pdf";
+
+      result = await getDocAndUpload(data, url, docName);
+    } else {
+      const data = {
+        alumniName: params.firstName + " " + params.lastName,
+        alumniID: params.id,
+        nameOfInstitution: orgName,
+        alumniSince: period,
+        alumniCategory: params.alumniCategory,
+        nameOfOrganization: orgName,
+        nameOfAdmin: adminName,
+        adminDesignation: adminDesignation,
+        currentDateTime: currentDateTime,
+        badgeID: badgeID,
+      };
+      const url =
+        "https://silver-adventure-wr7r4g7g77jwcg7jp-5000.app.github.dev/alumni-reference";
+      const docName = "alumniReference.pdf";
+
+      result = await getDocAndUpload(data, url, docName);
+    }
 
     if (result) {
       // If id is provided, find and update the document
@@ -424,6 +447,7 @@ export async function createOrUpdateDocumentVerificationRequest(
       currentDateTime: currentDateTime,
       badgeID: badgeID,
     };
+
     const url =
       "https://silver-adventure-wr7r4g7g77jwcg7jp-5000.app.github.dev/document-verification";
     const docName = "memberReference.pdf";
