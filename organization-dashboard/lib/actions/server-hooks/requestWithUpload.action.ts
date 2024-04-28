@@ -9,8 +9,11 @@ export async function getDocAndUpload(
   docName: string,
 ): Promise<string | undefined> {
   try {
+    console.log(data);
+    console.log(docName);
+    console.log(url);
     // Send the GET request with the JSON data
-    const response = await got.get(url, {
+    const response = await got.post(url, {
       responseType: "buffer", // Set response type to buffer to handle binary data
       json: data, // Send JSON data in the request body
     });
@@ -21,9 +24,10 @@ export async function getDocAndUpload(
       const pdfFile = response.body;
       const blob = await put(docName, pdfFile, {
         access: "public",
+        contentType: "application/pdf",
       });
       console.log("PDF uploaded to cloud storage successfully.");
-
+      console.log(blob.url, blob);
       return blob.url;
     } else {
       console.error("Error:", response.statusMessage);

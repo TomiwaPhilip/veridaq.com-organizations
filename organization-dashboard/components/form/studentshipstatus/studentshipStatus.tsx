@@ -76,6 +76,7 @@ const StudentshipStatus: React.FC<studentshipStatusProps> = ({ docId }) => {
             lastName,
             middleName,
             courseOfStudy,
+            categoryOfStudy,
             currentLevel,
             studentId,
             faculty,
@@ -89,6 +90,7 @@ const StudentshipStatus: React.FC<studentshipStatusProps> = ({ docId }) => {
             lastName,
             middleName,
             courseOfStudy,
+            categoryOfStudy,
             currentLevel,
             studentId,
             faculty,
@@ -152,6 +154,7 @@ const StudentshipStatus: React.FC<studentshipStatusProps> = ({ docId }) => {
         middleName: data.middleName,
         currentLevel: data.currentLevel,
         courseOfStudy: data.courseOfStudy,
+        categoryOfStudy: data.categoryOfStudy,
         studentId: data.studentId,
         info: data.info,
         faculty: data.faculty,
@@ -266,6 +269,40 @@ const StudentshipStatus: React.FC<studentshipStatusProps> = ({ docId }) => {
                             {...field}
                           />
                         </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="categoryOfStudy"
+                    render={({ field }) => (
+                      <FormItem className="w-full">
+                        <FormLabel className="font-medium text-[16px]">
+                          Category of Study
+                        </FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select a Current Level" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="Bachelors Degree">
+                              Bachelors Degree
+                            </SelectItem>
+                            <SelectItem value="Masters Degree">
+                              Masters Degree
+                            </SelectItem>
+                            <SelectItem value="Doctorate Degree">
+                              Doctorate Degree
+                            </SelectItem>
+                            <SelectItem value="Others">Others</SelectItem>
+                          </SelectContent>
+                        </Select>
                         <FormMessage />
                       </FormItem>
                     )}

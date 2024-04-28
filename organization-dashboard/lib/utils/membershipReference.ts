@@ -10,7 +10,7 @@ const MembershipReferenceSchema = new Schema({
   lastName: { type: String, required: true, minlength: 1 },
   middleName: String,
   id: { type: String, required: true, minlength: 1 },
-  info: { type: String, required: true, minlength: 1 },
+  memberSince: { type: Date, required: true, max: Date.now() },
   image: String,
   user: {
     type: Schema.Types.ObjectId,
@@ -32,7 +32,11 @@ const MembershipReferenceSchema = new Schema({
   badgeUrl: {
     type: String,
     default: null,
-  }
+  },
+  issuingAdminDetails: {
+    type: Schema.Types.ObjectId,
+    ref: "Role",
+  },
 });
 
 // Create and export the Mongoose model based on the schema

@@ -101,23 +101,8 @@ export function verifyToken(
 }
 
 export function generateVeridaqID(): string {
-  const numbers: number[] = [];
-  let result: string = "";
-
-  while (numbers.length < 4) {
-    const randomNumber = Math.floor(Math.random() * 100) + 1; // Generate a random number between 1 and 100
-
-    // Check if the random number is unique
-    if (!numbers.includes(randomNumber)) {
-      numbers.push(randomNumber);
-      result += `Veridaq-${randomNumber} `;
-    }
-  }
-
-  // Trim any trailing space
-  result = result.trim();
-
-  return result;
+  const randomNumber = Math.floor(Math.random() * 9000) + 1000; // Generate a random number between 1000 and 9999
+  return `Veridaq-${randomNumber}`;
 }
 
 export function concatenateDates(startDate: Date, endDate?: Date): string {
@@ -140,22 +125,27 @@ export function concatenateDates(startDate: Date, endDate?: Date): string {
     return `${formattedStartDate} -- ${formattedEndDate}`;
   } else {
     // Construct "Till Date" string using the year from the start date
-    const year = startDate.getFullYear();
-    return `${formattedStartDate} -- Till ${year}`;
+
+    return `${formattedStartDate} -- Till Date`;
   }
 }
 
 export function getCurrentDateTime(): string {
   const currentDate = new Date();
 
+  // Convert UTC time to local time zone
+  const localDate = new Date(
+    currentDate.getTime() - currentDate.getTimezoneOffset() * 60000,
+  );
+
   // Get day, month, and year
-  const day = currentDate.getDate();
-  const month = currentDate.getMonth() + 1; // Month is zero-based, so add 1
-  const year = currentDate.getFullYear();
+  const day = localDate.getDate();
+  const month = localDate.getMonth() + 1; // Month is zero-based, so add 1
+  const year = localDate.getFullYear();
 
   // Get hours, minutes, and AM/PM
-  let hours = currentDate.getHours();
-  const minutes = currentDate.getMinutes();
+  let hours = localDate.getHours();
+  const minutes = localDate.getMinutes();
   const amOrPm = hours >= 12 ? "PM" : "AM";
 
   // Convert hours to 12-hour format

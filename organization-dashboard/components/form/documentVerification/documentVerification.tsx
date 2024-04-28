@@ -134,8 +134,8 @@ const DocumentVerification: React.FC<docVerificationProps> = ({ docId }) => {
         firstName: data.firstName,
         lastName: data.lastName,
         middleName: data.middleName,
-        documentType: data.id, // Assuming id in Membershipdata corresponds to documentType
-        documentName: data.info, // Assuming info in Membershipdata corresponds to documentName
+        documentType: data.documentType, // Assuming id in Membershipdata corresponds to documentType
+        documentName: data.documentName, // Assuming info in Membershipdata corresponds to documentName
         id: data.id,
         info: data.info,
         image: data.image,
@@ -210,7 +210,7 @@ const DocumentVerification: React.FC<docVerificationProps> = ({ docId }) => {
                     render={({ field }) => (
                       <FormItem className="w-full">
                         <FormLabel className="font-medium text-[16px]">
-                          Employee Type
+                          Document Type
                         </FormLabel>
                         <Select
                           onValueChange={field.onChange}

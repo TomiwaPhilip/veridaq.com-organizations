@@ -12,6 +12,7 @@ const StudentshipStatusSchema = new Schema({
   middleName: String,
   currentLevel: { type: String, required: true, minlength: 1 },
   courseOfStudy: { type: String, required: true, minlength: 1 },
+  categoryOfStudy: { type: String, required: true, minlength: 1 },
   studentId: { type: String, required: true, minlength: 1 },
   info: String,
   faculty: { type: String, required: true, minlength: 1 },
@@ -38,7 +39,11 @@ const StudentshipStatusSchema = new Schema({
   badgeUrl: {
     type: String,
     default: null,
-  }
+  },
+  issuingAdminDetails: {
+    type: Schema.Types.ObjectId,
+    ref: "Role",
+  },
 });
 
 // Create and export the Mongoose model based on the schema

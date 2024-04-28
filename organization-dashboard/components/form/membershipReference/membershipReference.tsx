@@ -15,6 +15,16 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import Image from "next/image";
 import { upload } from "@vercel/blob/client";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import { cn } from "@/lib/utils";
 
 import {
   createOrUpdateMembershipReference,
@@ -54,13 +64,14 @@ const MembershipReference: React.FC<membershipReferenceProps> = ({ docId }) => {
         console.log("Fetched document:", doc); // Log fetched document
         // Set default values for form fields if available
         if (doc) {
-          const { firstName, lastName, middleName, id, info, image } = doc;
+          const { firstName, lastName, middleName, id, memberSince, image } =
+            doc;
           form.reset({
             firstName,
             lastName,
             middleName,
             id,
-            info,
+            memberSince,
             image,
           });
         }
@@ -117,7 +128,7 @@ const MembershipReference: React.FC<membershipReferenceProps> = ({ docId }) => {
         lastName: data.lastName,
         middleName: data.middleName,
         id: data.id,
-        info: data.info,
+        memberSince: data.memberSince,
         image: data.image,
         _id: docId as string,
       });
@@ -201,15 +212,43 @@ const MembershipReference: React.FC<membershipReferenceProps> = ({ docId }) => {
                   />
                   <FormField
                     control={form.control}
-                    name="info"
+                    name="memberSince"
                     render={({ field }) => (
-                      <FormItem className="w-full">
+                      <FormItem className="flex flex-col">
                         <FormLabel className="font-medium text-[16px]">
-                          Additional Info
+                          Year of Entry
                         </FormLabel>
-                        <FormControl>
-                          <Input placeholder="Info" {...field} />
-                        </FormControl>
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <FormControl>
+                              <Button
+                                variant={"outline"}
+                                className={cn(
+                                  "flex h-12 w-full normal-border bg-[#C3B8D8] pt-10 rounded-lg px-1 py-3 placeholder:text-gray-500 text-left disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-950",
+                                  !field.value && "text-muted-foreground",
+                                )}
+                              >
+                                {field.value ? (
+                                  format(field.value, "PPP")
+                                ) : (
+                                  <span>Pick a date</span>
+                                )}
+                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                              </Button>
+                            </FormControl>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-auto p-0" align="start">
+                            <Calendar
+                              mode="single"
+                              selected={field.value}
+                              onSelect={field.onChange}
+                              disabled={(date) =>
+                                date > new Date() || date < new Date("1900")
+                              }
+                              initialFocus
+                            />
+                          </PopoverContent>
+                        </Popover>
                         <FormMessage />
                       </FormItem>
                     )}
