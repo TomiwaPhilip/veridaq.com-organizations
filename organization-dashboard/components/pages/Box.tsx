@@ -160,110 +160,157 @@ export default function Box() {
                 ) : (
                   <div className="flex items-center justify-center h-full">
                     <RiLoader4Line className="animate-spin text-2xl mb-4" />
-                    <p>Loading...</p>
+                    <p className="font-bold">Loading...</p>
                   </div>
                 )}
 
                 {!isAdmin && workRefVeridaqRole && (
                   <>
-                    {workReferenceDoc.length > 0 ? (
-                      workReferenceDoc.map((doc: Documents) => (
-                        <VeridaqDocument
-                          key={doc.DocId}
-                          DocDetails={doc.DocDetails}
-                          DocDate={doc.DocDate}
-                          docId={doc.DocId}
-                          id="1"
-                          onClick={handleOpenModal}
-                        />
-                      ))
+                    {!isLoading ? (
+                      <>
+                        {workReferenceDoc.length > 0 ? (
+                          workReferenceDoc.map((doc: Documents) => (
+                            <VeridaqDocument
+                              key={doc.DocId}
+                              DocDetails={doc.DocDetails}
+                              DocDate={doc.DocDate}
+                              docId={doc.DocId}
+                              id="1"
+                              onClick={handleOpenModal}
+                            />
+                          ))
+                        ) : (
+                          <div className="flex flex-col items-center justify-center h-full">
+                            <Image
+                              src="/assets/images/error.png"
+                              alt="Not Found"
+                              width={200}
+                              height={200}
+                            />
+                            <p className="text-center mt-2">
+                              No documents found!
+                            </p>
+                          </div>
+                        )}
+                      </>
                     ) : (
-                      <div className="flex flex-col items-center justify-center h-full">
-                        <Image
-                          src="/assets/images/error.png"
-                          alt="Not Found"
-                          width={200}
-                          height={200}
-                        />
-                        <p className="text-center mt-2">No documents found!</p>
+                      <div className="flex items-center justify-center h-full">
+                        <RiLoader4Line className="animate-spin text-2xl mb-4" />
+                        <p>Loading...</p>
                       </div>
                     )}
                   </>
                 )}
+
                 {!isAdmin && memStatusVeridaqRole && (
                   <>
-                    {memberReferenceDoc.length > 0 ? (
-                      memberReferenceDoc.map((doc: Documents) => (
-                        <VeridaqDocument
-                          key={doc.DocId}
-                          DocDetails={doc.DocDetails}
-                          DocDate={doc.DocDate}
-                          docId={doc.DocId}
-                          id="3"
-                          onClick={handleOpenModal}
-                        />
-                      ))
+                    {!isLoading ? (
+                      <>
+                        {memberReferenceDoc.length > 0 ? (
+                          memberReferenceDoc.map((doc: Documents) => (
+                            <VeridaqDocument
+                              key={doc.DocId}
+                              DocDetails={doc.DocDetails}
+                              DocDate={doc.DocDate}
+                              docId={doc.DocId}
+                              id="3"
+                              onClick={handleOpenModal}
+                            />
+                          ))
+                        ) : (
+                          <div className="flex flex-col items-center justify-center h-full">
+                            <Image
+                              src="/assets/images/error.png"
+                              alt="Not Found"
+                              width={200}
+                              height={200}
+                            />
+                            <p className="text-center mt-2">
+                              No documents found!
+                            </p>
+                          </div>
+                        )}
+                      </>
                     ) : (
-                      <div className="flex flex-col items-center justify-center h-full">
-                        <Image
-                          src="/assets/images/error.png"
-                          alt="Not Found"
-                          width={200}
-                          height={200}
-                        />
-                        <p className="text-center mt-2">No documents found!</p>
+                      <div className="flex items-center justify-center h-full">
+                        <RiLoader4Line className="animate-spin text-2xl mb-4" />
+                        <p>Loading...</p>
                       </div>
                     )}
                   </>
                 )}
+
                 {!isAdmin && docRefVeridaqRole && (
                   <>
-                    {docVerificationDoc.length > 0 ? (
-                      docVerificationDoc.map((doc: Documents) => (
-                        <VeridaqDocument
-                          key={doc.DocId}
-                          DocDetails={doc.DocDetails}
-                          DocDate={doc.DocDate}
-                          docId={doc.DocId}
-                          id="4"
-                          onClick={handleOpenModal}
-                        />
-                      ))
+                    {!isLoading ? (
+                      <>
+                        {docVerificationDoc.length > 0 ? (
+                          docVerificationDoc.map((doc: Documents) => (
+                            <VeridaqDocument
+                              key={doc.DocId}
+                              DocDetails={doc.DocDetails}
+                              DocDate={doc.DocDate}
+                              docId={doc.DocId}
+                              id="4"
+                              onClick={handleOpenModal}
+                            />
+                          ))
+                        ) : (
+                          <div className="flex flex-col items-center justify-center h-full">
+                            <Image
+                              src="/assets/images/error.png"
+                              alt="Not Found"
+                              width={200}
+                              height={200}
+                            />
+                            <p className="text-center mt-2">
+                              No documents found!
+                            </p>
+                          </div>
+                        )}
+                      </>
                     ) : (
-                      <div className="flex flex-col items-center justify-center h-full">
-                        <Image
-                          src="/assets/images/error.png"
-                          alt="Not Found"
-                          width={200}
-                          height={200}
-                        />
-                        <p className="text-center mt-2">No documents found!</p>
+                      <div className="flex items-center justify-center h-full">
+                        <RiLoader4Line className="animate-spin text-2xl mb-4" />
+                        <p>Loading...</p>
                       </div>
                     )}
                   </>
                 )}
+
                 {!isAdmin && stdStatusVeridaqRole && (
                   <>
-                    {studentStatusDoc.length > 0 ? (
-                      studentStatusDoc.map((doc: Documents) => (
-                        <VeridaqDocument
-                          key={doc.DocId}
-                          DocDetails={doc.DocDetails}
-                          DocDate={doc.DocDate}
-                          docId={doc.DocId}
-                          id="2"
-                          onClick={handleOpenModal}
-                        />
-                      ))
+                    {!isLoading ? (
+                      <>
+                        {studentStatusDoc.length > 0 ? (
+                          studentStatusDoc.map((doc: Documents) => (
+                            <VeridaqDocument
+                              key={doc.DocId}
+                              DocDetails={doc.DocDetails}
+                              DocDate={doc.DocDate}
+                              docId={doc.DocId}
+                              id="2"
+                              onClick={handleOpenModal}
+                            />
+                          ))
+                        ) : (
+                          <div className="flex flex-col items-center justify-center h-full">
+                            <Image
+                              src="/assets/images/error.png"
+                              alt="Not Found"
+                              width={200}
+                              height={200}
+                            />
+                            <p className="text-center mt-2">
+                              No documents found!
+                            </p>
+                          </div>
+                        )}
+                      </>
                     ) : (
-                      <div className="flex flex-col items-center justify-center h-full">
-                        <Image
-                          src="/assets/images/error.png"
-                          alt="Not Found"
-                          width={200}
-                          height={200}
-                        />
-                        <p className="text-center mt-2">No documents found!</p>
+                      <div className="flex items-center justify-center h-full">
+                        <RiLoader4Line className="animate-spin text-2xl mb-4" />
+                        <p>Loading...</p>
                       </div>
                     )}
                   </>
@@ -273,7 +320,7 @@ export default function Box() {
           </div>
         </div>
       </div>
-      // TO DO Implement endless scrolling or pagination.
+      {/* TO DO Implement endless scrolling or pagination. */}
       {openModalId && (
         <ModalWithStepper
           id={openModalId}
