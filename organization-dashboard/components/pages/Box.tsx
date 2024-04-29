@@ -38,6 +38,7 @@ export default function Box() {
       try {
         const doc1 = await getWorkReference();
         if (doc1) setWorkReferenceDoc(doc1);
+        console.log(workReferenceDoc);
 
         const doc2 = await getMemberReference();
         if (doc2) setMemberReferenceDoc(doc2);
@@ -95,11 +96,11 @@ export default function Box() {
               <div className="mt-10 overflow-auto">
                 {!isLoading ? (
                   <>
-                    {isAdmin ||
-                    workReferenceDoc.length > 0 ||
-                    memberReferenceDoc.length > 0 ||
-                    docVerificationDoc.length > 0 ||
-                    studentStatusDoc.length > 0 ? (
+                    {isAdmin &&
+                    (workReferenceDoc.length > 0 ||
+                      memberReferenceDoc.length > 0 ||
+                      docVerificationDoc.length > 0 ||
+                      studentStatusDoc.length > 0) ? (
                       <>
                         {workReferenceDoc.map((doc: Documents) => (
                           <VeridaqDocument
@@ -272,6 +273,7 @@ export default function Box() {
           </div>
         </div>
       </div>
+      // TO DO Implement endless scrolling or pagination.
       {openModalId && (
         <ModalWithStepper
           id={openModalId}
