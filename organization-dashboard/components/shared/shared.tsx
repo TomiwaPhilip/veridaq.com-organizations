@@ -348,6 +348,43 @@ export function Card3({
   );
 }
 
+export function Card4({
+  heading,
+  bgColor,
+  outlineColor,
+  textColor,
+  rights,
+  role,
+}: {
+  heading: string;
+  bgColor: string;
+  outlineColor: string;
+  textColor: string;
+  rights: string;
+  role: string;
+}) {
+  return (
+    <div
+      className="card rounded-lg text-[#38313A] w-full"
+      style={{
+        backgroundColor: bgColor,
+        borderColor: outlineColor,
+        borderStyle: "solid",
+        borderWidth: "3px",
+        color: textColor,
+      }}
+    >
+      <div className="flex items-start justify-center gap-10">
+        <p className="font-bold text-[16px] mt-4 px-1">{heading}</p>
+        <p className="text-white italic text-sm font-bold">{rights}</p>
+      </div>
+      <p className="font-bold text-sm" style={{ color: textColor }}>
+        {role}
+      </p>
+    </div>
+  );
+}
+
 export function SearchBar() {
   return (
     <div className="bg-[#E1D7E2]">

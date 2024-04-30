@@ -12,6 +12,7 @@ import {
 } from "../utils";
 import { getDocAndUpload } from "./server-hooks/requestWithUpload.action";
 import MembershipReference from "../utils/membershipReference";
+import Role from "../utils/roleSchema";
 
 interface Params {
   firstName: string;
@@ -283,7 +284,7 @@ interface MembershipParams {
   middleName?: string;
   id: string;
   memberSince: Date;
-  alumniCategory: string;
+  alumniCategory?: string;
   image?: string;
   _id?: string;
 }
@@ -917,5 +918,40 @@ export async function getIssuedDocVerification() {
   } catch (error: any) {
     console.error(error);
     throw new Error("Failed to fetch issued studentshipStatus documents");
+  }
+}
+
+export async function getTeamMembers() {
+  try {
+    const session = await getSession();
+
+    if (!session || session.role !== "admin") {
+      throw new Error("Unauthorized");
+    }
+
+    // Connect to the database
+    connectToDB();
+
+    const orgId = session.orgId;
+
+    // Query the Role collection based on orgId
+    const roles = await Role.find({
+      organization: orgId,
+    }).select("firstName lastName role designation");
+
+    // Format the data before returning to the frontend
+    const formattedData = roles.map((doc) => ({
+      heading: `${doc.firstName} ${doc.lastName}`,
+      DocId: doc._id.toString(),
+      role: doc.designation,
+      roles: doc.role,
+    }));
+
+    console.log(formattedData);
+
+    return formattedData;
+  } catch (error: any) {
+    console.error(error);
+    throw new Error("Failed to fetch team members");
   }
 }

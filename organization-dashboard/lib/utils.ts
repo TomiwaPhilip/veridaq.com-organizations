@@ -39,6 +39,29 @@ export const sendVerificationRequest = async (
   }
 };
 
+interface sendInviteParams {
+  firstName: string;
+  email: string;
+  organizationName: string;
+}
+
+export const sendTeamInvite = async (params: sendInviteParams) => {
+  try {
+    const resend = new Resend(process.env.RESEND_API_KEY!);
+    const data = await resend.emails.send({
+      from: "onboarding@veridaq.com",
+      to: params.email,
+      subject: "Team Invite to Veridaq",
+      html: `<p>Hi, ${params.firstName}, you have been invited by ${params.organizationName} to join your organization on Veridaq.com</p>
+        <p>Click <a href="https://organization.veridaq.com/auth/signin"><b>here</b></a> to join now</p>
+        `,
+    });
+    return data;
+  } catch (error) {
+    console.log({ error });
+  }
+};
+
 export async function saveSession(session: SessionData): Promise<void> {
   // Check if session exists
   let existingSession = await getSession();
