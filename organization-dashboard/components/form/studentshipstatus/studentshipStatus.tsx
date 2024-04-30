@@ -38,7 +38,11 @@ import {
   getStudentshipStatusById,
 } from "@/lib/actions/request.action";
 import { StudentshipStatusValidation3 } from "@/lib/validations/studentshipstatus";
-import { SuccessMessage, ErrorMessage } from "@/components/shared/shared";
+import {
+  SuccessMessage,
+  ErrorMessage,
+  useSession,
+} from "@/components/shared/shared";
 
 interface studentshipStatusProps {
   docId?: string | null;
@@ -48,6 +52,7 @@ const StudentshipStatus: React.FC<studentshipStatusProps> = ({ docId }) => {
   const [step, setStep] = useState(1);
   const [requestResult, setRequestResult] = useState<boolean | null>(null);
   const inputFileRef = useRef<HTMLInputElement>(null);
+  const session = useSession();
 
   const handleNextStep = () => {
     setStep(step + 1);
@@ -172,6 +177,15 @@ const StudentshipStatus: React.FC<studentshipStatusProps> = ({ docId }) => {
       setRequestResult(false);
     }
   };
+
+  if (session?.role !== "admin" && session?.role !== "stdStatusVeridaqRole") {
+    return (
+      <p className="font-bold text-lg text-center">
+        {" "}
+        You are not authorized to issue this kind of Veridaq
+      </p>
+    );
+  }
 
   return (
     <main>

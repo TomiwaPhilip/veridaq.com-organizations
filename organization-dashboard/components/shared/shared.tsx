@@ -444,6 +444,10 @@ export function Wallet() {
   const balance = session?.walletBalance as string;
   const isZeroBalance: boolean = balance === "0.00";
 
+  if (session?.role !== "admin") {
+    return null;
+  }
+
   async function handleWithdraw() {
     setIsLoading(true);
     setIsError(false);

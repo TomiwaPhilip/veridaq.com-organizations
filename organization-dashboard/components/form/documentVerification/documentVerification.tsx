@@ -28,7 +28,11 @@ import {
   getDocVerificationById,
 } from "@/lib/actions/request.action";
 import { DocumentVerificationValidation3 } from "@/lib/validations/documentverification";
-import { SuccessMessage, ErrorMessage } from "@/components/shared/shared";
+import {
+  SuccessMessage,
+  ErrorMessage,
+  useSession,
+} from "@/components/shared/shared";
 
 interface docVerificationProps {
   docId?: string | null;
@@ -38,6 +42,7 @@ const DocumentVerification: React.FC<docVerificationProps> = ({ docId }) => {
   const [step, setStep] = useState(1);
   const [requestResult, setRequestResult] = useState<boolean | null>(null);
   const inputFileRef = useRef<HTMLInputElement>(null);
+  const session = useSession();
 
   const handleNextStep = () => {
     setStep(step + 1);
@@ -150,6 +155,15 @@ const DocumentVerification: React.FC<docVerificationProps> = ({ docId }) => {
       setRequestResult(false);
     }
   };
+
+  if (session?.role !== "admin" && session?.role !== "memStatusVeridaqRole") {
+    return (
+      <p className="font-bold text-lg text-center">
+        {" "}
+        You are not authorized to issue this kind of Veridaq
+      </p>
+    );
+  }
 
   return (
     <main>

@@ -36,7 +36,11 @@ import {
   getWorkReferenceById,
 } from "@/lib/actions/request.action";
 import { WorkReferenceValidation3 } from "@/lib/validations/workreference";
-import { SuccessMessage, ErrorMessage } from "@/components/shared/shared";
+import {
+  SuccessMessage,
+  ErrorMessage,
+  useSession,
+} from "@/components/shared/shared";
 
 interface WorkReferenceProps {
   docId?: string | null;
@@ -45,6 +49,7 @@ interface WorkReferenceProps {
 const WorkReference: React.FC<WorkReferenceProps> = ({ docId }) => {
   const [step, setStep] = useState(1);
   const [requestResult, setRequestResult] = useState<boolean | null>(null);
+  const session = useSession();
 
   const handleNextStep = () => {
     setStep(step + 1);
@@ -136,6 +141,15 @@ const WorkReference: React.FC<WorkReferenceProps> = ({ docId }) => {
       setRequestResult(false);
     }
   };
+
+  if (session?.role !== "admin" && session?.role !== "workRefVeridaqRole") {
+    return (
+      <p className="font-bold text-lg text-center">
+        {" "}
+        You are not authorized to issue this kind of Veridaq
+      </p>
+    );
+  }
 
   return (
     <main>

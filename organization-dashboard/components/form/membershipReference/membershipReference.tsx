@@ -32,7 +32,11 @@ import {
   getMemberReferenceById,
 } from "@/lib/actions/request.action";
 import { MembershipReferenceValidation3 } from "@/lib/validations/membershipreference";
-import { SuccessMessage, ErrorMessage } from "@/components/shared/shared";
+import {
+  SuccessMessage,
+  ErrorMessage,
+  useSession,
+} from "@/components/shared/shared";
 
 interface membershipReferenceProps {
   docId?: string | null;
@@ -43,6 +47,7 @@ const MembershipReference: React.FC<membershipReferenceProps> = ({ docId }) => {
   const [requestResult, setRequestResult] = useState<boolean | null>(null);
   const inputFileRef = useRef<HTMLInputElement>(null);
   const [isImageDisabled, setIsImageDisabled] = useState(true);
+  const session = useSession();
 
   const handleNextStep = () => {
     setStep(step + 1);
@@ -144,6 +149,15 @@ const MembershipReference: React.FC<membershipReferenceProps> = ({ docId }) => {
       setRequestResult(false);
     }
   };
+
+  if (session?.role !== "admin" && session?.role !== "memStatusVeridaqRole") {
+    return (
+      <p className="font-bold text-lg text-center">
+        {" "}
+        You are not authorized to issue this kind of Veridaq
+      </p>
+    );
+  }
 
   return (
     <main>

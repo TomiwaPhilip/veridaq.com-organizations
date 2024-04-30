@@ -54,99 +54,35 @@ export default function Store() {
     fetchData();
   }, []);
 
-  let isAdmin;
+  let isAdmin: boolean = false;
   let workRefVeridaqRole: boolean = false;
   let memStatusVeridaqRole: boolean = false;
   let docRefVeridaqRole: boolean = false;
   let stdStatusVeridaqRole: boolean = false;
 
   if (session?.role === "admin") isAdmin = true;
-  if (session?.role === "workRefVeridaqRole") isAdmin = true;
-  if (session?.role === "memStatusVeridaqRole") isAdmin = true;
+  if (session?.role === "workRefVeridaqRole") workRefVeridaqRole = true;
+  if (session?.role === "memStatusVeridaqRole") memStatusVeridaqRole = true;
   if (session?.role === "docRefVeridaqRole") docRefVeridaqRole = true;
   if (session?.role === "stdStatusVeridaqRole") stdStatusVeridaqRole = true;
 
-  return (
-    <main className="mt-[60px]">
-      <div className="">
-        <SearchBar />
-      </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 justify-center mt-[30px]">
-        {!isLoading ? (
-          <>
-            {isAdmin &&
-            (workReferenceDoc.length > 0 ||
-              memberReferenceDoc.length > 0 ||
-              docVerificationDoc.length > 0 ||
-              studentStatusDoc.length > 0) ? (
-              <div className="mt-10 overflow-auto">
-                {/* Render cards for each type of document */}
-                {workReferenceDoc.map((doc: Documents) => (
-                  <Card3
-                    key={doc.DocId} // Ensure each Card component has a unique key
-                    heading={doc.heading}
-                    textColor={doc.textColor}
-                    bgColor={doc.bgColor}
-                    outlineColor={doc.outlineColor}
-                    link={doc.link}
-                  />
-                ))}
-                {memberReferenceDoc.map((doc: Documents) => (
-                  <Card3
-                    key={doc.DocId} // Ensure each Card component has a unique key
-                    heading={doc.heading}
-                    textColor={doc.textColor}
-                    bgColor={doc.bgColor}
-                    outlineColor={doc.outlineColor}
-                    link={doc.link}
-                  />
-                ))}
-                {docVerificationDoc.map((doc: Documents) => (
-                  <Card3
-                    key={doc.DocId} // Ensure each Card component has a unique key
-                    heading={doc.heading}
-                    textColor={doc.textColor}
-                    bgColor={doc.bgColor}
-                    outlineColor={doc.outlineColor}
-                    link={doc.link}
-                  />
-                ))}
-                {studentStatusDoc.map((doc: Documents) => (
-                  <Card3
-                    key={doc.DocId} // Ensure each Card component has a unique key
-                    heading={doc.heading}
-                    textColor={doc.textColor}
-                    bgColor={doc.bgColor}
-                    outlineColor={doc.outlineColor}
-                    link={doc.link}
-                  />
-                ))}
-              </div>
-            ) : (
-              <div className="flex flex-col items-center justify-center h-full">
-                <Image
-                  src="/assets/images/error.png"
-                  alt="No Document Found"
-                  width={200}
-                  height={200}
-                />
-                <p className="text-center mt-2">You have no Documents yet!</p>
-              </div>
-            )}
-          </>
-        ) : (
-          <div className="flex items-center justify-center h-full">
-            <RiLoader4Line className="animate-spin text-2xl mb-4" />
-            <p className="font-bold">Loading...</p>
-          </div>
-        )}
-
-        {!isAdmin && workRefVeridaqRole && (
-          <>
-            {!isLoading ? (
-              <>
-                {workReferenceDoc.length > 0 ? (
-                  workReferenceDoc.map((doc: Documents) => (
+  if (isAdmin) {
+    return (
+      <main className="mt-[60px]">
+        <div className="">
+          <SearchBar />
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 justify-center mt-[30px]">
+          {!isLoading ? (
+            <>
+              {isAdmin &&
+              (workReferenceDoc.length > 0 ||
+                memberReferenceDoc.length > 0 ||
+                docVerificationDoc.length > 0 ||
+                studentStatusDoc.length > 0) ? (
+                <div className="mt-10 overflow-auto">
+                  {/* Render cards for each type of document */}
+                  {workReferenceDoc.map((doc: Documents) => (
                     <Card3
                       key={doc.DocId} // Ensure each Card component has a unique key
                       heading={doc.heading}
@@ -155,34 +91,8 @@ export default function Store() {
                       outlineColor={doc.outlineColor}
                       link={doc.link}
                     />
-                  ))
-                ) : (
-                  <div className="flex flex-col items-center justify-center h-full">
-                    <Image
-                      src="/assets/images/error.png"
-                      alt="Not Found"
-                      width={200}
-                      height={200}
-                    />
-                    <p className="text-center mt-2">No documents found!</p>
-                  </div>
-                )}
-              </>
-            ) : (
-              <div className="flex items-center justify-center h-full">
-                <RiLoader4Line className="animate-spin text-2xl mb-4" />
-                <p>Loading...</p>
-              </div>
-            )}
-          </>
-        )}
-
-        {!isAdmin && memStatusVeridaqRole && (
-          <>
-            {!isLoading ? (
-              <>
-                {memberReferenceDoc.length > 0 ? (
-                  memberReferenceDoc.map((doc: Documents) => (
+                  ))}
+                  {memberReferenceDoc.map((doc: Documents) => (
                     <Card3
                       key={doc.DocId} // Ensure each Card component has a unique key
                       heading={doc.heading}
@@ -191,34 +101,8 @@ export default function Store() {
                       outlineColor={doc.outlineColor}
                       link={doc.link}
                     />
-                  ))
-                ) : (
-                  <div className="flex flex-col items-center justify-center h-full">
-                    <Image
-                      src="/assets/images/error.png"
-                      alt="Not Found"
-                      width={200}
-                      height={200}
-                    />
-                    <p className="text-center mt-2">No documents found!</p>
-                  </div>
-                )}
-              </>
-            ) : (
-              <div className="flex items-center justify-center h-full">
-                <RiLoader4Line className="animate-spin text-2xl mb-4" />
-                <p>Loading...</p>
-              </div>
-            )}
-          </>
-        )}
-
-        {!isAdmin && docRefVeridaqRole && (
-          <>
-            {!isLoading ? (
-              <>
-                {docVerificationDoc.length > 0 ? (
-                  docVerificationDoc.map((doc: Documents) => (
+                  ))}
+                  {docVerificationDoc.map((doc: Documents) => (
                     <Card3
                       key={doc.DocId} // Ensure each Card component has a unique key
                       heading={doc.heading}
@@ -227,34 +111,8 @@ export default function Store() {
                       outlineColor={doc.outlineColor}
                       link={doc.link}
                     />
-                  ))
-                ) : (
-                  <div className="flex flex-col items-center justify-center h-full">
-                    <Image
-                      src="/assets/images/error.png"
-                      alt="Not Found"
-                      width={200}
-                      height={200}
-                    />
-                    <p className="text-center mt-2">No documents found!</p>
-                  </div>
-                )}
-              </>
-            ) : (
-              <div className="flex items-center justify-center h-full">
-                <RiLoader4Line className="animate-spin text-2xl mb-4" />
-                <p>Loading...</p>
-              </div>
-            )}
-          </>
-        )}
-
-        {!isAdmin && stdStatusVeridaqRole && (
-          <>
-            {!isLoading ? (
-              <>
-                {studentStatusDoc.length > 0 ? (
-                  studentStatusDoc.map((doc: Documents) => (
+                  ))}
+                  {studentStatusDoc.map((doc: Documents) => (
                     <Card3
                       key={doc.DocId} // Ensure each Card component has a unique key
                       heading={doc.heading}
@@ -263,28 +121,208 @@ export default function Store() {
                       outlineColor={doc.outlineColor}
                       link={doc.link}
                     />
-                  ))
-                ) : (
-                  <div className="flex flex-col items-center justify-center h-full">
-                    <Image
-                      src="/assets/images/error.png"
-                      alt="Not Found"
-                      width={200}
-                      height={200}
-                    />
-                    <p className="text-center mt-2">No documents found!</p>
-                  </div>
-                )}
-              </>
-            ) : (
-              <div className="flex items-center justify-center h-full">
-                <RiLoader4Line className="animate-spin text-2xl mb-4" />
-                <p>Loading...</p>
-              </div>
-            )}
-          </>
-        )}
-      </div>
-    </main>
-  );
+                  ))}
+                </div>
+              ) : (
+                <div className="flex flex-col items-center justify-center h-full">
+                  <Image
+                    src="/assets/images/error.png"
+                    alt="No Document Found"
+                    width={200}
+                    height={200}
+                  />
+                  <p className="text-center mt-2">You have no Documents yet!</p>
+                </div>
+              )}
+            </>
+          ) : (
+            <div className="flex items-center justify-center h-full">
+              <RiLoader4Line className="animate-spin text-2xl mb-4" />
+              <p className="font-bold">Loading...</p>
+            </div>
+          )}
+        </div>
+      </main>
+    );
+  } else if (workRefVeridaqRole) {
+    return (
+      <main className="mt-[60px]">
+        <div className="">
+          <SearchBar />
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 justify-center mt-[30px]">
+          {!isAdmin && workRefVeridaqRole && (
+            <>
+              {!isLoading ? (
+                <>
+                  {workReferenceDoc.length > 0 ? (
+                    workReferenceDoc.map((doc: Documents) => (
+                      <Card3
+                        key={doc.DocId} // Ensure each Card component has a unique key
+                        heading={doc.heading}
+                        textColor={doc.textColor}
+                        bgColor={doc.bgColor}
+                        outlineColor={doc.outlineColor}
+                        link={doc.link}
+                      />
+                    ))
+                  ) : (
+                    <div className="flex flex-col items-center justify-center h-full">
+                      <Image
+                        src="/assets/images/error.png"
+                        alt="Not Found"
+                        width={200}
+                        height={200}
+                      />
+                      <p className="text-center mt-2">No documents found!</p>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div className="flex items-center justify-center h-full">
+                  <RiLoader4Line className="animate-spin text-2xl mb-4" />
+                  <p>Loading...</p>
+                </div>
+              )}
+            </>
+          )}
+        </div>
+      </main>
+    );
+  } else if (memStatusVeridaqRole) {
+    return (
+      <main className="mt-[60px]">
+        <div className="">
+          <SearchBar />
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 justify-center mt-[30px]">
+          {!isAdmin && memStatusVeridaqRole && (
+            <>
+              {!isLoading ? (
+                <>
+                  {memberReferenceDoc.length > 0 ? (
+                    memberReferenceDoc.map((doc: Documents) => (
+                      <Card3
+                        key={doc.DocId} // Ensure each Card component has a unique key
+                        heading={doc.heading}
+                        textColor={doc.textColor}
+                        bgColor={doc.bgColor}
+                        outlineColor={doc.outlineColor}
+                        link={doc.link}
+                      />
+                    ))
+                  ) : (
+                    <div className="flex flex-col items-center justify-center h-full">
+                      <Image
+                        src="/assets/images/error.png"
+                        alt="Not Found"
+                        width={200}
+                        height={200}
+                      />
+                      <p className="text-center mt-2">No documents found!</p>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div className="flex items-center justify-center h-full">
+                  <RiLoader4Line className="animate-spin text-2xl mb-4" />
+                  <p>Loading...</p>
+                </div>
+              )}
+            </>
+          )}
+        </div>
+      </main>
+    );
+  } else if (docRefVeridaqRole) {
+    return (
+      <main className="mt-[60px]">
+        <div className="">
+          <SearchBar />
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 justify-center mt-[30px]">
+          {!isAdmin && docRefVeridaqRole && (
+            <>
+              {!isLoading ? (
+                <>
+                  {docVerificationDoc.length > 0 ? (
+                    docVerificationDoc.map((doc: Documents) => (
+                      <Card3
+                        key={doc.DocId} // Ensure each Card component has a unique key
+                        heading={doc.heading}
+                        textColor={doc.textColor}
+                        bgColor={doc.bgColor}
+                        outlineColor={doc.outlineColor}
+                        link={doc.link}
+                      />
+                    ))
+                  ) : (
+                    <div className="flex flex-col items-center justify-center h-full">
+                      <Image
+                        src="/assets/images/error.png"
+                        alt="Not Found"
+                        width={200}
+                        height={200}
+                      />
+                      <p className="text-center mt-2">No documents found!</p>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div className="flex items-center justify-center h-full">
+                  <RiLoader4Line className="animate-spin text-2xl mb-4" />
+                  <p>Loading...</p>
+                </div>
+              )}
+            </>
+          )}
+        </div>
+      </main>
+    );
+  } else if (stdStatusVeridaqRole) {
+    return (
+      <main className="mt-[60px]">
+        <div className="">
+          <SearchBar />
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 justify-center mt-[30px]">
+          {!isAdmin && stdStatusVeridaqRole && (
+            <>
+              {!isLoading ? (
+                <>
+                  {studentStatusDoc.length > 0 ? (
+                    studentStatusDoc.map((doc: Documents) => (
+                      <Card3
+                        key={doc.DocId} // Ensure each Card component has a unique key
+                        heading={doc.heading}
+                        textColor={doc.textColor}
+                        bgColor={doc.bgColor}
+                        outlineColor={doc.outlineColor}
+                        link={doc.link}
+                      />
+                    ))
+                  ) : (
+                    <div className="flex flex-col items-center justify-center h-full">
+                      <Image
+                        src="/assets/images/error.png"
+                        alt="Not Found"
+                        width={200}
+                        height={200}
+                      />
+                      <p className="text-center mt-2">No documents found!</p>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div className="flex items-center justify-center h-full">
+                  <RiLoader4Line className="animate-spin text-2xl mb-4" />
+                  <p>Loading...</p>
+                </div>
+              )}
+            </>
+          )}
+        </div>
+      </main>
+    );
+  }
 }
