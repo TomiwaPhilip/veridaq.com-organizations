@@ -28,7 +28,11 @@ import {
   getDocVerificationById,
 } from "@/lib/actions/request.action";
 import { DocumentVerificationValidation3 } from "@/lib/validations/documentverification";
-import { SuccessMessage, ErrorMessage } from "@/components/shared/shared";
+import {
+  SuccessMessage,
+  ErrorMessage,
+  useSession,
+} from "@/components/shared/shared";
 
 interface docVerificationProps {
   docId?: string | null;
@@ -38,6 +42,7 @@ const DocumentVerification: React.FC<docVerificationProps> = ({ docId }) => {
   const [step, setStep] = useState(1);
   const [requestResult, setRequestResult] = useState<boolean | null>(null);
   const inputFileRef = useRef<HTMLInputElement>(null);
+  const session = useSession();
 
   const handleNextStep = () => {
     setStep(step + 1);
@@ -134,8 +139,8 @@ const DocumentVerification: React.FC<docVerificationProps> = ({ docId }) => {
         firstName: data.firstName,
         lastName: data.lastName,
         middleName: data.middleName,
-        documentType: data.id, // Assuming id in Membershipdata corresponds to documentType
-        documentName: data.info, // Assuming info in Membershipdata corresponds to documentName
+        documentType: data.documentType, // Assuming id in Membershipdata corresponds to documentType
+        documentName: data.documentName, // Assuming info in Membershipdata corresponds to documentName
         id: data.id,
         info: data.info,
         image: data.image,
@@ -150,6 +155,15 @@ const DocumentVerification: React.FC<docVerificationProps> = ({ docId }) => {
       setRequestResult(false);
     }
   };
+
+  if (session?.role !== "admin" && session?.role !== "memStatusVeridaqRole") {
+    return (
+      <p className="font-bold text-lg text-center">
+        {" "}
+        You are not authorized to issue this kind of Veridaq
+      </p>
+    );
+  }
 
   return (
     <main>
@@ -210,7 +224,7 @@ const DocumentVerification: React.FC<docVerificationProps> = ({ docId }) => {
                     render={({ field }) => (
                       <FormItem className="w-full">
                         <FormLabel className="font-medium text-[16px]">
-                          Employee Type
+                          Document Type
                         </FormLabel>
                         <Select
                           onValueChange={field.onChange}

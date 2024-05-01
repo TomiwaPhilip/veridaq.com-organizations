@@ -54,6 +54,8 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
           lastName: existingUser.lastName,
           image: "", // Initialize image as an empty string
           walletBalance: "",
+          orgName: "",
+          designation: existingUser.designation,
           isOnboarded: false,
           isVerified: false,
           role: existingUser.role,
@@ -70,6 +72,7 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
           sessionData.isOnboarded = existingOrg.onboarded;
           sessionData.isVerified = existingOrg.verified;
           sessionData.walletBalance = existingOrg.walletBalance;
+          sessionData.orgName = existingOrg.orgName;
         }
 
         if (existingUser.loginType === "google") {
@@ -145,7 +148,9 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
           walletBalance: organization.walletBalance,
           isOnboarded: organization.onboarded,
           isVerified: organization.verified,
+          orgName: organization.orgName,
           role: newRole.role,
+          designation: newRole.designation,
           orgId: organizationId.toString(),
           isLoggedIn: true,
         };

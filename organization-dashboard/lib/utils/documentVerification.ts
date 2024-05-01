@@ -31,6 +31,14 @@ const DocumentVerificationSchema = new Schema({
     type: Date,
     default: Date.now,
   },
+  badgeUrl: {
+    type: String,
+    default: null,
+  },
+  issuingAdminDetails: {
+    type: Schema.Types.ObjectId,
+    ref: "Role",
+  },
 });
 
 // Create and export the Mongoose model based on the schema

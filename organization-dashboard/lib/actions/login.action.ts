@@ -19,7 +19,7 @@ export async function signIn(email: string) {
     // Generate token and URL for verification
     const { token, generatedAt, expiresIn } = generateToken();
 
-    const url = `https://ubiquitous-carnival-x5rgx975jq6vf6rgw-3000.app.github.dev/auth/verify?token=${token}`;
+    const url = `https://65dl88-3000.csb.app/auth/verify?token=${token}`;
 
     // Send email with resend.dev
     await sendVerificationRequest({ url: url, email: email });
@@ -89,6 +89,8 @@ export async function verifyUserToken(token: string): Promise<boolean> {
           isOnboarded: false,
           isVerified: false,
           walletBalance: "",
+          orgName: "",
+          designation: existingUser.designation,
           role: existingUser.role,
           orgId: organizationId.toString(),
           isLoggedIn: true,
@@ -103,6 +105,7 @@ export async function verifyUserToken(token: string): Promise<boolean> {
           sessionData.isOnboarded = existingOrg.onboarded;
           sessionData.isVerified = existingOrg.verified;
           sessionData.walletBalance = existingOrg.walletBalance;
+          sessionData.orgName = existingOrg.orgName;
         }
 
         // Save session
@@ -148,6 +151,8 @@ export async function verifyUserToken(token: string): Promise<boolean> {
           isOnboarded: organization.onboarded,
           isVerified: organization.verified,
           walletBalance: organization.walletBalance,
+          orgName: organization.orgName,
+          designation: newRole.designation,
           role: newRole.role,
           orgId: organizationId.toString(),
           isLoggedIn: true,

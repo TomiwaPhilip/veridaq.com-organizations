@@ -38,7 +38,11 @@ import {
   getStudentshipStatusById,
 } from "@/lib/actions/request.action";
 import { StudentshipStatusValidation3 } from "@/lib/validations/studentshipstatus";
-import { SuccessMessage, ErrorMessage } from "@/components/shared/shared";
+import {
+  SuccessMessage,
+  ErrorMessage,
+  useSession,
+} from "@/components/shared/shared";
 
 interface studentshipStatusProps {
   docId?: string | null;
@@ -48,6 +52,7 @@ const StudentshipStatus: React.FC<studentshipStatusProps> = ({ docId }) => {
   const [step, setStep] = useState(1);
   const [requestResult, setRequestResult] = useState<boolean | null>(null);
   const inputFileRef = useRef<HTMLInputElement>(null);
+  const session = useSession();
 
   const handleNextStep = () => {
     setStep(step + 1);
@@ -76,6 +81,7 @@ const StudentshipStatus: React.FC<studentshipStatusProps> = ({ docId }) => {
             lastName,
             middleName,
             courseOfStudy,
+            categoryOfStudy,
             currentLevel,
             studentId,
             faculty,
@@ -89,6 +95,7 @@ const StudentshipStatus: React.FC<studentshipStatusProps> = ({ docId }) => {
             lastName,
             middleName,
             courseOfStudy,
+            categoryOfStudy,
             currentLevel,
             studentId,
             faculty,
@@ -152,6 +159,7 @@ const StudentshipStatus: React.FC<studentshipStatusProps> = ({ docId }) => {
         middleName: data.middleName,
         currentLevel: data.currentLevel,
         courseOfStudy: data.courseOfStudy,
+        categoryOfStudy: data.categoryOfStudy,
         studentId: data.studentId,
         info: data.info,
         faculty: data.faculty,
@@ -169,6 +177,15 @@ const StudentshipStatus: React.FC<studentshipStatusProps> = ({ docId }) => {
       setRequestResult(false);
     }
   };
+
+  if (session?.role !== "admin" && session?.role !== "stdStatusVeridaqRole") {
+    return (
+      <p className="font-bold text-lg text-center">
+        {" "}
+        You are not authorized to issue this kind of Veridaq
+      </p>
+    );
+  }
 
   return (
     <main>
@@ -266,6 +283,40 @@ const StudentshipStatus: React.FC<studentshipStatusProps> = ({ docId }) => {
                             {...field}
                           />
                         </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="categoryOfStudy"
+                    render={({ field }) => (
+                      <FormItem className="w-full">
+                        <FormLabel className="font-medium text-[16px]">
+                          Category of Study
+                        </FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select a Current Level" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="Bachelors Degree">
+                              Bachelors Degree
+                            </SelectItem>
+                            <SelectItem value="Masters Degree">
+                              Masters Degree
+                            </SelectItem>
+                            <SelectItem value="Doctorate Degree">
+                              Doctorate Degree
+                            </SelectItem>
+                            <SelectItem value="Others">Others</SelectItem>
+                          </SelectContent>
+                        </Select>
                         <FormMessage />
                       </FormItem>
                     )}

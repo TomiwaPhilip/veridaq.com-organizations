@@ -53,6 +53,8 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
             walletBalance: "",
             isOnboarded: false,
             isVerified: false,
+            orgName: "",
+            designation: existingUser.designation,
             role: existingUser.role,
             orgId: organizationId.toString(),
             isLoggedIn: true,
@@ -67,6 +69,7 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
             sessionData.isOnboarded = existingOrg.onboarded;
             sessionData.isVerified = existingOrg.verified;
             sessionData.walletBalance = existingOrg.walletBalance;
+            sessionData.orgName = existingOrg.orgName;
           }
 
           if (existingUser.loginType === "linkedin") {

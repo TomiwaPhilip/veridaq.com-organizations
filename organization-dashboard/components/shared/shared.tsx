@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { RiLoader4Line } from 'react-icons/ri';
+import { RiLoader4Line } from "react-icons/ri";
 
 import { signOut } from "@/lib/actions/login.action";
 import { getSession2 } from "@/lib/actions/server-hooks/getsession.action";
@@ -173,26 +173,26 @@ export function Header() {
         height={35}
       />
       {session?.image ? (
-              <Image
-                alt="user"
-                src={session.image as string}
-                className="rounded-full aspect-square object-cover normal-border"
-                width={50}
-                height={50}
-                onClick={handleSignOut}
-                style={{ cursor: "pointer" }}
-              />
-            ) : (
-              <Image
-                alt="fallback"
-                src="/assets/images/user.png"
-                className="rounded-full aspect-square object-cover normal-border"
-                width={50}
-                height={50}
-                onClick={handleSignOut}
-                style={{ cursor: "pointer" }}
-              />
-            )}
+        <Image
+          alt="user"
+          src={session.image as string}
+          className="rounded-full aspect-square object-cover normal-border"
+          width={50}
+          height={50}
+          onClick={handleSignOut}
+          style={{ cursor: "pointer" }}
+        />
+      ) : (
+        <Image
+          alt="fallback"
+          src="/assets/images/user.png"
+          className="rounded-full aspect-square object-cover normal-border"
+          width={50}
+          height={50}
+          onClick={handleSignOut}
+          style={{ cursor: "pointer" }}
+        />
+      )}
     </header>
   );
 }
@@ -268,15 +268,45 @@ export function Card3({
   bgColor,
   outlineColor,
   textColor,
+  link,
 }: {
   heading: string;
   bgColor: string;
   outlineColor: string;
   textColor: string;
+  link: string;
 }) {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [copy, setCopy] = useState("Copy Link");
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  const handleCopyLink = (link: string) => {
+    // Copy link to clipboard
+    if (navigator.clipboard) {
+      navigator.clipboard
+        .writeText(link)
+        .then(() => {
+          setCopy("Copied");
+          console.log("Link copied to clipboard!");
+          setTimeout(() => {
+            setCopy("Copy Link");
+          }, 4000);
+        })
+        .catch((error) => {
+          // Unable to write to clipboard
+          console.error("Failed to copy link to clipboard:", error);
+        });
+    } else {
+      setCopy("Unable to Copy");
+    }
+  };
+
   return (
     <div
-      className="card rounded-lg text-[#38313A] text-center"
+      className="card rounded-lg text-[#38313A] text-center relative"
       style={{
         backgroundColor: bgColor,
         borderColor: outlineColor,
@@ -292,13 +322,65 @@ export function Card3({
         className="py-2 flex justify-center text-center"
         style={{ backgroundColor: outlineColor }}
       >
-        <Image
-          src={"/assets/icons/icon-command.png"}
-          alt="options"
-          width={40}
-          height={40}
-        />
+        <button onClick={toggleDropdown} className="hover:cursor-pointer">
+          <Image
+            src={"/assets/icons/icon-command.png"}
+            alt="options"
+            width={40}
+            height={40}
+          />
+        </button>
+        {isDropdownOpen && (
+          <div className="absolute top-full right-0 mt-2 z-10 bg-white text-black rounded-lg shadow-md">
+            <button
+              onClick={() => handleCopyLink(link)}
+              className="block w-full py-2 px-4 text-left"
+            >
+              {copy}
+            </button>
+            <Link href={link}>
+              <button className="block w-full py-2 px-4 text-left">Open</button>
+            </Link>
+          </div>
+        )}
       </div>
+    </div>
+  );
+}
+
+export function Card4({
+  heading,
+  bgColor,
+  outlineColor,
+  textColor,
+  rights,
+  role,
+}: {
+  heading: string;
+  bgColor: string;
+  outlineColor: string;
+  textColor: string;
+  rights: string;
+  role: string;
+}) {
+  return (
+    <div
+      className="card rounded-lg text-[#38313A] w-full"
+      style={{
+        backgroundColor: bgColor,
+        borderColor: outlineColor,
+        borderStyle: "solid",
+        borderWidth: "3px",
+        color: textColor,
+      }}
+    >
+      <div className="flex items-start justify-center gap-10">
+        <p className="font-bold text-[16px] mt-4 px-1">{heading}</p>
+        <p className="text-white italic text-sm font-bold">{rights}</p>
+      </div>
+      <p className="font-bold text-sm" style={{ color: textColor }}>
+        {role}
+      </p>
     </div>
   );
 }
@@ -354,7 +436,6 @@ export function SearchBar2() {
 }
 
 export function Wallet() {
-
   const [isError, setIsError] = useState(false);
   const [isSuccessful, setIsSuccessful] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -363,21 +444,25 @@ export function Wallet() {
   const balance = session?.walletBalance as string;
   const isZeroBalance: boolean = balance === "0.00";
 
+  if (session?.role !== "admin") {
+    return null;
+  }
+
   async function handleWithdraw() {
     setIsLoading(true);
     setIsError(false);
     const result = await withDrawFunds();
 
-    if(result) {
-        setIsLoading(false);
-        setIsSuccessful(true);
+    if (result) {
+      setIsLoading(false);
+      setIsSuccessful(true);
     } else {
-        setIsError(true)
-        console.log("I returned false")
-        setIsLoading(false);
-    };
+      setIsError(true);
+      console.log("I returned false");
+      setIsLoading(false);
+    }
   }
-  
+
   return (
     <div className="flex items-center justify-center gap-1">
       <div className="bg-[#554957] px-4 rounded-lg py-4 text-center">
@@ -399,18 +484,27 @@ export function Wallet() {
               height={30}
             />
             <span style={{ marginLeft: "5px" }}>
-                {isLoading ? (
-                    <>
-                        Withdrawing...
-                        <RiLoader4Line className="animate-spin text-2xl inline" />
-                    </>
-                ) : 'Withdraw funds'}
+              {isLoading ? (
+                <>
+                  Withdrawing...
+                  <RiLoader4Line className="animate-spin text-2xl inline" />
+                </>
+              ) : (
+                "Withdraw funds"
+              )}
             </span>
           </div>
         </button>
       </div>
-      {isError ? <StatusMessage message="An Error occurred! Ensure your bank details is correct" type="error" /> : null}
-      {isSuccessful ? <StatusMessage message="Your money is on its way!" type="success" /> : null}
+      {isError ? (
+        <StatusMessage
+          message="An Error occurred! Ensure your bank details is correct"
+          type="error"
+        />
+      ) : null}
+      {isSuccessful ? (
+        <StatusMessage message="Your money is on its way!" type="success" />
+      ) : null}
     </div>
   );
 }
@@ -590,10 +684,9 @@ export function VeridaqDocument({
   );
 }
 
-
 interface StatusMessageProps {
   message: string;
-  type: 'error' | 'success';
+  type: "error" | "success";
 }
 
 const StatusMessage: React.FC<StatusMessageProps> = ({ message, type }) => {
@@ -610,8 +703,8 @@ const StatusMessage: React.FC<StatusMessageProps> = ({ message, type }) => {
   return (
     <div
       className={`fixed bottom-5 right-5 p-3 rounded-md text-white ${
-        type === 'error' ? 'bg-red-500' : 'bg-green-500'
-      } ${isVisible ? 'opacity-100' : 'opacity-0'}`}
+        type === "error" ? "bg-red-500" : "bg-green-500"
+      } ${isVisible ? "opacity-100" : "opacity-0"}`}
     >
       {message}
     </div>

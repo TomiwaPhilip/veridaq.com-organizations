@@ -5,8 +5,14 @@ import connectToDB from "../model/database";
 import WorkReference from "../utils/workreference";
 import StudentshipStatus from "../utils/studentshipstatus";
 import DocumentVerification from "../utils/documentVerification";
-import User from "../utils/user";
+import {
+  generateVeridaqID,
+  concatenateDates,
+  getCurrentDateTime,
+} from "../utils";
+import { getDocAndUpload } from "./server-hooks/requestWithUpload.action";
 import MembershipReference from "../utils/membershipReference";
+import Role from "../utils/roleSchema";
 
 interface Params {
   firstName: string;
@@ -42,16 +48,83 @@ export async function createOrUpdateWorkReferenceRequest({
   personalitySummary,
 }: Params) {
   try {
+    console.log("Data got to backend");
     // Connect to the database
     connectToDB();
 
+    const session = await getSession();
+
+    if (!session) {
+      throw new Error("Unauthorized");
+    }
+
+    const orgId = session.orgId;
+    const adminDesignation = session.designation;
+    const adminName = (session.firstName + " " + session.lastName) as string;
+    const orgName = session.orgName as string;
+    const period = concatenateDates(workStartDate, workEndDate);
+    const currentDateTime = getCurrentDateTime();
+    const badgeID = generateVeridaqID();
+    const issuingAdminDetails = session.userId;
+
     console.log(id);
 
-    // If id is provided, find and update the document
-    if (id) {
-      await WorkReference.findByIdAndUpdate(
-        id,
-        {
+    const data = {
+      nameOfEmployee: firstName + " " + lastName,
+      employeeID: staffId,
+      employeeStatus: subType,
+      nameOfInstitution: orgName,
+      subType: employeeType,
+      designation: designation,
+      department: department,
+      period: period,
+      jobFunctions: jobFunction,
+      notableAchievement: notableAchievement,
+      personalitySummary: personalitySummary,
+      nameOfAdmin: adminName,
+      adminDesignation: adminDesignation,
+      currentDateTime: currentDateTime,
+      badgeID: badgeID,
+    };
+    const url =
+      "https://silver-adventure-wr7r4g7g77jwcg7jp-5000.app.github.dev/work-reference";
+    const docName = "workReference.pdf";
+
+    const result = await getDocAndUpload(data, url, docName);
+
+    if (result) {
+      // If id is provided, find and update the document
+      if (id) {
+        await WorkReference.findByIdAndUpdate(
+          id,
+          {
+            firstName,
+            lastName,
+            middleName,
+            employeeType,
+            subType,
+            staffId,
+            designation,
+            workStartDate,
+            workEndDate,
+            department,
+            notableAchievement,
+            jobFunction,
+            personalitySummary,
+            issued: true,
+            dateIssued: new Date(),
+            badgeUrl: result,
+            issuingAdminDetails,
+          },
+          { new: true },
+        );
+
+        return true; // Return true if update is successful
+      } else {
+        // If id is not provided, create a new document
+        // Create a new WorkReference document
+        const workReference = new WorkReference({
+          orgId,
           firstName,
           lastName,
           middleName,
@@ -67,44 +140,15 @@ export async function createOrUpdateWorkReferenceRequest({
           personalitySummary,
           issued: true,
           dateIssued: new Date(),
-        },
-        { new: true },
-      );
-      return true; // Return true if update is successful
-    } else {
-      // If id is not provided, create a new document
-      const session = await getSession();
+          badgeUrl: result,
+          issuingAdminDetails,
+        });
 
-      if (!session) {
-        throw new Error("Unauthorized");
+        // Save the WorkReference document to the database
+        await workReference.save();
+        return true; // Return true if creation is successful
       }
-
-      const orgId = session.orgId;
-
-      // Create a new WorkReference document
-      const workReference = new WorkReference({
-        orgId,
-        firstName,
-        lastName,
-        middleName,
-        employeeType,
-        subType,
-        staffId,
-        designation,
-        workStartDate,
-        workEndDate,
-        department,
-        notableAchievement,
-        jobFunction,
-        personalitySummary,
-        issued: true,
-        dateIssued: new Date(),
-      });
-
-      // Save the WorkReference document to the database
-      await workReference.save();
-      return true; // Return true if creation is successful
-    }
+    } else return false;
   } catch (error: any) {
     throw new Error(
       `Failed to save/update WorkReference request: ${error.message}`,
@@ -117,6 +161,7 @@ interface StudentshipParams {
   lastName: string;
   middleName?: string; // Optional middleName field
   currentLevel: string;
+  categoryOfStudy: string;
   courseOfStudy: string;
   studentId: string;
   info?: string; // Optional info field
@@ -137,11 +182,73 @@ export async function createOrUpdateStudentshipStatus(
 
     console.log(params.id);
 
-    // If id is provided, find and update the document
-    if (params.id) {
-      await StudentshipStatus.findByIdAndUpdate(
-        params.id,
-        {
+    const session = await getSession();
+
+    if (!session) {
+      throw new Error("Unauthorized");
+    }
+
+    const orgId = session.orgId;
+    const adminDesignation = session.designation;
+    const adminName = (session.firstName + " " + session.lastName) as string;
+    const orgName = session.orgName as string;
+    const period = concatenateDates(params.entryYear, params.exitYear);
+    const currentDateTime = getCurrentDateTime();
+    const badgeID = generateVeridaqID();
+    const issuingAdminDetails = session.userId;
+
+    console.log(params.id);
+
+    const data = {
+      nameOfStudent: params.firstName + " " + params.lastName,
+      studentID: params.studentId,
+      nameOfInstitution: orgName,
+      passportUrl: params.image,
+      categoryOfStudy: params.categoryOfStudy,
+      currentLevel: params.currentLevel,
+      courseOfStudy: params.courseOfStudy,
+      faculty: params.faculty,
+      yearOfEntryAndExit: period,
+      nameOfAdmin: adminName,
+      adminDesignation: adminDesignation,
+      currentDateTime: currentDateTime,
+      badgeID: badgeID,
+    };
+    const url =
+      "https://silver-adventure-wr7r4g7g77jwcg7jp-5000.app.github.dev/student-status";
+    const docName = "studentStatus.pdf";
+
+    const result = await getDocAndUpload(data, url, docName);
+
+    if (result) {
+      // If id is provided, find and update the document
+      if (params.id) {
+        await StudentshipStatus.findByIdAndUpdate(
+          params.id,
+          {
+            firstName: params.firstName,
+            lastName: params.lastName,
+            middleName: params.middleName,
+            currentLevel: params.currentLevel,
+            courseOfStudy: params.courseOfStudy,
+            studentId: params.studentId,
+            info: params.info,
+            faculty: params.faculty,
+            entryYear: params.entryYear,
+            exitYear: params.exitYear,
+            image: params.image,
+            issued: true,
+            dateIssued: new Date(),
+            badgeUrl: result,
+            issuingAdminDetails,
+          },
+          { new: true },
+        );
+        return true; // Return true if update is successful
+      } else {
+        // Create a new WorkReference document
+        const studentshipStatus = new StudentshipStatus({
+          orgId: orgId,
           firstName: params.firstName,
           lastName: params.lastName,
           middleName: params.middleName,
@@ -155,42 +262,15 @@ export async function createOrUpdateStudentshipStatus(
           image: params.image,
           issued: true,
           dateIssued: new Date(),
-        },
-        { new: true },
-      );
-      return true; // Return true if update is successful
-    } else {
-      // If id is not provided, create a new document
-      const session = await getSession();
+          badgeUrl: result,
+          issuingAdminDetails,
+        });
 
-      if (!session) {
-        throw new Error("Unauthorized");
+        // Save the WorkReference document to the database
+        await studentshipStatus.save();
+        return true; // Return true if creation is successful
       }
-
-      const orgId = session.orgId;
-
-      // Create a new WorkReference document
-      const studentshipStatus = new StudentshipStatus({
-        orgId: orgId,
-        firstName: params.firstName,
-        lastName: params.lastName,
-        middleName: params.middleName,
-        currentLevel: params.currentLevel,
-        courseOfStudy: params.courseOfStudy,
-        studentId: params.studentId,
-        info: params.info,
-        faculty: params.faculty,
-        entryYear: params.entryYear,
-        exitYear: params.exitYear,
-        image: params.image,
-        issued: true,
-        dateIssued: new Date(),
-      });
-
-      // Save the WorkReference document to the database
-      await studentshipStatus.save();
-      return true; // Return true if creation is successful
-    }
+    } else return false;
   } catch (error: any) {
     throw new Error(
       `Failed to save/update StudentshipStatus request: ${error.message}`,
@@ -203,7 +283,8 @@ interface MembershipParams {
   lastName: string;
   middleName?: string;
   id: string;
-  info: string;
+  memberSince: Date;
+  alumniCategory?: string;
   image?: string;
   _id?: string;
 }
@@ -216,52 +297,102 @@ export async function createOrUpdateMembershipReference(
     // Connect to the database
     connectToDB();
 
-    console.log(params._id);
+    const session = await getSession();
 
-    // If id is provided, find and update the document
-    if (params._id) {
-      await MembershipReference.findByIdAndUpdate(
-        params._id,
-        {
+    if (!session) {
+      throw new Error("Unauthorized");
+    }
+
+    const orgId = session.orgId;
+    const adminDesignation = session.designation;
+    const adminName = (session.firstName + " " + session.lastName) as string;
+    const orgName = session.orgName as string;
+    const period = concatenateDates(params.memberSince);
+    const currentDateTime = getCurrentDateTime();
+    const badgeID = generateVeridaqID();
+    const issuingAdminDetails = session.userId;
+
+    console.log(params.id);
+
+    let result;
+
+    if (!params.alumniCategory) {
+      const data = {
+        memberName: params.firstName + " " + params.lastName,
+        memberID: params.id,
+        nameOfInstitution: orgName,
+        passportUrl: params.image,
+        memberSince: period,
+        nameOfOrganization: orgName,
+        nameOfAdmin: adminName,
+        adminDesignation: adminDesignation,
+        currentDateTime: currentDateTime,
+        badgeID: badgeID,
+      };
+      const url =
+        "https://silver-adventure-wr7r4g7g77jwcg7jp-5000.app.github.dev/member-reference";
+      const docName = "memberReference.pdf";
+
+      result = await getDocAndUpload(data, url, docName);
+    } else {
+      const data = {
+        alumniName: params.firstName + " " + params.lastName,
+        alumniID: params.id,
+        nameOfInstitution: orgName,
+        alumniSince: period,
+        alumniCategory: params.alumniCategory,
+        nameOfOrganization: orgName,
+        nameOfAdmin: adminName,
+        adminDesignation: adminDesignation,
+        currentDateTime: currentDateTime,
+        badgeID: badgeID,
+      };
+      const url =
+        "https://silver-adventure-wr7r4g7g77jwcg7jp-5000.app.github.dev/alumni-reference";
+      const docName = "alumniReference.pdf";
+
+      result = await getDocAndUpload(data, url, docName);
+    }
+
+    if (result) {
+      // If id is provided, find and update the document
+      if (params._id) {
+        await MembershipReference.findByIdAndUpdate(
+          params._id,
+          {
+            firstName: params.firstName,
+            lastName: params.lastName,
+            middleName: params.middleName,
+            id: params.id,
+            memberSince: params.memberSince,
+            image: params.image,
+            issued: true,
+            dateIssued: new Date(),
+            badgeUrl: result,
+            issuingAdminDetails,
+          },
+          { new: true },
+        );
+        return true; // Return true if update is successful
+      } else {
+        // Create a new WorkReference document
+        const membershipReference = new MembershipReference({
+          orgId: orgId,
           firstName: params.firstName,
           lastName: params.lastName,
           middleName: params.middleName,
           id: params.id,
-          info: params.info,
+          memberSince: params.memberSince,
           image: params.image,
           issued: true,
           dateIssued: new Date(),
-        },
-        { new: true },
-      );
-      return true; // Return true if update is successful
-    } else {
-      // If id is not provided, create a new document
-      const session = await getSession();
+        });
 
-      if (!session) {
-        throw new Error("Unauthorized");
+        // Save the WorkReference document to the database
+        await membershipReference.save();
+        return true; // Return true if creation is successful
       }
-
-      const orgId = session.orgId;
-
-      // Create a new WorkReference document
-      const membershipReference = new MembershipReference({
-        orgId: orgId,
-        firstName: params.firstName,
-        lastName: params.lastName,
-        middleName: params.middleName,
-        id: params.id,
-        info: params.info,
-        image: params.image,
-        issued: true,
-        dateIssued: new Date(),
-      });
-
-      // Save the WorkReference document to the database
-      await membershipReference.save();
-      return true; // Return true if creation is successful
-    }
+    } else return false;
   } catch (error: any) {
     throw new Error(
       `Failed to save/update membershipReference request: ${error.message}`,
@@ -273,6 +404,8 @@ interface DocumentParams {
   firstName: string;
   lastName: string;
   middleName?: string;
+  documentType: string;
+  documentName: string;
   id: string;
   info: string;
   image?: string;
@@ -287,56 +420,88 @@ export async function createOrUpdateDocumentVerificationRequest(
     // Connect to the database
     connectToDB();
 
-    console.log(params._id);
+    const session = await getSession();
 
-    // If id is provided, find and update the document
-    if (params._id) {
-      await DocumentVerification.findByIdAndUpdate(
-        params._id,
-        {
+    if (!session) {
+      throw new Error("Unauthorized");
+    }
+
+    const orgId = session.orgId;
+    const adminDesignation = session.designation;
+    const adminName = (session.firstName + " " + session.lastName) as string;
+    const orgName = session.orgName as string;
+    const currentDateTime = getCurrentDateTime();
+    const badgeID = generateVeridaqID();
+    const issuingAdminDetails = session.userId;
+
+    console.log(params.id);
+
+    const data = {
+      nameOfOrganization: orgName,
+      nameOfIndividual: params.firstName + " " + params.lastName,
+      documentType: params.documentType,
+      documentName: params.documentName,
+      documentID: params.id,
+      moreInfo: params.info,
+      nameOfAdmin: adminName,
+      adminDesignation: adminDesignation,
+      currentDateTime: currentDateTime,
+      badgeID: badgeID,
+    };
+
+    const url =
+      "https://silver-adventure-wr7r4g7g77jwcg7jp-5000.app.github.dev/document-verification";
+    const docName = "memberReference.pdf";
+
+    const result = await getDocAndUpload(data, url, docName);
+
+    if (result) {
+      // If id is provided, find and update the document
+      if (params._id) {
+        await DocumentVerification.findByIdAndUpdate(
+          params._id,
+          {
+            firstName: params.firstName,
+            lastName: params.lastName,
+            middleName: params.middleName,
+            documentType: params.documentType, // Assuming id in MembershipParams corresponds to documentType
+            documentName: params.documentName, // Assuming info in MembershipParams corresponds to documentName
+            id: params.id,
+            info: params.info,
+            image: params.image, // Default to empty string if image is not provided
+            issued: true,
+            dateIssued: new Date(),
+            badgeUrl: result,
+            issuingAdminDetails: issuingAdminDetails,
+          },
+          { new: true },
+        );
+        return true; // Return true if update is successful
+      } else {
+        // If id is not provided, create a new document
+
+        // Create a new WorkReference document
+        const documentVerification = new DocumentVerification({
+          orgId: orgId,
           firstName: params.firstName,
           lastName: params.lastName,
           middleName: params.middleName,
-          documentType: params.id, // Assuming id in MembershipParams corresponds to documentType
-          documentName: params.info, // Assuming info in MembershipParams corresponds to documentName
+          documentType: params.documentType, // Assuming id in MembershipParams corresponds to documentType
+          documentName: params.documentName, // Assuming info in MembershipParams corresponds to documentName
           id: params.id,
           info: params.info,
           image: params.image, // Default to empty string if image is not provided
           issued: true,
           dateIssued: new Date(),
-        },
-        { new: true },
-      );
-      return true; // Return true if update is successful
-    } else {
-      // If id is not provided, create a new document
-      const session = await getSession();
+          badgeUrl: result,
+          issuingAdminDetails: issuingAdminDetails,
+        });
 
-      if (!session) {
-        throw new Error("Unauthorized");
+        // Save the WorkReference document to the database
+        await documentVerification.save();
+        return true; // Return true if creation is successful
       }
-
-      const orgId = session.orgId;
-
-      // Create a new WorkReference document
-      const documentVerification = new DocumentVerification({
-        orgId: orgId,
-        firstName: params.firstName,
-        lastName: params.lastName,
-        middleName: params.middleName,
-        documentType: params.id, // Assuming id in MembershipParams corresponds to documentType
-        documentName: params.info, // Assuming info in MembershipParams corresponds to documentName
-        id: params.id,
-        info: params.info,
-        image: params.image, // Default to empty string if image is not provided
-        issued: true,
-        dateIssued: new Date(),
-      });
-
-      // Save the WorkReference document to the database
-      await documentVerification.save();
-      return true; // Return true if creation is successful
-    }
+    } else return false;
   } catch (error: any) {
     throw new Error(
       `Failed to save/update DocumentVerification request: ${error.message}`,
@@ -605,5 +770,188 @@ export async function getStudentshipStatusById(docId: string) {
     throw new Error(
       `Failed to fetch StudentshipStatus document with ID: ${docId}`,
     );
+  }
+}
+
+export async function getIssuedWorkReference() {
+  try {
+    const session = await getSession();
+
+    if (!session) {
+      throw new Error("Unauthorized");
+    }
+
+    // Connect to the database
+    connectToDB();
+
+    const orgId = session.orgId;
+
+    // Query the WorkReference collection based on orgId
+    const workReferences = await WorkReference.find({
+      orgId,
+      issued: true,
+    }).select("firstName lastName badgeUrl");
+
+    // Format the data before returning to the frontend
+    const formattedData = workReferences.map((doc) => ({
+      heading: `Work Reference Veridaq to ${doc.firstName} ${doc.lastName}`,
+      DocId: doc._id.toString(), // Convert _id to string
+      link: doc.badgeUrl,
+      textColor: "#38313A",
+      bgColor: "#F4DBE4",
+      outlineColor: "#897A8B",
+    }));
+
+    if (formattedData) return formattedData;
+    false;
+  } catch (error: any) {
+    console.error(error);
+    throw new Error("Failed to fetch issued WorkReference documents");
+  }
+}
+
+export async function getIssuedMemberReference() {
+  try {
+    const session = await getSession();
+
+    if (!session) {
+      throw new Error("Unauthorized");
+    }
+
+    // Connect to the database
+    connectToDB();
+
+    const orgId = session.orgId;
+
+    // Query the WorkReference collection based on orgId
+    const memberReferences = await MembershipReference.find({
+      orgId,
+      issued: true,
+    }).select("firstName lastName badgeUrl");
+
+    // Format the data before returning to the frontend
+    const formattedData = memberReferences.map((doc) => ({
+      heading: `Member Reference Veridaq to ${doc.firstName} ${doc.lastName}`,
+      DocId: doc._id.toString(), // Convert _id to string
+      link: doc.badgeUrl,
+      textColor: "#FFFFFF",
+      bgColor: "#38313A",
+      outlineColor: "#C3B8D8",
+    }));
+
+    if (formattedData) return formattedData;
+    false;
+  } catch (error: any) {
+    console.error(error);
+    throw new Error("Failed to fetch issued memberReferences documents");
+  }
+}
+
+export async function getIssuedStudentshipStatus() {
+  try {
+    const session = await getSession();
+
+    if (!session) {
+      throw new Error("Unauthorized");
+    }
+
+    // Connect to the database
+    connectToDB();
+
+    const orgId = session.orgId;
+
+    // Query the WorkReference collection based on orgId
+    const studentshipStatus = await StudentshipStatus.find({
+      orgId,
+      issued: true,
+    }).select("firstName lastName badgeUrl");
+
+    // Format the data before returning to the frontend
+    const formattedData = studentshipStatus.map((doc) => ({
+      heading: `Studentship Status Veridaq to ${doc.firstName} ${doc.lastName}`,
+      DocId: doc._id.toString(), // Convert _id to string
+      link: doc.badgeUrl,
+      textColor: "#38313A",
+      bgColor: "#F26BBA",
+      outlineColor: "#A593C5",
+    }));
+
+    if (formattedData) return formattedData;
+    false;
+  } catch (error: any) {
+    console.error(error);
+    throw new Error("Failed to fetch issued studentshipStatus documents");
+  }
+}
+
+export async function getIssuedDocVerification() {
+  try {
+    const session = await getSession();
+
+    if (!session) {
+      throw new Error("Unauthorized");
+    }
+
+    // Connect to the database
+    connectToDB();
+
+    const orgId = session.orgId;
+
+    // Query the WorkReference collection based on orgId
+    const docVerification = await DocumentVerification.find({
+      orgId,
+      issued: true,
+    }).select("firstName lastName badgeUrl");
+
+    // Format the data before returning to the frontend
+    const formattedData = docVerification.map((doc) => ({
+      heading: `Document Verification Veridaq to ${doc.firstName} ${doc.lastName}`,
+      DocId: doc._id.toString(), // Convert _id to string
+      link: doc.badgeUrl,
+      textColor: "#38313A",
+      bgColor: "#AF8BA4",
+      outlineColor: "#F4DBE4",
+    }));
+
+    if (formattedData) return formattedData;
+    false;
+  } catch (error: any) {
+    console.error(error);
+    throw new Error("Failed to fetch issued studentshipStatus documents");
+  }
+}
+
+export async function getTeamMembers() {
+  try {
+    const session = await getSession();
+
+    if (!session || session.role !== "admin") {
+      throw new Error("Unauthorized");
+    }
+
+    // Connect to the database
+    connectToDB();
+
+    const orgId = session.orgId;
+
+    // Query the Role collection based on orgId
+    const roles = await Role.find({
+      organization: orgId,
+    }).select("firstName lastName role designation");
+
+    // Format the data before returning to the frontend
+    const formattedData = roles.map((doc) => ({
+      heading: `${doc.firstName} ${doc.lastName}`,
+      DocId: doc._id.toString(),
+      role: doc.designation,
+      roles: doc.role,
+    }));
+
+    console.log(formattedData);
+
+    return formattedData;
+  } catch (error: any) {
+    console.error(error);
+    throw new Error("Failed to fetch team members");
   }
 }
