@@ -19,17 +19,17 @@ import { upload } from "@vercel/blob/client";
 import { BlackButton } from "@/components/shared/buttons";
 import { OnboardingValidation } from "@/lib/validations/onboarding";
 import { updateOrgDetails } from "@/lib/actions/settings.action";
-import StatusMessage from "@/components/shared/shared";
+import { StatusMessage } from "@/components/shared/shared";
 
 export interface SettingsProps {
-    orgName: string;
-    adminFirstName: string;
-    adminLastName: string;
-    streetAddress: string;
-    postalCode: string;
-    city: string;
-    country: string;
-    image: string;
+  orgName: string;
+  adminFirstName: string;
+  adminLastName: string;
+  streetAddress: string;
+  postalCode: string;
+  city: string;
+  country: string;
+  image: string;
 }
 
 export default function Settings(params: SettingsProps) {
@@ -90,23 +90,23 @@ export default function Settings(params: SettingsProps) {
   const onSubmit = async (data: z.infer<typeof OnboardingValidation>) => {
     console.log(data);
     const result = await updateOrgDetails({
-        orgName: data.orgName,
-        adminFirstName: data.adminFirstName,
-        adminLastName: data.adminLastName,
-        streetAddress: data.streetAddress,
-        postalCode: data.postalCode,
-        city: data.city,
-        country: data.country,
-        image: data.image,
+      orgName: data.orgName,
+      adminFirstName: data.adminFirstName,
+      adminLastName: data.adminLastName,
+      streetAddress: data.streetAddress,
+      postalCode: data.postalCode,
+      city: data.city,
+      country: data.country,
+      image: data.image,
     });
-    if(result) {
-        setIsSuccessful(true);
+    if (result) {
+      setIsSuccessful(true);
     } else {
-        setIsError(true)
+      setIsError(true)
     };
     setDisable(false)
   };
-  
+
   return (
     <div className="text-[#38313A]">
       <div className="mt-[30px]">
@@ -116,7 +116,7 @@ export default function Settings(params: SettingsProps) {
         <div className="">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-              <div className="flex gap-[6.5rem] space-10 items-center justify-center">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-7 justify-center">
                 <FormField
                   control={form.control}
                   name="orgName"
@@ -147,8 +147,6 @@ export default function Settings(params: SettingsProps) {
                     </FormItem>
                   )}
                 />
-              </div>
-              <div className="flex gap-[6.5rem] space-10 items-center justify-center">
                 <FormField
                   control={form.control}
                   name="adminLastName"
@@ -179,8 +177,6 @@ export default function Settings(params: SettingsProps) {
                     </FormItem>
                   )}
                 />
-              </div>
-              <div className="flex gap-[6.5rem] space-10 items-center justify-center">
                 <FormField
                   control={form.control}
                   name="city"
@@ -211,8 +207,6 @@ export default function Settings(params: SettingsProps) {
                     </FormItem>
                   )}
                 />
-              </div>
-              <div className="flex gap-[6.5rem] space-10">
                 <FormField
                   control={form.control}
                   name="country"
@@ -241,7 +235,7 @@ export default function Settings(params: SettingsProps) {
                             width={96}
                             height={96}
                             priority
-                            className="rounded-full object-contain"
+                            className="rounded-full aspect-square object-cover"
                           />
                         ) : (
                           <Image
@@ -249,7 +243,7 @@ export default function Settings(params: SettingsProps) {
                             alt="image"
                             width={96}
                             height={96}
-                            className="object-contain"
+                            className="rounded-full aspect-square object-cover"
                           />
                         )}
                       </FormLabel>

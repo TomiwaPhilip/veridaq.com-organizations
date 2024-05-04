@@ -18,7 +18,7 @@ const IssueVeridaq: React.FC = () => {
   };
 
   return (
-    <main className="bg-[#E1D7E2] mt-[70px]">
+    <main className="bg-[#E1D7E2] mt-[70px] mb-[5rem] lg:mb-[0rem]">
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 justify-center mt-[40px]">
         {/* Map through the card data and render each card */}
         {cardData2.map((card, index) => (

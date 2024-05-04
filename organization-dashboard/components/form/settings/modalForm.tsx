@@ -62,14 +62,14 @@ const ModalForm: React.FC<ModalForm> = ({ onClose }) => {
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-lg shadow-lg normal-border p-10"
+        className="p-5 bg-white rounded-lg shadow-lg normal-border w-full max-h-[55vh] h-[55vh] overflow-auto mx-5 md:mx-0 md:w-[70%] max-h-[70%] h-[70%]"
         onClick={(e) => e.stopPropagation()}
       >
         <p className="text-2xl font-bold mb-5">Add Team Member</p>
         {isForm ? (
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-              <div className="flex gap-[6.5rem] space-10 items-center justify-center">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-7 justify-center">
                 <FormField
                   control={form.control}
                   name="firstName"
@@ -100,8 +100,6 @@ const ModalForm: React.FC<ModalForm> = ({ onClose }) => {
                     </FormItem>
                   )}
                 />
-              </div>
-              <div className="flex gap-[6.5rem] space-10 items-center justify-center">
                 <FormField
                   control={form.control}
                   name="email"
@@ -132,8 +130,6 @@ const ModalForm: React.FC<ModalForm> = ({ onClose }) => {
                     </FormItem>
                   )}
                 />
-              </div>
-              <div className="flex gap-[6.5rem] space-10 items-center justify-center">
                 <FormField
                   control={form.control}
                   name="role"

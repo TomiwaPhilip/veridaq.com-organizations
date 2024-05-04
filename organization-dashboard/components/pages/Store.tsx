@@ -72,56 +72,58 @@ export default function Store() {
         <div className="">
           <SearchBar />
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 justify-center mt-[30px]">
+        <div className="">
           {!isLoading ? (
             <>
               {isAdmin &&
-              (workReferenceDoc.length > 0 ||
-                memberReferenceDoc.length > 0 ||
-                docVerificationDoc.length > 0 ||
-                studentStatusDoc.length > 0) ? (
+                (workReferenceDoc.length > 0 ||
+                  memberReferenceDoc.length > 0 ||
+                  docVerificationDoc.length > 0 ||
+                  studentStatusDoc.length > 0) ? (
                 <div className="mt-10 overflow-auto">
                   {/* Render cards for each type of document */}
-                  {workReferenceDoc.map((doc: Documents) => (
-                    <Card3
-                      key={doc.DocId} // Ensure each Card component has a unique key
-                      heading={doc.heading}
-                      textColor={doc.textColor}
-                      bgColor={doc.bgColor}
-                      outlineColor={doc.outlineColor}
-                      link={doc.link}
-                    />
-                  ))}
-                  {memberReferenceDoc.map((doc: Documents) => (
-                    <Card3
-                      key={doc.DocId} // Ensure each Card component has a unique key
-                      heading={doc.heading}
-                      textColor={doc.textColor}
-                      bgColor={doc.bgColor}
-                      outlineColor={doc.outlineColor}
-                      link={doc.link}
-                    />
-                  ))}
-                  {docVerificationDoc.map((doc: Documents) => (
-                    <Card3
-                      key={doc.DocId} // Ensure each Card component has a unique key
-                      heading={doc.heading}
-                      textColor={doc.textColor}
-                      bgColor={doc.bgColor}
-                      outlineColor={doc.outlineColor}
-                      link={doc.link}
-                    />
-                  ))}
-                  {studentStatusDoc.map((doc: Documents) => (
-                    <Card3
-                      key={doc.DocId} // Ensure each Card component has a unique key
-                      heading={doc.heading}
-                      textColor={doc.textColor}
-                      bgColor={doc.bgColor}
-                      outlineColor={doc.outlineColor}
-                      link={doc.link}
-                    />
-                  ))}
+                  <div className="mb-[5rem] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 justify-center mt-[30px] lg:mb-[0rem]">
+                    {workReferenceDoc.map((doc: Documents) => (
+                      <Card3
+                        key={doc.DocId} // Ensure each Card component has a unique key
+                        heading={doc.heading}
+                        textColor={doc.textColor}
+                        bgColor={doc.bgColor}
+                        outlineColor={doc.outlineColor}
+                        link={doc.link}
+                      />
+                    ))}
+                    {memberReferenceDoc.map((doc: Documents) => (
+                      <Card3
+                        key={doc.DocId} // Ensure each Card component has a unique key
+                        heading={doc.heading}
+                        textColor={doc.textColor}
+                        bgColor={doc.bgColor}
+                        outlineColor={doc.outlineColor}
+                        link={doc.link}
+                      />
+                    ))}
+                    {docVerificationDoc.map((doc: Documents) => (
+                      <Card3
+                        key={doc.DocId} // Ensure each Card component has a unique key
+                        heading={doc.heading}
+                        textColor={doc.textColor}
+                        bgColor={doc.bgColor}
+                        outlineColor={doc.outlineColor}
+                        link={doc.link}
+                      />
+                    ))}
+                    {studentStatusDoc.map((doc: Documents) => (
+                      <Card3
+                        key={doc.DocId} // Ensure each Card component has a unique key
+                        heading={doc.heading}
+                        textColor={doc.textColor}
+                        bgColor={doc.bgColor}
+                        outlineColor={doc.outlineColor}
+                        link={doc.link}
+                      />
+                    ))}
+                  </div>
                 </div>
               ) : (
                 <div className="flex flex-col items-center justify-center h-full">
@@ -136,7 +138,7 @@ export default function Store() {
               )}
             </>
           ) : (
-            <div className="flex items-center justify-center h-full">
+            <div className="flex items-center justify-center h-full mt-[5rem]">
               <RiLoader4Line className="animate-spin text-2xl mb-4" />
               <p className="font-bold">Loading...</p>
             </div>
@@ -150,22 +152,26 @@ export default function Store() {
         <div className="">
           <SearchBar />
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 justify-center mt-[30px]">
+        <div className="">
           {!isAdmin && workRefVeridaqRole && (
             <>
               {!isLoading ? (
                 <>
                   {workReferenceDoc.length > 0 ? (
-                    workReferenceDoc.map((doc: Documents) => (
-                      <Card3
-                        key={doc.DocId} // Ensure each Card component has a unique key
-                        heading={doc.heading}
-                        textColor={doc.textColor}
-                        bgColor={doc.bgColor}
-                        outlineColor={doc.outlineColor}
-                        link={doc.link}
-                      />
-                    ))
+                    <div className="mt-10 overflow-auto">
+                      <div className="mb-[5rem] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 justify-center mt-[30px] lg:mb-[0rem]">
+                        {workReferenceDoc.map((doc: Documents) => ( // Move the .map() function inside curly braces
+                          <Card3
+                            key={doc.DocId} // Ensure each Card component has a unique key
+                            heading={doc.heading}
+                            textColor={doc.textColor}
+                            bgColor={doc.bgColor}
+                            outlineColor={doc.outlineColor}
+                            link={doc.link}
+                          />
+                        ))}
+                      </div>
+                    </div>
                   ) : (
                     <div className="flex flex-col items-center justify-center h-full">
                       <Image
@@ -189,28 +195,33 @@ export default function Store() {
         </div>
       </main>
     );
+    
   } else if (memStatusVeridaqRole) {
     return (
       <main className="mt-[60px]">
         <div className="">
           <SearchBar />
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 justify-center mt-[30px]">
+        <div className="">
           {!isAdmin && memStatusVeridaqRole && (
             <>
               {!isLoading ? (
                 <>
                   {memberReferenceDoc.length > 0 ? (
-                    memberReferenceDoc.map((doc: Documents) => (
-                      <Card3
-                        key={doc.DocId} // Ensure each Card component has a unique key
-                        heading={doc.heading}
-                        textColor={doc.textColor}
-                        bgColor={doc.bgColor}
-                        outlineColor={doc.outlineColor}
-                        link={doc.link}
-                      />
-                    ))
+                    <div className="mt-10 overflow-auto">
+                      <div className="mb-[5rem] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 justify-center mt-[30px] lg:mb-[0rem]">
+                        {memberReferenceDoc.map((doc: Documents) => (
+                          <Card3
+                            key={doc.DocId} // Ensure each Card component has a unique key
+                            heading={doc.heading}
+                            textColor={doc.textColor}
+                            bgColor={doc.bgColor}
+                            outlineColor={doc.outlineColor}
+                            link={doc.link}
+                          />
+                        ))}
+                      </div>
+                    </div>
                   ) : (
                     <div className="flex flex-col items-center justify-center h-full">
                       <Image
@@ -234,28 +245,33 @@ export default function Store() {
         </div>
       </main>
     );
+    
   } else if (docRefVeridaqRole) {
     return (
       <main className="mt-[60px]">
         <div className="">
           <SearchBar />
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 justify-center mt-[30px]">
+        <div className="">
           {!isAdmin && docRefVeridaqRole && (
             <>
               {!isLoading ? (
                 <>
                   {docVerificationDoc.length > 0 ? (
-                    docVerificationDoc.map((doc: Documents) => (
-                      <Card3
-                        key={doc.DocId} // Ensure each Card component has a unique key
-                        heading={doc.heading}
-                        textColor={doc.textColor}
-                        bgColor={doc.bgColor}
-                        outlineColor={doc.outlineColor}
-                        link={doc.link}
-                      />
-                    ))
+                    <div className="mt-10 overflow-auto">
+                      <div className="mb-[5rem] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 justify-center mt-[30px] lg:mb-[0rem]">
+                        {docVerificationDoc.map((doc: Documents) => (
+                          <Card3
+                            key={doc.DocId} // Ensure each Card component has a unique key
+                            heading={doc.heading}
+                            textColor={doc.textColor}
+                            bgColor={doc.bgColor}
+                            outlineColor={doc.outlineColor}
+                            link={doc.link}
+                          />
+                        ))}
+                      </div>
+                    </div>
                   ) : (
                     <div className="flex flex-col items-center justify-center h-full">
                       <Image
@@ -279,28 +295,33 @@ export default function Store() {
         </div>
       </main>
     );
+    
   } else if (stdStatusVeridaqRole) {
     return (
       <main className="mt-[60px]">
         <div className="">
           <SearchBar />
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 justify-center mt-[30px]">
+        <div className="">
           {!isAdmin && stdStatusVeridaqRole && (
             <>
               {!isLoading ? (
                 <>
                   {studentStatusDoc.length > 0 ? (
-                    studentStatusDoc.map((doc: Documents) => (
-                      <Card3
-                        key={doc.DocId} // Ensure each Card component has a unique key
-                        heading={doc.heading}
-                        textColor={doc.textColor}
-                        bgColor={doc.bgColor}
-                        outlineColor={doc.outlineColor}
-                        link={doc.link}
-                      />
-                    ))
+                    <div className="mt-10 overflow-auto">
+                      <div className="mb-[5rem] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 justify-center mt-[30px] lg:mb-[0rem]">
+                        {studentStatusDoc.map((doc: Documents) => (
+                          <Card3
+                            key={doc.DocId} // Ensure each Card component has a unique key
+                            heading={doc.heading}
+                            textColor={doc.textColor}
+                            bgColor={doc.bgColor}
+                            outlineColor={doc.outlineColor}
+                            link={doc.link}
+                          />
+                        ))}
+                      </div>
+                    </div>
                   ) : (
                     <div className="flex flex-col items-center justify-center h-full">
                       <Image
@@ -324,5 +345,6 @@ export default function Store() {
         </div>
       </main>
     );
+    
   }
 }

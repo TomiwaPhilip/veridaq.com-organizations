@@ -144,7 +144,7 @@ const WorkReference: React.FC<WorkReferenceProps> = ({ docId }) => {
 
   if (session?.role !== "admin" && session?.role !== "workRefVeridaqRole") {
     return (
-      <p className="font-bold text-lg text-center">
+      <p className="font-bold text-md text-center min-h-screen mt-[25%] p-5">
         {" "}
         You are not authorized to issue this kind of Veridaq
       </p>
@@ -289,7 +289,7 @@ const WorkReference: React.FC<WorkReferenceProps> = ({ docId }) => {
                     )}
                   />
                 </div>
-                <div className="mt-5 grid grid-cols-2 items-center justify-center">
+                <div className="mt-10 flex items-center justify-center">
                   <div className="text-right right">
                     <button
                       type="button"
@@ -457,7 +457,7 @@ const WorkReference: React.FC<WorkReferenceProps> = ({ docId }) => {
                     )}
                   />
                 </div>
-                <div className="mt-5 grid grid-cols-2 items-center justify-center">
+                <div className="mt-10 grid grid-cols-2 items-center justify-center">
                   <div className="text-left left">
                     <button
                       type="button"

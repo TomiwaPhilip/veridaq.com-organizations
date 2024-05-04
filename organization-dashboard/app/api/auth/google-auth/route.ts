@@ -1,5 +1,4 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 
 import {
   getGoogleAccessToken,
@@ -10,12 +9,13 @@ import Role from "@/lib/utils/roleSchema";
 import Organization from "@/lib/utils/organizationSchema";
 import { saveSession } from "@/lib/utils";
 
-export async function GET(req: NextApiRequest, res: NextApiResponse) {
-  if (!req.url) {
+export async function GET(req: NextRequest, res: NextResponse) {
+
+  if (!req.nextUrl) {
     return new Response("No request query found!", { status: 401 });
   }
-  const urlSearchParams = new URLSearchParams(req.url.split("?")[1]);
-  const code = urlSearchParams.get("code");
+
+  const code = req.nextUrl.searchParams.get("code")
 
   // Check if code is undefined
   if (!code) {

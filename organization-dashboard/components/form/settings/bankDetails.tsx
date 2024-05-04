@@ -17,12 +17,12 @@ import { updateBankDetails } from "@/lib/actions/settings.action";
 
 import { BlackButton } from "@/components/shared/buttons";
 import { BankDetailsValidation } from "@/lib/validations/onboarding";
-import StatusMessage from "@/components/shared/shared";
+import { StatusMessage } from "@/components/shared/shared";
 
 export interface BankDetailsInterface {
-    accountName: string;
-    accountNumber: number;
-    bankCode: number;
+  accountName: string;
+  accountNumber: number;
+  bankCode: number;
 }
 
 export default function BankDetails(params: BankDetailsInterface) {
@@ -43,14 +43,14 @@ export default function BankDetails(params: BankDetailsInterface) {
     console.log(data);
     setDisable(true);
     const result = await updateBankDetails(data);
-    if(result) {
-        setIsSuccessful(true);
+    if (result) {
+      setIsSuccessful(true);
     } else {
-        setIsError(true)
+      setIsError(true)
     };
     setDisable(false)
   };
-  
+
   return (
     <div className="text-[#38313A]">
       <div className="mt-[50px]">
@@ -60,7 +60,7 @@ export default function BankDetails(params: BankDetailsInterface) {
         <div className="">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-              <div className="flex gap-[6.5rem] space-10 items-center justify-center">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-7 justify-center">
                 <FormField
                   control={form.control}
                   name="accountName"
@@ -91,8 +91,6 @@ export default function BankDetails(params: BankDetailsInterface) {
                     </FormItem>
                   )}
                 />
-              </div>
-              <div className="flex gap-[6.5rem] space-10 items-center justify-center">
                 <FormField
                   control={form.control}
                   name="bankCode"

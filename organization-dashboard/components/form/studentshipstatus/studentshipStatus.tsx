@@ -180,7 +180,7 @@ const StudentshipStatus: React.FC<studentshipStatusProps> = ({ docId }) => {
 
   if (session?.role !== "admin" && session?.role !== "stdStatusVeridaqRole") {
     return (
-      <p className="font-bold text-lg text-center">
+      <p className="font-bold text-md text-center min-h-screen mt-[25%] p-5">
         {" "}
         You are not authorized to issue this kind of Veridaq
       </p>
@@ -352,7 +352,7 @@ const StudentshipStatus: React.FC<studentshipStatusProps> = ({ docId }) => {
                     )}
                   />
                 </div>
-                <div className="mt-5 grid grid-cols-2 items-center justify-center">
+                <div className="mt-10 flex items-center justify-center">
                   <div className="text-right right">
                     <button
                       type="button"
@@ -488,7 +488,7 @@ const StudentshipStatus: React.FC<studentshipStatusProps> = ({ docId }) => {
                               width={96}
                               height={96}
                               priority
-                              className="rounded-full object-contain"
+                              className="rounded-full aspect-square object-cover"
                             />
                           ) : (
                             <Image
@@ -496,7 +496,7 @@ const StudentshipStatus: React.FC<studentshipStatusProps> = ({ docId }) => {
                               alt="image"
                               width={96}
                               height={96}
-                              className="object-contain"
+                              className="rounded-full aspect-square object-cover"
                             />
                           )}
                         </FormLabel>
@@ -514,7 +514,7 @@ const StudentshipStatus: React.FC<studentshipStatusProps> = ({ docId }) => {
                     )}
                   />
                 </div>
-                <div className="mt-5 grid grid-cols-2 items-center justify-center">
+                <div className="mt-10 grid grid-cols-2 items-center justify-center">
                   <div className="text-left left">
                     <button
                       type="button"

@@ -215,7 +215,7 @@ export default function Onboard() {
                             width={96}
                             height={96}
                             priority
-                            className="rounded-full object-contain"
+                            className="rounded-full aspect-square object-cover"
                           />
                         ) : (
                           <Image
@@ -223,7 +223,7 @@ export default function Onboard() {
                             alt="image"
                             width={96}
                             height={96}
-                            className="object-contain"
+                            className="rounded-full aspect-square object-cover"
                           />
                         )}
                       </FormLabel>

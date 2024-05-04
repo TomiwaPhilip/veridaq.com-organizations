@@ -141,7 +141,7 @@ function Verification() {
                         width={96}
                         height={96}
                         priority
-                        className="rounded-full object-contain"
+                        className="rounded-full aspect-square object-cover"
                       />
                     ) : (
                       <Image
@@ -149,7 +149,7 @@ function Verification() {
                         alt="image"
                         width={96}
                         height={96}
-                        className="object-contain"
+                        className="rounded-full aspect-square object-cover"
                       />
                     )}
                   </FormLabel>
