@@ -114,6 +114,7 @@ export async function createOrUpdateWorkReferenceRequest({
             issued: true,
             dateIssued: new Date(),
             badgeUrl: result,
+            badgeID: badgeID,
             issuingAdminDetails,
           },
           { new: true },
@@ -141,6 +142,7 @@ export async function createOrUpdateWorkReferenceRequest({
           issued: true,
           dateIssued: new Date(),
           badgeUrl: result,
+          badgeID: badgeID,
           issuingAdminDetails,
         });
 
@@ -240,6 +242,7 @@ export async function createOrUpdateStudentshipStatus(
             issued: true,
             dateIssued: new Date(),
             badgeUrl: result,
+            badgeID: badgeID,
             issuingAdminDetails,
           },
           { new: true },
@@ -263,6 +266,7 @@ export async function createOrUpdateStudentshipStatus(
           issued: true,
           dateIssued: new Date(),
           badgeUrl: result,
+          badgeID: badgeID,
           issuingAdminDetails,
         });
 
@@ -365,10 +369,12 @@ export async function createOrUpdateMembershipReference(
             middleName: params.middleName,
             id: params.id,
             memberSince: params.memberSince,
+            alumniCategory: params.alumniCategory,
             image: params.image,
             issued: true,
             dateIssued: new Date(),
             badgeUrl: result,
+            badgeID: badgeID,
             issuingAdminDetails,
           },
           { new: true },
@@ -381,11 +387,15 @@ export async function createOrUpdateMembershipReference(
           firstName: params.firstName,
           lastName: params.lastName,
           middleName: params.middleName,
+          alumniCategory: params.alumniCategory,
           id: params.id,
           memberSince: params.memberSince,
           image: params.image,
           issued: true,
           dateIssued: new Date(),
+          badgeUrl: result,
+          badgeID: badgeID,
+          issuingAdminDetails,
         });
 
         // Save the WorkReference document to the database
@@ -472,6 +482,7 @@ export async function createOrUpdateDocumentVerificationRequest(
             issued: true,
             dateIssued: new Date(),
             badgeUrl: result,
+            badgeID: badgeID,
             issuingAdminDetails: issuingAdminDetails,
           },
           { new: true },
@@ -494,6 +505,7 @@ export async function createOrUpdateDocumentVerificationRequest(
           issued: true,
           dateIssued: new Date(),
           badgeUrl: result,
+          badgeID: badgeID,
           issuingAdminDetails: issuingAdminDetails,
         });
 
