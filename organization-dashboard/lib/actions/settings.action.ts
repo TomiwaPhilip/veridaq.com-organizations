@@ -12,6 +12,12 @@ import { sendTeamInvite } from "../utils";
 export async function getBankDetails() {
   try {
     const session = await getSession();
+    
+    // Check if session or session.orgId is null
+    if (!session || !session.orgId) {
+      throw new Error("Unable to get session or orgId");
+    }
+
     // Connect To Db
     connectToDB();
 
@@ -21,7 +27,22 @@ export async function getBankDetails() {
       bankCode: 1,
       _id: 0,
     });
-    return organizationBankDetails;
+
+    // Check if organizationBankDetails is null
+    if (!organizationBankDetails) {
+      return null;
+    }
+
+    // Convert fields to strings
+    const bankDetailsStringified = {
+      accountName: organizationBankDetails.accountName?.toString() ?? '',
+      accountNumber: organizationBankDetails.accountNumber?.toString() ?? '',
+      bankCode: organizationBankDetails.bankCode?.toString() ?? '',
+    };
+
+    console.log(bankDetailsStringified);
+
+    return bankDetailsStringified;
   } catch (error) {
     console.error("Error querying DB for bank details", error);
     throw new Error("Error querying DB for bank details");
@@ -31,6 +52,12 @@ export async function getBankDetails() {
 export async function getOrgDetails() {
   try {
     const session = await getSession();
+    
+    // Check if session or session.orgId is null
+    if (!session || !session.orgId) {
+      throw new Error("Unable to get session or orgId");
+    }
+
     // Connect To Db
     connectToDB();
 
@@ -48,12 +75,36 @@ export async function getOrgDetails() {
       membershipRefFee: 1,
       _id: 0,
     });
-    return organizationDetails;
+
+    // Check if organizationDetails is null
+    if (!organizationDetails) {
+      return null;
+    }
+
+    // Convert fields to strings
+    const orgDetailsStringified = {
+      name: organizationDetails.name?.toString() ?? '',
+      adminFirstName: organizationDetails.adminFirstName?.toString() ?? '',
+      adminLastName: organizationDetails.adminLastName?.toString() ?? '',
+      streetAddress: organizationDetails.streetAddress?.toString() ?? '',
+      postalCode: organizationDetails.postalCode?.toString() ?? '',
+      city: organizationDetails.city?.toString() ?? '',
+      country: organizationDetails.country?.toString() ?? '',
+      image: organizationDetails.image?.toString() ?? '',
+      studentStatusFee: organizationDetails.studentStatusFee ?? 0,
+      docVerificationFee: organizationDetails.docVerificationFee ?? 0,
+      membershipRefFee: organizationDetails.membershipRefFee ?? 0,
+    };
+
+    console.log(orgDetailsStringified);
+
+    return orgDetailsStringified;
   } catch (error) {
     console.error("Error querying DB for organization details", error);
     throw new Error("Error querying DB for organization details");
   }
 }
+
 
 export async function updateBankDetails(params: BankDetailsInterface) {
   try {
