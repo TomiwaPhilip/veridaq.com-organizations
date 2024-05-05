@@ -4,7 +4,7 @@ import "../globals.css";
 
 export const metadata: Metadata = {
   title: "Auth",
-  description: "Sign in to your Individual Dashboard",
+  description: "Sign in to your Organization Dashboard",
 };
 
 interface RootLayoutProps {
