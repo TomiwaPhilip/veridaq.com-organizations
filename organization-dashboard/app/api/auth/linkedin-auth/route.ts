@@ -72,7 +72,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
         sessionData.isOnboarded = existingOrg.onboarded;
         sessionData.isVerified = existingOrg.verified;
         sessionData.walletBalance = existingOrg.walletBalance;
-        sessionData.orgName = existingOrg.orgName;
+        sessionData.orgName = existingOrg.name;
       }
 
       if (existingUser.loginType === "linkedin") {

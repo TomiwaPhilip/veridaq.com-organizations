@@ -72,7 +72,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
           sessionData.isOnboarded = existingOrg.onboarded;
           sessionData.isVerified = existingOrg.verified;
           sessionData.walletBalance = existingOrg.walletBalance;
-          sessionData.orgName = existingOrg.orgName;
+          sessionData.orgName = existingOrg.name;
         }
 
         if (existingUser.loginType === "google") {
@@ -136,6 +136,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
           role: "admin", // or whatever default role you want to assign
           loginType: "google", // or the appropriate login type
           organization: organizationId,
+          designation: "Admin",
         });
 
         // Create session data
@@ -148,7 +149,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
           walletBalance: organization.walletBalance,
           isOnboarded: organization.onboarded,
           isVerified: organization.verified,
-          orgName: organization.orgName,
+          orgName: organization.name,
           role: newRole.role,
           designation: newRole.designation,
           orgId: organizationId.toString(),

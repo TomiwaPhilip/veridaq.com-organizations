@@ -105,7 +105,7 @@ export async function verifyUserToken(token: string): Promise<boolean> {
           sessionData.isOnboarded = existingOrg.onboarded;
           sessionData.isVerified = existingOrg.verified;
           sessionData.walletBalance = existingOrg.walletBalance;
-          sessionData.orgName = existingOrg.orgName;
+          sessionData.orgName = existingOrg.name;
         }
 
         // Save session
@@ -142,6 +142,7 @@ export async function verifyUserToken(token: string): Promise<boolean> {
           role: "admin", // or whatever default role you want to assign
           loginType: "email", // or the appropriate login type
           organization: organizationId,
+          designation: "Admin",
         });
 
         // Create session data
@@ -151,7 +152,7 @@ export async function verifyUserToken(token: string): Promise<boolean> {
           isOnboarded: organization.onboarded,
           isVerified: organization.verified,
           walletBalance: organization.walletBalance,
-          orgName: organization.orgName,
+          orgName: organization.name,
           designation: newRole.designation,
           role: newRole.role,
           orgId: organizationId.toString(),
