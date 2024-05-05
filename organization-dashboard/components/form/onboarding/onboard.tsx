@@ -87,10 +87,10 @@ export default function Onboard() {
         <p className="text-center text-2xl font-bold">
           Complete your profile to continue
         </p>
-        <div className="pt-[3rem] px-[10rem]">
+        <div className="pt-[3rem] px-[2rem]">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-              <div className="flex gap-[6.5rem] space-10 items-center justify-center">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 justify-center">
                 <FormField
                   control={form.control}
                   name="orgName"
@@ -121,8 +121,6 @@ export default function Onboard() {
                     </FormItem>
                   )}
                 />
-              </div>
-              <div className="flex gap-[6.5rem] space-10 items-center justify-center">
                 <FormField
                   control={form.control}
                   name="adminLastName"
@@ -153,8 +151,6 @@ export default function Onboard() {
                     </FormItem>
                   )}
                 />
-              </div>
-              <div className="flex gap-[6.5rem] space-10 items-center justify-center">
                 <FormField
                   control={form.control}
                   name="city"
@@ -185,8 +181,6 @@ export default function Onboard() {
                     </FormItem>
                   )}
                 />
-              </div>
-              <div className="flex gap-[6.5rem] space-10">
                 <FormField
                   control={form.control}
                   name="country"
