@@ -85,7 +85,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
         await saveSession(sessionData);
 
         // Redirect to the dashboard or appropriate page
-        return NextResponse.redirect(new URL("/dashboard", req.url));
+        return NextResponse.redirect(new URL("/", req.url));
       } else if (existingUser.loginType === "email") {
         // User exists with the correct login type (email), proceed with login
         console.log(
@@ -96,7 +96,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
         await saveSession(sessionData);
 
         // Redirect to the dashboard or appropriate page
-        return NextResponse.redirect(new URL("/dashboard", req.url));
+        return NextResponse.redirect(new URL("/", req.url));
       } else {
         // User exists with a different login type, redirect to error page
         console.log(
@@ -104,7 +104,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
         );
 
         // Redirect to error page with appropriate error message
-        return NextResponse.redirect(new URL("/error", req.url));
+        return NextResponse.redirect(new URL("/auth/error", req.url));
       }
     } else {
       // User does not exist, create a new organization and role with the received email
@@ -157,7 +157,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
       await saveSession(sessionData);
 
       // Redirect to the dashboard or appropriate page
-      return NextResponse.redirect(new URL("/dashboard", req.url));
+      return NextResponse.redirect(new URL("/", req.url));
     }
   } catch (error) {
     // Handle any errors that occur during the process
