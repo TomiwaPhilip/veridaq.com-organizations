@@ -86,7 +86,7 @@ function Verification() {
     console.log(data);
     const result = await updateUser2(data);
     if (result) {
-      router.push("/");
+      router.push("/settings");
     } else {
       setErrorMessage("Credentials incomplete!");
     }
