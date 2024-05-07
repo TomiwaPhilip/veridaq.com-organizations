@@ -29,7 +29,7 @@ export interface SettingsProps {
   postalCode: string;
   city: string;
   country: string;
-  image: string;
+  image?: string;
 }
 
 export default function Settings(params: SettingsProps) {
