@@ -91,7 +91,7 @@ export const DocumentVerificationValidation2 = z.object({
 
 export const DocumentVerificationValidation3 = z.object({
   firstName: z.string().min(1, {
-    message: "Last Name must be at least 1 character.",
+    message: "First Name must be at least 1 character.",
   }),
   lastName: z.string().min(1, {
     message: "Last Name must be at least 1 character.",
