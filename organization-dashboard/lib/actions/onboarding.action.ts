@@ -13,7 +13,7 @@ interface Params {
   city: string;
   postalCode: string;
   country: string;
-  image: string;
+  image?: string;
 }
 
 export async function updateUser(params: Params) {
