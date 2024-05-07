@@ -2,7 +2,7 @@ export const cardData = [
   {
     heading: "Check your Veridaq Box!",
     paragraph:
-      "Veridaq Box is for receiving mails from organizations and individuals you have interacted with on the Veridaq platform. You can also issue a Veridaq.",
+      "Veridaq Box is for receiving mails from individuals on the Veridaq platform. You can also issue a Veridaq.",
     bgColor: "#AF8BA4",
     outlineColor: "#A593C5",
   },
@@ -31,28 +31,28 @@ export const cardData = [
 
 export const cardData2 = [
   {
-    heading: "Work Reference Veridaq",
+    heading: "Work Reference",
     textColor: "#38313A",
     bgColor: "#F4DBE4",
     outlineColor: "#897A8B",
     id: "1",
   },
   {
-    heading: "Studentship Status Veridaq",
+    heading: "Studentship Status Reference",
     textColor: "#38313A",
     bgColor: "#F26BBA",
     outlineColor: "#A593C5",
     id: "2",
   },
   {
-    heading: "Membership Reference Veridaq",
+    heading: "Membership Reference",
     textColor: "#FFFFFF",
     bgColor: "#38313A",
     outlineColor: "#C3B8D8",
     id: "3",
   },
   {
-    heading: "Document Verification Veridaq",
+    heading: "Document Verification Reference",
     textColor: "#38313A",
     bgColor: "#AF8BA4",
     outlineColor: "#F4DBE4",
@@ -62,25 +62,25 @@ export const cardData2 = [
 
 export const cardData3 = [
   {
-    heading: "Work Reference Veridaq",
+    heading: "Work Reference",
     textColor: "#38313A",
     bgColor: "#F4DBE4",
     outlineColor: "#897A8B",
   },
   {
-    heading: "Studentship Status Veridaq",
+    heading: "Studentship Status Reference",
     textColor: "#38313A",
     bgColor: "#F26BBA",
     outlineColor: "#A593C5",
   },
   {
-    heading: "Membership Reference Veridaq",
+    heading: "Membership Reference",
     textColor: "#FFFFFF",
     bgColor: "#38313A",
     outlineColor: "#C3B8D8",
   },
   {
-    heading: "Document Verification Veridaq",
+    heading: "Document Verification Reference",
     textColor: "#38313A",
     bgColor: "#AF8BA4",
     outlineColor: "#F4DBE4",

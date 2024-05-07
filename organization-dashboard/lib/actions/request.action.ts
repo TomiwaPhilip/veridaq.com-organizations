@@ -550,7 +550,7 @@ export async function getWorkReference() {
 
     // Format the data before returning to the frontend
     const formattedData = workReferences.map((doc) => ({
-      DocDetails: `Work Reference Veridaq Request from ${doc.firstName} ${doc.lastName}`,
+      DocDetails: `Work Reference Request from ${doc.firstName} ${doc.lastName}`,
       DocId: doc._id.toString(), // Convert _id to string
       DocDate: formatDate(doc.dateRequested), // Format the date
     }));
@@ -613,7 +613,7 @@ export async function getDocVerification() {
 
     // Format the data before returning to the frontend
     const formattedData = docVerification.map((doc) => ({
-      DocDetails: `Document Verification Veridaq Request from ${doc.firstName} ${doc.lastName}`,
+      DocDetails: `Document Verification Reference Request from ${doc.firstName} ${doc.lastName}`,
       DocId: doc._id.toString(), // Convert _id to string
       DocDate: formatDate(doc.dateRequested), // Format the date
     }));
@@ -676,7 +676,7 @@ export async function getMemberReference() {
 
     // Format the data before returning to the frontend
     const formattedData = memberReference.map((doc) => ({
-      DocDetails: `Membership Reference Veridaq Request from ${doc.firstName} ${doc.lastName}`,
+      DocDetails: `Membership Reference Request from ${doc.firstName} ${doc.lastName}`,
       DocId: doc._id.toString(), // Convert _id to string
       DocDate: formatDate(doc.dateRequested), // Format the date
     }));
@@ -741,7 +741,7 @@ export async function getStudentshipStatus() {
 
     // Format the data before returning to the frontend
     const formattedData = studentshipStatus.map((doc) => ({
-      DocDetails: `Studentship Status Veridaq Request from ${doc.firstName} ${doc.lastName}`,
+      DocDetails: `Studentship Status Reference Request from ${doc.firstName} ${doc.lastName}`,
       DocId: doc._id.toString(), // Convert _id to string
       DocDate: formatDate(doc.dateRequested), // Format the date
     }));
@@ -806,7 +806,7 @@ export async function getIssuedWorkReference() {
 
     // Format the data before returning to the frontend
     const formattedData = workReferences.map((doc) => ({
-      heading: `Work Reference Veridaq to ${doc.firstName} ${doc.lastName}`,
+      heading: `Work Reference to ${doc.firstName} ${doc.lastName}`,
       DocId: doc._id.toString(), // Convert _id to string
       link: doc.badgeUrl,
       textColor: "#38313A",
@@ -843,7 +843,7 @@ export async function getIssuedMemberReference() {
 
     // Format the data before returning to the frontend
     const formattedData = memberReferences.map((doc) => ({
-      heading: `Member Reference Veridaq to ${doc.firstName} ${doc.lastName}`,
+      heading: `Member Reference to ${doc.firstName} ${doc.lastName}`,
       DocId: doc._id.toString(), // Convert _id to string
       link: doc.badgeUrl,
       textColor: "#FFFFFF",
@@ -880,7 +880,7 @@ export async function getIssuedStudentshipStatus() {
 
     // Format the data before returning to the frontend
     const formattedData = studentshipStatus.map((doc) => ({
-      heading: `Studentship Status Veridaq to ${doc.firstName} ${doc.lastName}`,
+      heading: `Studentship Status Reference to ${doc.firstName} ${doc.lastName}`,
       DocId: doc._id.toString(), // Convert _id to string
       link: doc.badgeUrl,
       textColor: "#38313A",
@@ -917,7 +917,7 @@ export async function getIssuedDocVerification() {
 
     // Format the data before returning to the frontend
     const formattedData = docVerification.map((doc) => ({
-      heading: `Document Verification Veridaq to ${doc.firstName} ${doc.lastName}`,
+      heading: `Document Verification Reference to ${doc.firstName} ${doc.lastName}`,
       DocId: doc._id.toString(), // Convert _id to string
       link: doc.badgeUrl,
       textColor: "#38313A",
