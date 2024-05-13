@@ -463,7 +463,7 @@ export async function createOrUpdateDocumentVerificationRequest(
 
     const url =
       "https://generator-abfcaoddhq-bq.a.run.app/doc-verification";
-    const docName = "memberReference.pdf";
+    const docName = "docVerification.pdf";
 
     const result = await getDocAndUpload(data, url, docName);
 
