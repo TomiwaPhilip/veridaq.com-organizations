@@ -46,7 +46,7 @@ const MembershipReference: React.FC<membershipReferenceProps> = ({ docId }) => {
   const [step, setStep] = useState(1);
   const [requestResult, setRequestResult] = useState<boolean | null>(null);
   const inputFileRef = useRef<HTMLInputElement>(null);
-  const [isImageDisabled, setIsImageDisabled] = useState(true);
+  const [isImageDisabled, setIsImageDisabled] = useState(false);
   const session = useSession();
 
   const handleNextStep = () => {
@@ -331,7 +331,7 @@ const MembershipReference: React.FC<membershipReferenceProps> = ({ docId }) => {
                       type="submit"
                       className="bg-[#38313A] px-7 py-5 rounded-md text-white"
                     >
-                      Submit
+                      Generate Veridaq
                     </button>
                   </div>
                 </div>

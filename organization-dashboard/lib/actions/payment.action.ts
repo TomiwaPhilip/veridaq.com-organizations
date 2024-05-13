@@ -1,6 +1,5 @@
 "use server";
 
-import got from "got";
 const Flutterwave = require("flutterwave-node-v3");
 
 import getSession from "./server-hooks/getsession.action";
