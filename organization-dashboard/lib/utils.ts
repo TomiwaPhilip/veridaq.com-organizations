@@ -125,7 +125,7 @@ export function verifyToken(
 
 export function generateVeridaqID(): string {
   const randomNumber = Math.floor(Math.random() * 9000) + 1000; // Generate a random number between 1000 and 9999
-  return `Veridaq-${randomNumber}`;
+  return `veridaq-${randomNumber}`;
 }
 
 export function concatenateDates(startDate: Date, endDate?: Date): string {

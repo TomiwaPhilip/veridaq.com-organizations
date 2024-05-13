@@ -87,7 +87,7 @@ export async function createOrUpdateWorkReferenceRequest({
       badgeID: badgeID,
     };
     const url =
-      "https://silver-adventure-wr7r4g7g77jwcg7jp-5000.app.github.dev/work-reference";
+      "https://generator-abfcaoddhq-bq.a.run.app/work-reference";
     const docName = "workReference.pdf";
 
     const result = await getDocAndUpload(data, url, docName);
@@ -217,7 +217,7 @@ export async function createOrUpdateStudentshipStatus(
       badgeID: badgeID,
     };
     const url =
-      "https://silver-adventure-wr7r4g7g77jwcg7jp-5000.app.github.dev/student-status";
+      "https://generator-abfcaoddhq-bq.a.run.app/student-status";
     const docName = "studentStatus.pdf";
 
     const result = await getDocAndUpload(data, url, docName);
@@ -233,6 +233,7 @@ export async function createOrUpdateStudentshipStatus(
             middleName: params.middleName,
             currentLevel: params.currentLevel,
             courseOfStudy: params.courseOfStudy,
+            categoryOfStudy: params.categoryOfStudy,
             studentId: params.studentId,
             info: params.info,
             faculty: params.faculty,
@@ -257,6 +258,7 @@ export async function createOrUpdateStudentshipStatus(
           middleName: params.middleName,
           currentLevel: params.currentLevel,
           courseOfStudy: params.courseOfStudy,
+          categoryOfStudy: params.categoryOfStudy,
           studentId: params.studentId,
           info: params.info,
           faculty: params.faculty,
@@ -334,7 +336,7 @@ export async function createOrUpdateMembershipReference(
         badgeID: badgeID,
       };
       const url =
-        "https://silver-adventure-wr7r4g7g77jwcg7jp-5000.app.github.dev/member-reference";
+        "https://generator-abfcaoddhq-bq.a.run.app/member-reference";
       const docName = "memberReference.pdf";
 
       result = await getDocAndUpload(data, url, docName);
@@ -352,7 +354,7 @@ export async function createOrUpdateMembershipReference(
         badgeID: badgeID,
       };
       const url =
-        "https://silver-adventure-wr7r4g7g77jwcg7jp-5000.app.github.dev/alumni-reference";
+        "https://generator-abfcaoddhq-bq.a.run.app/alumni-reference";
       const docName = "alumniReference.pdf";
 
       result = await getDocAndUpload(data, url, docName);
@@ -460,7 +462,7 @@ export async function createOrUpdateDocumentVerificationRequest(
     };
 
     const url =
-      "https://silver-adventure-wr7r4g7g77jwcg7jp-5000.app.github.dev/document-verification";
+      "https://generator-abfcaoddhq-bq.a.run.app/doc-verification";
     const docName = "memberReference.pdf";
 
     const result = await getDocAndUpload(data, url, docName);

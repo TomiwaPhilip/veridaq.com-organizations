@@ -339,7 +339,7 @@ const DocumentVerification: React.FC<docVerificationProps> = ({ docId }) => {
                       type="submit"
                       className="bg-[#38313A] px-7 py-5 rounded-md text-white"
                     >
-                      Submit
+                      Generate Veridaq
                     </button>
                   </div>
                 </div>
