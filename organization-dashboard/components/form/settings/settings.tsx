@@ -34,11 +34,10 @@ export interface SettingsProps {
 }
 
 export default function Settings(params: SettingsProps) {
-
   const inputFileRef = useRef<HTMLInputElement>(null);
   const [disable, setDisable] = useState(false);
   const [isError, setIsError] = useState(false);
-  const [loading, setLoading] - useState(false);
+  const [loading, setLoading] = useState(false);
   const [isSuccessful, setIsSuccessful] = useState(false);
 
   const form = useForm<z.infer<typeof OnboardingValidation>>({
@@ -91,7 +90,7 @@ export default function Settings(params: SettingsProps) {
 
   const onSubmit = async (data: z.infer<typeof OnboardingValidation>) => {
     console.log(data);
-    setLoading(true)
+    setLoading(true);
     const result = await updateOrgDetails({
       orgName: data.orgName,
       adminFirstName: data.adminFirstName,
@@ -105,18 +104,16 @@ export default function Settings(params: SettingsProps) {
     if (result) {
       setIsSuccessful(true);
     } else {
-      setIsError(true)
-    };
-    setDisable(false)
+      setIsError(true);
+    }
+    setDisable(false);
     setLoading(true);
   };
 
   return (
     <div className="text-[#38313A]">
       <div className="mt-[30px]">
-        <p className="text-2xl font-bold mb-5">
-          Veridaq Account Details
-        </p>
+        <p className="text-2xl font-bold mb-5">Veridaq Account Details</p>
         <div className="">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -277,8 +274,12 @@ export default function Settings(params: SettingsProps) {
           </Form>
         </div>
       </div>
-      {isError ? <StatusMessage message="An Error occurred!" type="error" /> : null}
-      {isSuccessful ? <StatusMessage message="Saved Successfully!" type="success" /> : null}
+      {isError ? (
+        <StatusMessage message="An Error occurred!" type="error" />
+      ) : null}
+      {isSuccessful ? (
+        <StatusMessage message="Saved Successfully!" type="success" />
+      ) : null}
     </div>
   );
 }
