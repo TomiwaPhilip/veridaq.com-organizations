@@ -1,11 +1,46 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "../globals.css";
 
 import { Nav, Header, BottomBar } from "@/components/shared/shared";
 
 export const metadata: Metadata = {
-  title: "My Dashboard",
+  applicationName: "Organization Veridaq.com Dashboard",
+  title: {
+    default: "My Dashboard",
+    template: "My Dashboard",
+  },
   description: "Request, receive, and share your Veridaq",
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "My Dashboard",
+    // startUpImage: [],
+  },
+  formatDetection: {
+    telephone: false,
+  },
+  openGraph: {
+    type: "website",
+    siteName: "Veridaq.com",
+    title: {
+      default: "My Dashboard",
+      template: "My Dashboard",
+    },
+    description: "Request, receive, and share your Veridaq",
+  },
+  twitter: {
+    card: "summary",
+    title: {
+      default: "My Dashboard",
+      template: "My Dashboard",
+    },
+    description: "Request, receive, and share your Veridaq",
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#FFFFFF",
 };
 
 interface RootLayoutProps {
