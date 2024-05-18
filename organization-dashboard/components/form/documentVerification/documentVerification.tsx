@@ -33,6 +33,7 @@ import {
   ErrorMessage,
   useSession,
 } from "@/components/shared/shared";
+import { BlackButton } from "@/components/shared/buttons";
 
 interface docVerificationProps {
   docId?: string | null;
@@ -43,6 +44,7 @@ const DocumentVerification: React.FC<docVerificationProps> = ({ docId }) => {
   const [requestResult, setRequestResult] = useState<boolean | null>(null);
   const inputFileRef = useRef<HTMLInputElement>(null);
   const session = useSession();
+  const [loading, setLoading] = useState(false);
 
   const handleNextStep = () => {
     setStep(step + 1);
@@ -133,6 +135,7 @@ const DocumentVerification: React.FC<docVerificationProps> = ({ docId }) => {
     data: z.infer<typeof DocumentVerificationValidation3>,
   ) => {
     console.log("I want to submit");
+    setLoading(true);
 
     try {
       const create = await createOrUpdateDocumentVerificationRequest({
@@ -149,10 +152,12 @@ const DocumentVerification: React.FC<docVerificationProps> = ({ docId }) => {
       setRequestResult(create);
       if (create) {
         handleNextStep();
+        setLoading(false);
       }
     } catch (error) {
       console.error("Error submitting form:", error);
       setRequestResult(false);
+      setLoading(false);
     }
   };
 
@@ -335,12 +340,11 @@ const DocumentVerification: React.FC<docVerificationProps> = ({ docId }) => {
                 </div>
                 <div className="mt-10 flex items-center justify-center">
                   <div className="text-right right">
-                    <button
+                    <BlackButton
+                      name="Generate Veridaq"
                       type="submit"
-                      className="bg-[#38313A] px-7 py-5 rounded-md text-white"
-                    >
-                      Generate Veridaq
-                    </button>
+                      loading={loading}
+                    />
                   </div>
                 </div>
               </div>

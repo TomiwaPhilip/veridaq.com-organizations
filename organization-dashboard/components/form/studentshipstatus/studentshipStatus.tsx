@@ -43,6 +43,7 @@ import {
   ErrorMessage,
   useSession,
 } from "@/components/shared/shared";
+import { BlackButton } from "@/components/shared/buttons";
 
 interface studentshipStatusProps {
   docId?: string | null;
@@ -52,6 +53,7 @@ const StudentshipStatus: React.FC<studentshipStatusProps> = ({ docId }) => {
   const [step, setStep] = useState(1);
   const [requestResult, setRequestResult] = useState<boolean | null>(null);
   const inputFileRef = useRef<HTMLInputElement>(null);
+  const [loading, setLoading] = useState(false);
   const session = useSession();
 
   const handleNextStep = () => {
@@ -151,7 +153,7 @@ const StudentshipStatus: React.FC<studentshipStatusProps> = ({ docId }) => {
     data: z.infer<typeof StudentshipStatusValidation3>,
   ) => {
     console.log("I want to submit");
-
+    setLoading(true);
     try {
       const create = await createOrUpdateStudentshipStatus({
         firstName: data.firstName,
@@ -171,10 +173,12 @@ const StudentshipStatus: React.FC<studentshipStatusProps> = ({ docId }) => {
       setRequestResult(create);
       if (create) {
         handleNextStep();
+        setLoading(true);
       }
     } catch (error) {
       console.error("Error submitting form:", error);
       setRequestResult(false);
+      setLoading(true);
     }
   };
 
@@ -525,12 +529,11 @@ const StudentshipStatus: React.FC<studentshipStatusProps> = ({ docId }) => {
                     </button>
                   </div>
                   <div className="text-right right">
-                    <button
+                    <BlackButton
+                      name="Generate Veridaq"
                       type="submit"
-                      className="bg-[#38313A] px-7 py-5 rounded-md text-white"
-                    >
-                      Generate Veridaq
-                    </button>
+                      loading={loading}
+                    />
                   </div>
                 </div>
               </div>

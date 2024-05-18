@@ -36,6 +36,7 @@ const ModalForm: React.FC<ModalForm> = ({ onClose }) => {
   const [disable, setDisable] = useState(false);
   const [isForm, setIsForm] = useState(true);
   const [isError, setIsError] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [isSuccessful, setIsSuccessful] = useState(false);
 
   const form = useForm<z.infer<typeof TeamMemberValidation>>({
@@ -45,6 +46,7 @@ const ModalForm: React.FC<ModalForm> = ({ onClose }) => {
   const onSubmit = async (data: z.infer<typeof TeamMemberValidation>) => {
     console.log(data);
     setDisable(true);
+    setLoading(true);
     const result = await updateOrgRole(data);
     if (result) {
       setIsForm(false);
@@ -54,6 +56,7 @@ const ModalForm: React.FC<ModalForm> = ({ onClose }) => {
       setIsError(true);
     }
     setDisable(false);
+    setLoading(false);
   };
 
   return (
@@ -172,6 +175,7 @@ const ModalForm: React.FC<ModalForm> = ({ onClose }) => {
                   type="submit"
                   name="Add Team Member"
                   disabled={disable}
+                  loading={loading}
                 />
               </div>
             </form>

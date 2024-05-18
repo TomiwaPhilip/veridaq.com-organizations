@@ -27,6 +27,7 @@ export interface BankDetailsInterface {
 
 export default function BankDetails(params: BankDetailsInterface) {
   const [disable, setDisable] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [isSuccessful, setIsSuccessful] = useState(false);
 
@@ -42,21 +43,21 @@ export default function BankDetails(params: BankDetailsInterface) {
   const onSubmit = async (data: z.infer<typeof BankDetailsValidation>) => {
     console.log(data);
     setDisable(true);
+    setLoading(true);
     const result = await updateBankDetails(data);
     if (result) {
       setIsSuccessful(true);
     } else {
-      setIsError(true)
-    };
-    setDisable(false)
+      setIsError(true);
+    }
+    setDisable(false);
+    setLoading(true);
   };
 
   return (
     <div className="text-[#38313A]">
       <div className="mt-[50px]">
-        <p className="text-2xl font-bold mb-5">
-          Bank Account Details
-        </p>
+        <p className="text-2xl font-bold mb-5">Bank Account Details</p>
         <div className="">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -112,14 +113,19 @@ export default function BankDetails(params: BankDetailsInterface) {
                   type="submit"
                   name="Save Changes"
                   disabled={disable}
+                  loading={loading}
                 />
               </div>
             </form>
           </Form>
         </div>
       </div>
-      {isError ? <StatusMessage message="An Error occurred!" type="error" /> : null}
-      {isSuccessful ? <StatusMessage message="Saved Successfully!" type="success" /> : null}
+      {isError ? (
+        <StatusMessage message="An Error occurred!" type="error" />
+      ) : null}
+      {isSuccessful ? (
+        <StatusMessage message="Saved Successfully!" type="success" />
+      ) : null}
     </div>
   );
 }

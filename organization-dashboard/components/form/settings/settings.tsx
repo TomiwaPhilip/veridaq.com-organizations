@@ -20,6 +20,7 @@ import { BlackButton } from "@/components/shared/buttons";
 import { OnboardingValidation } from "@/lib/validations/onboarding";
 import { updateOrgDetails } from "@/lib/actions/settings.action";
 import { StatusMessage } from "@/components/shared/shared";
+import { LucidePersonStanding } from "lucide-react";
 
 export interface SettingsProps {
   orgName: string;
@@ -37,6 +38,7 @@ export default function Settings(params: SettingsProps) {
   const inputFileRef = useRef<HTMLInputElement>(null);
   const [disable, setDisable] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [loading, setLoading] - useState(false);
   const [isSuccessful, setIsSuccessful] = useState(false);
 
   const form = useForm<z.infer<typeof OnboardingValidation>>({
@@ -89,6 +91,7 @@ export default function Settings(params: SettingsProps) {
 
   const onSubmit = async (data: z.infer<typeof OnboardingValidation>) => {
     console.log(data);
+    setLoading(true)
     const result = await updateOrgDetails({
       orgName: data.orgName,
       adminFirstName: data.adminFirstName,
@@ -105,6 +108,7 @@ export default function Settings(params: SettingsProps) {
       setIsError(true)
     };
     setDisable(false)
+    setLoading(true);
   };
 
   return (
@@ -265,6 +269,7 @@ export default function Settings(params: SettingsProps) {
                 <BlackButton
                   type="submit"
                   name="Save Changes"
+                  loading={loading}
                   disabled={disable}
                 />
               </div>

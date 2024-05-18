@@ -41,6 +41,7 @@ import {
   ErrorMessage,
   useSession,
 } from "@/components/shared/shared";
+import { BlackButton } from "@/components/shared/buttons";
 
 interface WorkReferenceProps {
   docId?: string | null;
@@ -49,6 +50,7 @@ interface WorkReferenceProps {
 const WorkReference: React.FC<WorkReferenceProps> = ({ docId }) => {
   const [step, setStep] = useState(1);
   const [requestResult, setRequestResult] = useState<boolean | null>(null);
+  const [loading, setLoading] = useState(false);
   const session = useSession();
 
   const handleNextStep = () => {
@@ -115,6 +117,7 @@ const WorkReference: React.FC<WorkReferenceProps> = ({ docId }) => {
 
   const onSubmit = async (data: z.infer<typeof WorkReferenceValidation3>) => {
     console.log("I want to submit");
+    setLoading(true);
     try {
       const create = await createOrUpdateWorkReferenceRequest({
         firstName: data.firstName,
@@ -135,10 +138,12 @@ const WorkReference: React.FC<WorkReferenceProps> = ({ docId }) => {
       setRequestResult(create);
       if (create) {
         handleNextStep();
+        setLoading(false);
       }
     } catch (error) {
       console.error("Error submitting form:", error);
       setRequestResult(false);
+      setLoading(false);
     }
   };
 
@@ -468,12 +473,11 @@ const WorkReference: React.FC<WorkReferenceProps> = ({ docId }) => {
                     </button>
                   </div>
                   <div className="text-right right">
-                    <button
+                    <BlackButton
+                      name="Generate Veridaq"
                       type="submit"
-                      className="bg-[#38313A] px-7 py-5 rounded-md text-white"
-                    >
-                      Generate Veridaq
-                    </button>
+                      loading={loading}
+                    />
                   </div>
                 </div>
               </div>

@@ -37,6 +37,7 @@ import {
   ErrorMessage,
   useSession,
 } from "@/components/shared/shared";
+import { BlackButton } from "@/components/shared/buttons";
 
 interface membershipReferenceProps {
   docId?: string | null;
@@ -47,6 +48,7 @@ const MembershipReference: React.FC<membershipReferenceProps> = ({ docId }) => {
   const [requestResult, setRequestResult] = useState<boolean | null>(null);
   const inputFileRef = useRef<HTMLInputElement>(null);
   const [isImageDisabled, setIsImageDisabled] = useState(false);
+  const [loading, setLoading] = useState(false);
   const session = useSession();
 
   const handleNextStep = () => {
@@ -129,6 +131,7 @@ const MembershipReference: React.FC<membershipReferenceProps> = ({ docId }) => {
   ) => {
     console.log("I want to submit");
 
+    setLoading(true);
     try {
       const create = await createOrUpdateMembershipReference({
         firstName: data.firstName,
@@ -143,10 +146,12 @@ const MembershipReference: React.FC<membershipReferenceProps> = ({ docId }) => {
       setRequestResult(create);
       if (create) {
         handleNextStep();
+        setLoading(false);
       }
     } catch (error) {
       console.error("Error submitting form:", error);
       setRequestResult(false);
+      setLoading(false);
     }
   };
 
@@ -327,12 +332,11 @@ const MembershipReference: React.FC<membershipReferenceProps> = ({ docId }) => {
                 </div>
                 <div className="mt-10 flex items-center justify-center">
                   <div className="text-right right">
-                    <button
+                    <BlackButton
+                      name="Generate Veridaq"
                       type="submit"
-                      className="bg-[#38313A] px-7 py-5 rounded-md text-white"
-                    >
-                      Generate Veridaq
-                    </button>
+                      loading={loading}
+                    />
                   </div>
                 </div>
               </div>

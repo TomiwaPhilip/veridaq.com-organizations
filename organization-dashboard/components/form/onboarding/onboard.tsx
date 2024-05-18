@@ -25,6 +25,7 @@ export default function Onboard() {
   const router = useRouter();
   const inputFileRef = useRef<HTMLInputElement>(null);
   const [disable, setDisable] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const form = useForm<z.infer<typeof OnboardingValidation>>({
     resolver: zodResolver(OnboardingValidation),
@@ -76,6 +77,7 @@ export default function Onboard() {
 
   const onSubmit = async (data: z.infer<typeof OnboardingValidation>) => {
     console.log(data);
+    setLoading(true);
     await updateUser(data);
 
     router.push("/auth/verify");

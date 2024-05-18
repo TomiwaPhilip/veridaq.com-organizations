@@ -27,6 +27,7 @@ export interface RequestPriceInterface {
 
 export default function RequestPrice(params: RequestPriceInterface) {
   const [disable, setDisable] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [isSuccessful, setIsSuccessful] = useState(false);
 
@@ -42,21 +43,21 @@ export default function RequestPrice(params: RequestPriceInterface) {
   const onSubmit = async (data: z.infer<typeof RequestPriceValidation>) => {
     console.log(data);
     setDisable(true);
+    setLoading(true);
     const result = await updatePricingDetails(data);
     if (result) {
       setIsSuccessful(true);
     } else {
-      setIsError(true)
-    };
-    setDisable(false)
+      setIsError(true);
+    }
+    setDisable(false);
+    setLoading(false);
   };
 
   return (
     <div className="text-[#38313A]">
       <div className="mt-[50px]">
-        <p className="text-2xl font-bold mb-5">
-          Request Pricing Customization
-        </p>
+        <p className="text-2xl font-bold mb-5">Request Pricing Customization</p>
         <div className="">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -112,14 +113,19 @@ export default function RequestPrice(params: RequestPriceInterface) {
                   type="submit"
                   name="Save Changes"
                   disabled={disable}
+                  loading={loading}
                 />
               </div>
             </form>
           </Form>
         </div>
       </div>
-      {isError ? <StatusMessage message="An Error occurred!" type="error" /> : null}
-      {isSuccessful ? <StatusMessage message="Saved Successfully!" type="success" /> : null}
+      {isError ? (
+        <StatusMessage message="An Error occurred!" type="error" />
+      ) : null}
+      {isSuccessful ? (
+        <StatusMessage message="Saved Successfully!" type="success" />
+      ) : null}
     </div>
   );
 }
