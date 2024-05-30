@@ -16,6 +16,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/form/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -289,12 +291,17 @@ const DocumentVerification: React.FC<docVerificationProps> = ({ docId }) => {
                     name="info"
                     render={({ field }) => (
                       <FormItem className="w-full">
-                        <FormLabel className="font-medium text-[16px]">
+                        <Label
+                          htmlFor="info"
+                          className="font-medium text-[16px]"
+                        >
                           Additional Info
-                        </FormLabel>
-                        <FormControl>
-                          <Input placeholder="Info" {...field} />
-                        </FormControl>
+                        </Label>
+                        <Textarea
+                          placeholder="More Info"
+                          id="info"
+                          className="flex h-12 w-full normal-border bg-[#C3B8D8] pt-10 rounded-lg px-1 py-3 placeholder:text-gray-500 text-left disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-950"
+                        />
                         <FormMessage />
                       </FormItem>
                     )}
