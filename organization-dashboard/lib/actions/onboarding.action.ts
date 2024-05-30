@@ -67,6 +67,7 @@ export async function updateUser(params: Params) {
 
 interface Params2 {
   credential?: string;
+  credential1?: string;
   credentialType: string;
   registered: string;
   nin?: string;
@@ -102,12 +103,12 @@ export async function updateUser2(params: Params2) {
       await session.save();
 
       return true;
-    } else if (params.credential) {
+    } else if (params.credential || params.credential1) {
       // Update the organization in the database
       await Organization.findOneAndUpdate(
         { _id: orgId },
         {
-          credential: params.credential,
+          credential: params.credential || params.credential1,
           credentialType: params.credentialType,
           registered: params.registered,
           verified: true,

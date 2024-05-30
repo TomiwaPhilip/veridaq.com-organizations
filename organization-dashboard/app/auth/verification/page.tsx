@@ -6,9 +6,9 @@ import getSession from "@/lib/actions/server-hooks/getsession.action";
 export default async function SignOut() {
   const session = await getSession();
 
-  if (session.isVerified) {
-    redirect("/");
-  }
+  // if (session.isVerified) {
+  //   redirect("/");
+  // }
 
   return <Verification />;
 }

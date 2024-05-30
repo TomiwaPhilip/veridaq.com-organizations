@@ -38,6 +38,7 @@ function Verification() {
       .string()
       .min(1, { message: "Registration details is required" }),
     credential: z.string().optional(),
+    credential1: z.string().optional(),
     nin: z.string().optional(),
     credentialType: z
       .string()
@@ -84,17 +85,19 @@ function Verification() {
 
   const onSubmit = async (data: z.infer<typeof VerificationValidation>) => {
     console.log(data);
+    setDisable(true);
     const result = await updateUser2(data);
     if (result) {
       router.push("/settings");
     } else {
       setErrorMessage("Credentials incomplete!");
     }
+    setDisable(false);
   };
 
   return (
-    <div className="flex justify-center items-center h-screen">
-      <div className="w-11/12 md:w-5/6 lg:w-2/3 xl:w-1/2 text-white mt-[50px]">
+    <div className="flex justify-center items-center">
+      <div className="w-11/12 md:w-5/6 lg:w-2/3 xl:w-1/2 text-white mt-[50px] mb-[50px]">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
@@ -130,7 +133,7 @@ function Verification() {
 
             <FormField
               control={form.control}
-              name="credential"
+              name="credential1"
               render={({ field }) => (
                 <FormItem className="w-full">
                   <FormLabel className="font-medium text-[20px]">
@@ -217,9 +220,7 @@ function Verification() {
                     </FormControl>
                     <SelectContent>
                       <SelectItem value="nin">NIN</SelectItem>
-                      <SelectItem value="cac">
-                        Certificate of Incorporation
-                      </SelectItem>
+                      <SelectItem value="cac">Incorporation Number</SelectItem>
                       <SelectItem value="letter">
                         Letter of Authorization
                       </SelectItem>
@@ -235,6 +236,7 @@ function Verification() {
                 type="submit"
                 name="Save and Continue"
                 disabled={disable}
+                loading={disable}
               />
             </div>
           </form>
