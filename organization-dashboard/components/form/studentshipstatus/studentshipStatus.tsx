@@ -262,6 +262,9 @@ const StudentshipStatus: React.FC<studentshipStatusProps> = ({ docId }) => {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
+                            <SelectItem value="Current Student">
+                              Current Student
+                            </SelectItem>
                             <SelectItem value="100L">100L</SelectItem>
                             <SelectItem value="200L">200L</SelectItem>
                             <SelectItem value="300L">300L</SelectItem>

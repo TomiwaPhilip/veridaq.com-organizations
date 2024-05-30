@@ -287,6 +287,10 @@ const MembershipReference: React.FC<membershipReferenceProps> = ({ docId }) => {
                           <Input placeholder="Post Graduate" {...field} />
                         </FormControl>
                         <FormMessage />
+                        <FormDescription>
+                          {" "}
+                          (Leave blank if not an Alumni ){" "}
+                        </FormDescription>
                       </FormItem>
                     )}
                   />
