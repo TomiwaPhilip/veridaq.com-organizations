@@ -68,10 +68,10 @@ export default function RequestPrice(params: RequestPriceInterface) {
                   render={({ field }) => (
                     <FormItem className="w-full">
                       <FormLabel className="font-medium text-[20px]">
-                        Stundentship Status Reference Fee
+                        Studentship Status Reference Fee
                       </FormLabel>
                       <FormControl>
-                        <Input placeholder="4000" {...field} />
+                        <Input placeholder="2000" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

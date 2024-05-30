@@ -123,10 +123,26 @@ function Verification() {
 
             <h3 className="text-center font-bold text-sm mt-10">
               If your organization is not registered, input your National
-              Identity Details. If your organization is registered upload either
-              the registration document of your organization or a stamped
-              authorization letter
+              Identity Details. If your organization is registered input either
+              your Company Incorporation Number or upload a stamped
+              authorization letter (you only need to do one of these).
             </h3>
+
+            <FormField
+              control={form.control}
+              name="credential"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormLabel className="font-medium text-[20px]">
+                    Company Incorporation Number
+                  </FormLabel>
+                  <FormControl>
+                    <Input placeholder="RC124353" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
             <FormField
               control={form.control}
@@ -175,7 +191,7 @@ function Verification() {
               render={({ field }) => (
                 <FormItem className="w-full">
                   <FormLabel className="font-medium text-[20px]">
-                    Nation Identity Number
+                    National Identity Number
                   </FormLabel>
                   <FormControl>
                     <Input placeholder="1536383899887773434777" {...field} />
