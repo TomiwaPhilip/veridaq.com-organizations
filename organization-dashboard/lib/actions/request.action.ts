@@ -293,6 +293,7 @@ interface MembershipParams {
   alumniCategory?: string;
   image?: string;
   _id?: string;
+  info?: string;
 }
 
 // Define the Membership Reference function
@@ -334,6 +335,7 @@ export async function createOrUpdateMembershipReference(
         adminDesignation: adminDesignation,
         currentDateTime: currentDateTime,
         badgeID: badgeID,
+        moreInfo: params.info,
       };
       const url =
         "https://generator-abfcaoddhq-bq.a.run.app/member-reference";
@@ -352,6 +354,7 @@ export async function createOrUpdateMembershipReference(
         adminDesignation: adminDesignation,
         currentDateTime: currentDateTime,
         badgeID: badgeID,
+        moreInfo: params.info,
       };
       const url =
         "https://generator-abfcaoddhq-bq.a.run.app/alumni-reference";
@@ -373,6 +376,7 @@ export async function createOrUpdateMembershipReference(
             memberSince: params.memberSince,
             alumniCategory: params.alumniCategory,
             image: params.image,
+            moreInfo: params.info,
             issued: true,
             dateIssued: new Date(),
             badgeUrl: result,
@@ -393,6 +397,7 @@ export async function createOrUpdateMembershipReference(
           id: params.id,
           memberSince: params.memberSince,
           image: params.image,
+          moreInfo: params.info,
           issued: true,
           dateIssued: new Date(),
           badgeUrl: result,

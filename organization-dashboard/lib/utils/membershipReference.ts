@@ -13,6 +13,7 @@ const MembershipReferenceSchema = new Schema({
   memberSince: { type: Date, required: true, max: Date.now() },
   image: String,
   alumniCategory: String,
+  moreInfo: String,
   user: {
     type: Schema.Types.ObjectId,
     ref: "User", // Reference to the User collection
