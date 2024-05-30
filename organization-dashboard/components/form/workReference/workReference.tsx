@@ -51,7 +51,6 @@ const WorkReference: React.FC<WorkReferenceProps> = ({ docId }) => {
   const [step, setStep] = useState(1);
   const [requestResult, setRequestResult] = useState<boolean | null>(null);
   const [loading, setLoading] = useState(false);
-  const [date, setDate] = React.useState<Date>();
   const session = useSession();
 
   const handleNextStep = () => {
@@ -364,50 +363,8 @@ const WorkReference: React.FC<WorkReferenceProps> = ({ docId }) => {
                     render={({ field }) => (
                       <FormItem className="flex flex-col">
                         <FormLabel className="font-medium text-[16px]">
-                          Work End Date
+                          Work End Date (Leave blank if ongoing)
                         </FormLabel>
-                        <Popover>
-                          <PopoverTrigger asChild>
-                            <Button
-                              variant={"outline"}
-                              className={cn(
-                                "flex h-12 w-full normal-border bg-[#C3B8D8] pt-10 rounded-lg px-1 py-3 placeholder:text-gray-500 text-left disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-950",
-                                !field.value && "text-muted-foreground",
-                              )}
-                            >
-                              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                              {date ? (
-                                format(date, "PPP")
-                              ) : (
-                                <span>Pick a date</span>
-                              )}
-                            </Button>
-                          </PopoverTrigger>
-                          <PopoverContent className="w-auto p-0" align="start">
-                            <Select
-                              onValueChange={(value) =>
-                                setDate(addDays(new Date(), parseInt(value)))
-                              }
-                            >
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select" />
-                              </SelectTrigger>
-                              <SelectContent position="popper">
-                                <SelectItem value="0">Today</SelectItem>
-                                <SelectItem value="1">Tomorrow</SelectItem>
-                                <SelectItem value="3">In 3 days</SelectItem>
-                                <SelectItem value="7">In a week</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <div className="rounded-md border">
-                              <Calendar
-                                mode="single"
-                                selected={date}
-                                onSelect={setDate}
-                              />
-                            </div>
-                          </PopoverContent>
-                        </Popover>
                         <Popover>
                           <PopoverTrigger asChild>
                             <FormControl>
