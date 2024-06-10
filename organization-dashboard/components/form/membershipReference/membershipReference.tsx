@@ -341,6 +341,12 @@ const MembershipReference: React.FC<membershipReferenceProps> = ({ docId }) => {
                             />
                           )}
                         </FormLabel>
+                        <label
+                            htmlFor="image"
+                            className="text-[#3344A8] cursor-pointer text-[20px] font-medium"
+                          >
+                            Upload Passport Image
+                        </label>
                         <FormControl className="flex-1 text-base-semibold text-gray-200">
                           <Input
                             type="file"
@@ -348,7 +354,7 @@ const MembershipReference: React.FC<membershipReferenceProps> = ({ docId }) => {
                             ref={inputFileRef}
                             disabled={isImageDisabled}
                             placeholder="Upload Profile Photo"
-                            className="account-form_image-input"
+                            className="hidden"
                             onChange={(e) => handleImage(e, field.onChange)}
                           />
                         </FormControl>

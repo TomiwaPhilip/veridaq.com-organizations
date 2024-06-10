@@ -2,21 +2,21 @@ export const cardData = [
   {
     heading: "Check your Veridaq Box!",
     paragraph:
-      "Veridaq Box is for receiving mails from individuals on the Veridaq platform. You can also issue a Veridaq.",
+      "Veridaq Box is the inbox on your interactions with other Veridaq users. Here, you receive request and make issuance based on the request",
     bgColor: "#AF8BA4",
     outlineColor: "#A593C5",
   },
   {
     heading: "Issue a Veridaq!",
     paragraph:
-      "Click on the Veridaq Issue button to issue Veridaq for Work History, Membership or Studentship Status, and Documents verification.",
+      "Click to directly intiate Veridaq Issuance (i.e. without prior requests) on Work Engagement, Memebership or Studentship Status and Document Verification",
     bgColor: "#A593C5",
     outlineColor: "#A294A4",
   },
   {
     heading: "Check your Veridaq Store!",
     paragraph:
-      "Click on the Veridaq Store button to manage received Veridaq, such as sharing, downloading, requesting updates, and controlling access.",
+      "Here is the Organization Veridaq databank where you record, trail and manage all your Veridaq Issuances.",
     bgColor: "#F26BBA",
     outlineColor: "#A593C5",
   },

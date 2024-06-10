@@ -427,9 +427,12 @@ const WorkReference: React.FC<WorkReferenceProps> = ({ docId }) => {
                           Notable Achievement
                         </FormLabel>
                         <FormControl>
-                          <Input placeholder="Permanent" {...field} />
-                        </FormControl>
-                        <FormMessage />
+                          <Textarea
+                            placeholder="Notable Achievement"
+                            id="notableAchievement"
+                            className="flex h-12 w-full normal-border bg-[#C3B8D8] pt-10 rounded-lg px-1 py-3 placeholder:text-gray-500 text-left disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-950"
+                          />
+                        </FormControl>                        <FormMessage />
                       </FormItem>
                     )}
                   />
@@ -438,17 +441,16 @@ const WorkReference: React.FC<WorkReferenceProps> = ({ docId }) => {
                     name="jobFunction"
                     render={({ field }) => (
                       <FormItem className="w-full">
-                        <Label
-                          htmlFor="jobFunction"
-                          className="font-medium text-[16px]"
-                        >
+                        <FormLabel className="font-medium text-[16px]">
                           Function
-                        </Label>
-                        <Textarea
-                          placeholder="Function"
-                          id="jobFunction"
-                          className="flex h-12 w-full normal-border bg-[#C3B8D8] pt-10 rounded-lg px-1 py-3 placeholder:text-gray-500 text-left disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-950"
-                        />
+                        </FormLabel>
+                        <FormControl>
+                          <Textarea
+                            placeholder="Function"
+                            id="jobFunction"
+                            className="flex h-12 w-full normal-border bg-[#C3B8D8] pt-10 rounded-lg px-1 py-3 placeholder:text-gray-500 text-left disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-950"
+                          />
+                        </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}

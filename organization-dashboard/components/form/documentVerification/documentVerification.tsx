@@ -331,13 +331,19 @@ const DocumentVerification: React.FC<docVerificationProps> = ({ docId }) => {
                             />
                           )}
                         </FormLabel>
+                        <label
+                            htmlFor="image"
+                            className="text-[#3344A8] cursor-pointer text-[20px] font-medium"
+                          >
+                            Upload Document Image
+                        </label>
                         <FormControl className="flex-1 text-base-semibold text-gray-200">
                           <Input
                             type="file"
                             accept="image/*"
                             ref={inputFileRef}
                             placeholder="Upload Profile Photo"
-                            className="account-form_image-input"
+                            className="hidden"
                             onChange={(e) => handleImage(e, field.onChange)}
                           />
                         </FormControl>
