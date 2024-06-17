@@ -26,4 +26,5 @@ export default withPWA({
       },
     ],
   },
+  output: "standalone",
 });
