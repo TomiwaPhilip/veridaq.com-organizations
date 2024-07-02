@@ -25,9 +25,9 @@ export default function Store() {
   }
 
   const [workReferenceDoc, setWorkReferenceDoc] = useState<Documents[]>([]);
-  const [memberReferenceDoc, setMemberReferenceDoc] = useState<Documents[]>([]);
-  const [docVerificationDoc, setDocVerificationDoc] = useState<Documents[]>([]);
-  const [studentStatusDoc, setStudentStatusDoc] = useState<Documents[]>([]);
+  // const [memberReferenceDoc, setMemberReferenceDoc] = useState<Documents[]>([]);
+  // const [docVerificationDoc, setDocVerificationDoc] = useState<Documents[]>([]);
+  // const [studentStatusDoc, setStudentStatusDoc] = useState<Documents[]>([]);
   const session = useSession();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -37,14 +37,14 @@ export default function Store() {
         const doc1 = await getIssuedWorkReference();
         if (doc1) setWorkReferenceDoc(doc1);
 
-        const doc2 = await getIssuedMemberReference();
-        if (doc2) setMemberReferenceDoc(doc2);
+        // const doc2 = await getIssuedMemberReference();
+        // if (doc2) setMemberReferenceDoc(doc2);
 
-        const doc3 = await getIssuedDocVerification();
-        if (doc3) setDocVerificationDoc(doc3);
+        // const doc3 = await getIssuedDocVerification();
+        // if (doc3) setDocVerificationDoc(doc3);
 
-        const doc4 = await getIssuedStudentshipStatus();
-        if (doc4) setStudentStatusDoc(doc4);
+        // const doc4 = await getIssuedStudentshipStatus();
+        // if (doc4) setStudentStatusDoc(doc4);
         setIsLoading(false);
       } catch (error) {
         console.error("Error fetching documents:", error);
@@ -76,10 +76,7 @@ export default function Store() {
           {!isLoading ? (
             <>
               {isAdmin &&
-                (workReferenceDoc.length > 0 ||
-                  memberReferenceDoc.length > 0 ||
-                  docVerificationDoc.length > 0 ||
-                  studentStatusDoc.length > 0) ? (
+                (workReferenceDoc.length > 0 ) ? (
                 <div className="mt-10 overflow-auto">
                   {/* Render cards for each type of document */}
                   <div className="mb-[5rem] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 justify-center mt-[30px] lg:mb-[0rem]">
@@ -93,7 +90,7 @@ export default function Store() {
                         link={doc.link}
                       />
                     ))}
-                    {memberReferenceDoc.map((doc: Documents) => (
+                    {/* {memberReferenceDoc.map((doc: Documents) => (
                       <Card3
                         key={doc.DocId} // Ensure each Card component has a unique key
                         heading={doc.heading}
@@ -122,7 +119,7 @@ export default function Store() {
                         outlineColor={doc.outlineColor}
                         link={doc.link}
                       />
-                    ))}
+                    ))} */}
                   </div>
                 </div>
               ) : (
@@ -194,157 +191,6 @@ export default function Store() {
           )}
         </div>
       </main>
-    );
-    
-  } else if (memStatusVeridaqRole) {
-    return (
-      <main className="mt-[60px]">
-        <div className="">
-          <SearchBar />
-        </div>
-        <div className="">
-          {!isAdmin && memStatusVeridaqRole && (
-            <>
-              {!isLoading ? (
-                <>
-                  {memberReferenceDoc.length > 0 ? (
-                    <div className="mt-10 overflow-auto">
-                      <div className="mb-[5rem] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 justify-center mt-[30px] lg:mb-[0rem]">
-                        {memberReferenceDoc.map((doc: Documents) => (
-                          <Card3
-                            key={doc.DocId} // Ensure each Card component has a unique key
-                            heading={doc.heading}
-                            textColor={doc.textColor}
-                            bgColor={doc.bgColor}
-                            outlineColor={doc.outlineColor}
-                            link={doc.link}
-                          />
-                        ))}
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="flex flex-col items-center justify-center h-full">
-                      <Image
-                        src="/assets/images/error.png"
-                        alt="Not Found"
-                        width={200}
-                        height={200}
-                      />
-                      <p className="text-center mt-2">No documents found!</p>
-                    </div>
-                  )}
-                </>
-              ) : (
-                <div className="flex items-center justify-center h-full">
-                  <RiLoader4Line className="animate-spin text-2xl mb-4" />
-                  <p>Loading...</p>
-                </div>
-              )}
-            </>
-          )}
-        </div>
-      </main>
-    );
-    
-  } else if (docRefVeridaqRole) {
-    return (
-      <main className="mt-[60px]">
-        <div className="">
-          <SearchBar />
-        </div>
-        <div className="">
-          {!isAdmin && docRefVeridaqRole && (
-            <>
-              {!isLoading ? (
-                <>
-                  {docVerificationDoc.length > 0 ? (
-                    <div className="mt-10 overflow-auto">
-                      <div className="mb-[5rem] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 justify-center mt-[30px] lg:mb-[0rem]">
-                        {docVerificationDoc.map((doc: Documents) => (
-                          <Card3
-                            key={doc.DocId} // Ensure each Card component has a unique key
-                            heading={doc.heading}
-                            textColor={doc.textColor}
-                            bgColor={doc.bgColor}
-                            outlineColor={doc.outlineColor}
-                            link={doc.link}
-                          />
-                        ))}
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="flex flex-col items-center justify-center h-full">
-                      <Image
-                        src="/assets/images/error.png"
-                        alt="Not Found"
-                        width={200}
-                        height={200}
-                      />
-                      <p className="text-center mt-2">No documents found!</p>
-                    </div>
-                  )}
-                </>
-              ) : (
-                <div className="flex items-center justify-center h-full">
-                  <RiLoader4Line className="animate-spin text-2xl mb-4" />
-                  <p>Loading...</p>
-                </div>
-              )}
-            </>
-          )}
-        </div>
-      </main>
-    );
-    
-  } else if (stdStatusVeridaqRole) {
-    return (
-      <main className="mt-[60px]">
-        <div className="">
-          <SearchBar />
-        </div>
-        <div className="">
-          {!isAdmin && stdStatusVeridaqRole && (
-            <>
-              {!isLoading ? (
-                <>
-                  {studentStatusDoc.length > 0 ? (
-                    <div className="mt-10 overflow-auto">
-                      <div className="mb-[5rem] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 justify-center mt-[30px] lg:mb-[0rem]">
-                        {studentStatusDoc.map((doc: Documents) => (
-                          <Card3
-                            key={doc.DocId} // Ensure each Card component has a unique key
-                            heading={doc.heading}
-                            textColor={doc.textColor}
-                            bgColor={doc.bgColor}
-                            outlineColor={doc.outlineColor}
-                            link={doc.link}
-                          />
-                        ))}
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="flex flex-col items-center justify-center h-full">
-                      <Image
-                        src="/assets/images/error.png"
-                        alt="Not Found"
-                        width={200}
-                        height={200}
-                      />
-                      <p className="text-center mt-2">No documents found!</p>
-                    </div>
-                  )}
-                </>
-              ) : (
-                <div className="flex items-center justify-center h-full">
-                  <RiLoader4Line className="animate-spin text-2xl mb-4" />
-                  <p>Loading...</p>
-                </div>
-              )}
-            </>
-          )}
-        </div>
-      </main>
-    );
-    
-  }
+    );   
+  } 
 }
