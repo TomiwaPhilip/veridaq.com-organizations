@@ -55,7 +55,7 @@ export default function RequestPrice(params: RequestPriceInterface) {
   };
 
   return (
-    <div className="text-[#38313A]">
+    <div className="text-[#38313A] hidden">
       <div className="mt-[50px]">
         <p className="text-2xl font-bold mb-5">Request Pricing Customization</p>
         <div className="">
