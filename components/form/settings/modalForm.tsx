@@ -154,7 +154,7 @@ const ModalForm: React.FC<ModalForm> = ({ onClose }) => {
                           <SelectItem value="workRefVeridaqRole">
                             Work Reference Admin
                           </SelectItem>
-                          <SelectItem value="stdStatusVeridaqRole">
+                          {/* <SelectItem value="stdStatusVeridaqRole">
                             Studentship Status Admin
                           </SelectItem>
                           <SelectItem value="docRefVeridaqRole">
@@ -162,7 +162,7 @@ const ModalForm: React.FC<ModalForm> = ({ onClose }) => {
                           </SelectItem>
                           <SelectItem value="memStatusVeridaqRole">
                             Membership Reference Admin
-                          </SelectItem>
+                          </SelectItem> */}
                         </SelectContent>
                       </Select>
                       <FormMessage />
