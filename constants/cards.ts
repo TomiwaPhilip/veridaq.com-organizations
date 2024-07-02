@@ -9,7 +9,7 @@ export const cardData = [
   {
     heading: "Issue a Veridaq!",
     paragraph:
-      "Click to directly intiate Veridaq Issuance (i.e. without prior requests) on Work Engagement, Memebership or Studentship Status and Document Verification",
+      "Click to directly intiate Veridaq Issuance (i.e. without prior requests) on Work Engagement and History",
     bgColor: "#A593C5",
     outlineColor: "#A294A4",
   },
@@ -37,27 +37,27 @@ export const cardData2 = [
     outlineColor: "#897A8B",
     id: "1",
   },
-  {
-    heading: "Studentship Status Reference",
-    textColor: "#38313A",
-    bgColor: "#F26BBA",
-    outlineColor: "#A593C5",
-    id: "2",
-  },
-  {
-    heading: "Membership Reference",
-    textColor: "#FFFFFF",
-    bgColor: "#38313A",
-    outlineColor: "#C3B8D8",
-    id: "3",
-  },
-  {
-    heading: "Document Verification Reference",
-    textColor: "#38313A",
-    bgColor: "#AF8BA4",
-    outlineColor: "#F4DBE4",
-    id: "4",
-  },
+  // {
+  //   heading: "Studentship Status Reference",
+  //   textColor: "#38313A",
+  //   bgColor: "#F26BBA",
+  //   outlineColor: "#A593C5",
+  //   id: "2",
+  // },
+  // {
+  //   heading: "Membership Reference",
+  //   textColor: "#FFFFFF",
+  //   bgColor: "#38313A",
+  //   outlineColor: "#C3B8D8",
+  //   id: "3",
+  // },
+  // {
+  //   heading: "Document Verification Reference",
+  //   textColor: "#38313A",
+  //   bgColor: "#AF8BA4",
+  //   outlineColor: "#F4DBE4",
+  //   id: "4",
+  // },
 ];
 
 export const cardData3 = [
@@ -67,22 +67,22 @@ export const cardData3 = [
     bgColor: "#F4DBE4",
     outlineColor: "#897A8B",
   },
-  {
-    heading: "Studentship Status Reference",
-    textColor: "#38313A",
-    bgColor: "#F26BBA",
-    outlineColor: "#A593C5",
-  },
-  {
-    heading: "Membership Reference",
-    textColor: "#FFFFFF",
-    bgColor: "#38313A",
-    outlineColor: "#C3B8D8",
-  },
-  {
-    heading: "Document Verification Reference",
-    textColor: "#38313A",
-    bgColor: "#AF8BA4",
-    outlineColor: "#F4DBE4",
-  },
+  // {
+  //   heading: "Studentship Status Reference",
+  //   textColor: "#38313A",
+  //   bgColor: "#F26BBA",
+  //   outlineColor: "#A593C5",
+  // },
+  // {
+  //   heading: "Membership Reference",
+  //   textColor: "#FFFFFF",
+  //   bgColor: "#38313A",
+  //   outlineColor: "#C3B8D8",
+  // },
+  // {
+  //   heading: "Document Verification Reference",
+  //   textColor: "#38313A",
+  //   bgColor: "#AF8BA4",
+  //   outlineColor: "#F4DBE4",
+  // },
 ];
