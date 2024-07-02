@@ -504,14 +504,14 @@ export function Wallet() {
     setIsError(false);
     const result = await withDrawFunds();
 
-    if (result) {
-      setIsLoading(false);
-      setIsSuccessful(true);
-    } else {
-      setIsError(true);
-      console.log("I returned false");
-      setIsLoading(false);
-    }
+    // if (result) {
+    //   setIsLoading(false);
+    //   setIsSuccessful(true);
+    // } else {
+    //   setIsError(true);
+    //   console.log("I returned false");
+    //   setIsLoading(false);
+    // }
   }
 
   return (
