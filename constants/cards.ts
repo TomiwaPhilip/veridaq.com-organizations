@@ -37,13 +37,13 @@ export const cardData2 = [
     outlineColor: "#897A8B",
     id: "1",
   },
-  // {
-  //   heading: "Studentship Status Reference",
-  //   textColor: "#38313A",
-  //   bgColor: "#F26BBA",
-  //   outlineColor: "#A593C5",
-  //   id: "2",
-  // },
+  {
+    heading: "Hands-On Experience Reference",
+    textColor: "#38313A",
+    bgColor: "#F26BBA",
+    outlineColor: "#A593C5",
+    id: "5",
+  },
   // {
   //   heading: "Membership Reference",
   //   textColor: "#FFFFFF",
@@ -67,12 +67,12 @@ export const cardData3 = [
     bgColor: "#F4DBE4",
     outlineColor: "#897A8B",
   },
-  // {
-  //   heading: "Studentship Status Reference",
-  //   textColor: "#38313A",
-  //   bgColor: "#F26BBA",
-  //   outlineColor: "#A593C5",
-  // },
+  {
+    heading: "Hands-On Experience Reference",
+    textColor: "#38313A",
+    bgColor: "#F26BBA",
+    outlineColor: "#A593C5",
+  },
   // {
   //   heading: "Membership Reference",
   //   textColor: "#FFFFFF",

@@ -13,6 +13,7 @@ import {
 import { getDocAndUpload } from "./server-hooks/requestWithUpload.action";
 import MembershipReference from "../utils/membershipReference";
 import Role from "../utils/roleSchema";
+import HandsOnReference from "../utils/handsOnReference";
 
 interface Params {
   firstName: string;
@@ -161,6 +162,155 @@ export async function createOrUpdateWorkReferenceRequest({
     );
   }
 }
+
+interface HandsOnReferenceParams {
+  firstName: string;
+  lastName: string;
+  middleName?: string;
+  roleType: string;
+  subType: string;
+  identifier: string;
+  projectTitle: string;
+  image?: string;
+  workStartDate: Date;
+  workEndDate?: Date; // Nullable workEndDate field
+  role: string;
+  notableAchievement?: string; // Optional notableAchievement field
+  roleResponsibilities: string; // Renamed from 'function' to 'jobFunction'
+  personalitySummary?: string; // Optional personalitySummary field
+  id?: string;
+}
+
+export async function createOrUpdateHandsOnReferenceRequest({
+  id,
+  firstName,
+  lastName,
+  middleName,
+  roleType,
+  subType,
+  identifier,
+  projectTitle,
+  image,
+  workStartDate,
+  workEndDate,
+  role,
+  notableAchievement,
+  roleResponsibilities, // Changed from 'function' to 'jobFunction'
+  personalitySummary,
+}: HandsOnReferenceParams) {
+  try {
+    console.log("Data got to backend");
+    // Connect to the database
+    connectToDB();
+
+    const session = await getSession();
+
+    if (!session) {
+      throw new Error("Unauthorized");
+    }
+
+    const orgId = session.orgId;
+    const adminDesignation = session.designation;
+    const adminName = (session.firstName + " " + session.lastName) as string;
+    const orgName = session.orgName as string;
+    const period = concatenateDates(workStartDate, workEndDate);
+    const currentDateTime = getCurrentDateTime();
+    const badgeID = generateVeridaqID();
+    const issuingAdminDetails = session.userId;
+
+    console.log(id);
+
+    // const data = {
+    //   nameOfEmployee: firstName + " " + lastName,
+    //   identifier: identifier,
+    //   employeeStatus: subType,
+    //   nameOfInstitution: orgName,
+    //   subType: subType,
+    //   designation: designation,
+    //   department: department,
+    //   period: period,
+    //   jobFunctions: jobFunction,
+    //   notableAchievement: notableAchievement,
+    //   personalitySummary: personalitySummary,
+    //   nameOfAdmin: adminName,
+    //   adminDesignation: adminDesignation,
+    //   currentDateTime: currentDateTime,
+    //   badgeID: badgeID,
+    // };
+    // const url =
+    //   "https://generator-abfcaoddhq-bq.a.run.app/work-reference";
+    // const docName = "handsOnReference.pdf";
+
+    // const result = await getDocAndUpload(data, url, docName);
+    let result;
+    if (result) {
+      // If id is provided, find and update the document
+      if (id) {
+        await HandsOnReference.findByIdAndUpdate(
+          id,
+          {
+            firstName,
+            lastName,
+            middleName,
+            roleType,
+            subType,
+            identifier,
+            projectTitle,
+            image,
+            workStartDate,
+            workEndDate,
+            role,
+            notableAchievement,
+            roleResponsibilities,
+            personalitySummary,
+            issued: true,
+            dateIssued: new Date(),
+            badgeUrl: result,
+            badgeID: badgeID,
+            issuingAdminDetails,
+          },
+          { new: true },
+        );
+
+        return true; // Return true if update is successful
+      } else {
+        // If id is not provided, create a new document
+        // Create a new WorkReference document
+        const handsOnReference = new HandsOnReference({
+          orgId,
+          firstName,
+          lastName,
+          middleName,
+          roleType,
+          subType,
+          identifier,
+          projectTitle,
+          image,
+          workStartDate,
+          workEndDate,
+          role,
+          notableAchievement,
+          roleResponsibilities,
+          personalitySummary,          
+          issued: true,
+          dateIssued: new Date(),
+          badgeUrl: result,
+          badgeID: badgeID,
+          issuingAdminDetails,
+        });
+
+        // Save the WorkReference document to the database
+        await handsOnReference.save();
+        return true; // Return true if creation is successful
+      }
+    } else return false;
+  } catch (error: any) {
+    throw new Error(
+      `Failed to save/update WorkReference request: ${error.message}`,
+    );
+  }
+}
+
 
 interface StudentshipParams {
   firstName: string;
