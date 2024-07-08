@@ -10,6 +10,7 @@ import { cardData3 } from "@/constants/cards";
 import {
   getIssuedDocVerification,
   getIssuedMemberReference,
+  getIssuedHandsOnReference,
   getIssuedStudentshipStatus,
   getIssuedWorkReference,
 } from "@/lib/actions/request.action";
@@ -25,7 +26,7 @@ export default function Store() {
   }
 
   const [workReferenceDoc, setWorkReferenceDoc] = useState<Documents[]>([]);
-  // const [memberReferenceDoc, setMemberReferenceDoc] = useState<Documents[]>([]);
+  const [handsOnReferenceDoc, setHandsOnReferenceDoc] = useState<Documents[]>([]);
   // const [docVerificationDoc, setDocVerificationDoc] = useState<Documents[]>([]);
   // const [studentStatusDoc, setStudentStatusDoc] = useState<Documents[]>([]);
   const session = useSession();
@@ -37,8 +38,8 @@ export default function Store() {
         const doc1 = await getIssuedWorkReference();
         if (doc1) setWorkReferenceDoc(doc1);
 
-        // const doc2 = await getIssuedMemberReference();
-        // if (doc2) setMemberReferenceDoc(doc2);
+        const doc2 = await getIssuedHandsOnReference();
+        if (doc2) setHandsOnReferenceDoc(doc2);
 
         // const doc3 = await getIssuedDocVerification();
         // if (doc3) setDocVerificationDoc(doc3);
@@ -76,7 +77,8 @@ export default function Store() {
           {!isLoading ? (
             <>
               {isAdmin &&
-                (workReferenceDoc.length > 0 ) ? (
+                (workReferenceDoc.length > 0 || 
+                  handsOnReferenceDoc.length > 0 ) ? (
                 <div className="mt-10 overflow-auto">
                   {/* Render cards for each type of document */}
                   <div className="mb-[5rem] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 justify-center mt-[30px] lg:mb-[0rem]">
@@ -90,7 +92,7 @@ export default function Store() {
                         link={doc.link}
                       />
                     ))}
-                    {/* {memberReferenceDoc.map((doc: Documents) => (
+                    {handsOnReferenceDoc.map((doc: Documents) => (
                       <Card3
                         key={doc.DocId} // Ensure each Card component has a unique key
                         heading={doc.heading}
@@ -100,7 +102,7 @@ export default function Store() {
                         link={doc.link}
                       />
                     ))}
-                    {docVerificationDoc.map((doc: Documents) => (
+                   {/* {docVerificationDoc.map((doc: Documents) => (
                       <Card3
                         key={doc.DocId} // Ensure each Card component has a unique key
                         heading={doc.heading}
