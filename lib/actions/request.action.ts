@@ -753,6 +753,71 @@ export async function getWorkReferenceById(docId: string) {
   }
 }
 
+export async function getHandsOnReference() {
+  try {
+    const session = await getSession();
+
+    if (!session) {
+      throw new Error("Unauthorized");
+    }
+
+    // Connect to the database
+    connectToDB();
+
+    const orgId = session.orgId;
+
+    // Query the WorkReference collection based on orgId
+    const workReferences = await HandsOnReference.find({
+      orgId,
+      issued: false,
+    }).select("firstName lastName dateRequested");
+
+    // Format the data before returning to the frontend
+    const formattedData = workReferences.map((doc) => ({
+      DocDetails: `Hands-On Experience Reference Request from ${doc.firstName} ${doc.lastName}`,
+      DocId: doc._id.toString(), // Convert _id to string
+      DocDate: formatDate(doc.dateRequested), // Format the date
+    }));
+
+    console.log(formattedData)
+
+    if (formattedData) return formattedData;
+    false;
+  } catch (error: any) {
+    console.error(error);
+    throw new Error("Failed to fetch WorkReference documents");
+  }
+}
+
+export async function getHandsOnReferenceById(docId: string) {
+  try {
+    // Connect to the database
+    connectToDB();
+
+    // Query the WorkReference collection based on the provided docId
+    const workReference = await HandsOnReference.findById(docId);
+
+    if (!workReference) {
+      throw new Error("Document not found");
+    }
+
+    // Convert the MongoDB _id field and other IDs to string
+    const stringifiedWorkReference = {
+      ...workReference.toJSON(),
+      _id: workReference._id.toString(), // Convert _id to string
+      orgId: workReference.orgId.toString(), // Convert orgId to string
+      user: workReference.user.toString(), // Convert user ID to string
+    };
+
+    // console.log(stringifiedWorkReference);
+
+    return stringifiedWorkReference;
+  } catch (error: any) {
+    console.error(error);
+    throw new Error(`Failed to fetch WorkReference document with ID: ${docId}`);
+  }
+}
+
 export async function getDocVerification() {
   try {
     const session = await getSession();
@@ -961,6 +1026,43 @@ export async function getIssuedWorkReference() {
 
     // Query the WorkReference collection based on orgId
     const workReferences = await WorkReference.find({
+      orgId,
+      issued: true,
+    }).select("firstName lastName badgeUrl");
+
+    // Format the data before returning to the frontend
+    const formattedData = workReferences.map((doc) => ({
+      heading: `Work Reference to ${doc.firstName} ${doc.lastName}`,
+      DocId: doc._id.toString(), // Convert _id to string
+      link: doc.badgeUrl,
+      textColor: "#38313A",
+      bgColor: "#F4DBE4",
+      outlineColor: "#897A8B",
+    }));
+
+    if (formattedData) return formattedData;
+    false;
+  } catch (error: any) {
+    console.error(error);
+    throw new Error("Failed to fetch issued WorkReference documents");
+  }
+}
+
+export async function getIssuedHandsOnReference() {
+  try {
+    const session = await getSession();
+
+    if (!session) {
+      throw new Error("Unauthorized");
+    }
+
+    // Connect to the database
+    connectToDB();
+
+    const orgId = session.orgId;
+
+    // Query the WorkReference collection based on orgId
+    const workReferences = await HandsOnReference.find({
       orgId,
       issued: true,
     }).select("firstName lastName badgeUrl");

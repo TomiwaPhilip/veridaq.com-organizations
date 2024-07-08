@@ -15,6 +15,7 @@ import {
   getDocVerification,
   getMemberReference,
   getStudentshipStatus,
+  getHandsOnReference,
 } from "@/lib/actions/request.action";
 
 export default function Box() {
@@ -27,7 +28,7 @@ export default function Box() {
   const [openModalId, setOpenModalId] = useState<string | null>(null);
   const [openModalDocId, setOpenModalDocId] = useState<string | null>(null);
   const [workReferenceDoc, setWorkReferenceDoc] = useState<Documents[]>([]);
-  // const [memberReferenceDoc, setMemberReferenceDoc] = useState<Documents[]>([]);
+  const [handsOnReferenceDoc, setHandsOnReferenceDoc] = useState<Documents[]>([]);
   // const [docVerificationDoc, setDocVerificationDoc] = useState<Documents[]>([]);
   // const [studentStatusDoc, setStudentStatusDoc] = useState<Documents[]>([]);
   const session = useSession();
@@ -40,8 +41,10 @@ export default function Box() {
         if (doc1) setWorkReferenceDoc(doc1);
         console.log(workReferenceDoc);
 
-        // const doc2 = await getMemberReference();
-        // if (doc2) setMemberReferenceDoc(doc2);
+        const doc2 = await getHandsOnReference();
+        if (doc2) setHandsOnReferenceDoc(doc2);
+
+        console.log(doc2);
 
         // const doc3 = await getDocVerification();
         // if (doc3) setDocVerificationDoc(doc3);
@@ -100,7 +103,8 @@ export default function Box() {
                   {!isLoading ? (
                     <>
                       {isAdmin &&
-                      (workReferenceDoc.length > 0 ) ? (
+                      (workReferenceDoc.length > 0 || 
+                        handsOnReferenceDoc.length > 0) ? (
                         <>
                           {workReferenceDoc.map((doc: Documents) => (
                             <VeridaqDocument
@@ -112,36 +116,37 @@ export default function Box() {
                               onClick={handleOpenModal}
                             />
                           ))}
-                          {/* {memberReferenceDoc.map((doc: Documents) => (
+                          {handsOnReferenceDoc.map((doc: Documents) => (
                             <VeridaqDocument
                               key={doc.DocId}
                               DocDetails={doc.DocDetails}
                               DocDate={doc.DocDate}
                               docId={doc.DocId}
-                              id="3"
+                              id="5"
                               onClick={handleOpenModal}
                             />
                           ))}
-                          {docVerificationDoc.map((doc: Documents) => (
-                            <VeridaqDocument
-                              key={doc.DocId}
-                              DocDetails={doc.DocDetails}
-                              DocDate={doc.DocDate}
-                              docId={doc.DocId}
-                              id="4"
-                              onClick={handleOpenModal}
-                            />
-                          ))}
-                          {studentStatusDoc.map((doc: Documents) => (
-                            <VeridaqDocument
-                              key={doc.DocId}
-                              DocDetails={doc.DocDetails}
-                              DocDate={doc.DocDate}
-                              docId={doc.DocId}
-                              id="2"
-                              onClick={handleOpenModal}
-                            />
-                          ))} */}
+                          {/* 
+                          // {docVerificationDoc.map((doc: Documents) => (
+                          //   <VeridaqDocument
+                          //     key={doc.DocId}
+                          //     DocDetails={doc.DocDetails}
+                          //     DocDate={doc.DocDate}
+                          //     docId={doc.DocId}
+                          //     id="4"
+                          //     onClick={handleOpenModal}
+                          //   />
+                          // ))}
+                          // {studentStatusDoc.map((doc: Documents) => (
+                          //   <VeridaqDocument
+                          //     key={doc.DocId}
+                          //     DocDetails={doc.DocDetails}
+                          //     DocDate={doc.DocDate}
+                          //     docId={doc.DocId}
+                          //     id="2"
+                          //     onClick={handleOpenModal}
+                          //   />
+                          // ))} */}
                         </>
                       ) : (
                         <div className="flex flex-col items-center justify-center h-full">

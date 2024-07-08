@@ -35,10 +35,8 @@ import { z } from "zod";
 
 import {
   createOrUpdateHandsOnReferenceRequest,
-  createOrUpdateWorkReferenceRequest,
-  getWorkReferenceById,
+  getHandsOnReferenceById,
 } from "@/lib/actions/request.action";
-import { WorkReferenceValidation3 } from "@/lib/validations/workreference";
 import {
   SuccessMessage,
   ErrorMessage,
@@ -78,7 +76,7 @@ const HandsOnReference: React.FC<HandsOnReferenceProps> = ({ docId }) => {
     const fetchWorkReferenceDoc = async () => {
       if (!docId) return;
       try {
-        const doc = await getWorkReferenceById(docId);
+        const doc = await getHandsOnReferenceById(docId);
         console.log("Fetched document:", doc); // Log fetched document
         // Set default values for form fields if available
         if (doc) {
