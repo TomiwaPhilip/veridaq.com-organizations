@@ -54,7 +54,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <main className="">
           <Nav />
           <div className="p-8 absolute right-0 lg:left-[230px]">
-            <Header/>
+            <Header />
             {children}
           </div>
           <BottomBar />
