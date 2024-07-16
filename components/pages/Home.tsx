@@ -1,10 +1,12 @@
-import { Wallet, Card } from "../shared/shared";
-import { cardData } from "@/constants/cards";
+import { BaseFramerAnimation } from "../shared/Animations"
+import { Wallet, Card } from "../shared/shared"
+import { cardData } from "@/constants/cards"
 import { Feedback } from "../shared/feedback";
 
 export default function HomePage() {
   return (
     <main className="bg-[#E1D7E2] mt-[40px] pb-[5rem] lg:pb-[0rem] md:mt-[70x]">
+      <BaseFramerAnimation>
       <div className="flex flex-col md:flex-row items-center justify-center gap-6 ">
         <div className="mr-auto md:w-[40%]">
           <p className="font-bold text-[28px] text-[#38313A]">
@@ -26,6 +28,7 @@ export default function HomePage() {
         ))}
       </div>
       <Feedback />
+      </BaseFramerAnimation>
     </main>
-  );
+  )
 }
