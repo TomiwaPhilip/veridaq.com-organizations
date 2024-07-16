@@ -9,7 +9,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/form/form";
-import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
@@ -93,7 +92,7 @@ const HandsOnReference: React.FC<HandsOnReferenceProps> = ({ docId }) => {
             workEndDate,
             role,
             notableAchievement,
-            roleResponsibilities, 
+            roleResponsibilities,
             personalitySummary,
           } = doc;
           form.reset({
@@ -109,7 +108,7 @@ const HandsOnReference: React.FC<HandsOnReferenceProps> = ({ docId }) => {
             workEndDate,
             role,
             notableAchievement,
-            roleResponsibilities, 
+            roleResponsibilities,
             personalitySummary,
           });
         }
@@ -312,7 +311,10 @@ const HandsOnReference: React.FC<HandsOnReferenceProps> = ({ docId }) => {
                           Project/Program Title
                         </FormLabel>
                         <FormControl>
-                          <Input placeholder="Development Internship" {...field} />
+                          <Input
+                            placeholder="Development Internship"
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -397,7 +399,7 @@ const HandsOnReference: React.FC<HandsOnReferenceProps> = ({ docId }) => {
                     render={({ field }) => (
                       <FormItem className="flex flex-col">
                         <FormLabel className="font-medium text-[16px]">
-                          Work Start Date
+                          Start Date
                         </FormLabel>
                         <Popover>
                           <PopoverTrigger asChild>
@@ -418,10 +420,7 @@ const HandsOnReference: React.FC<HandsOnReferenceProps> = ({ docId }) => {
                               </Button>
                             </FormControl>
                           </PopoverTrigger>
-                          <PopoverContent
-                            className="w-auto p-0"
-                            align="start"
-                          >
+                          <PopoverContent className="w-auto p-0" align="start">
                             <Calendar
                               mode="single"
                               selected={field.value}
@@ -444,7 +443,7 @@ const HandsOnReference: React.FC<HandsOnReferenceProps> = ({ docId }) => {
                     render={({ field }) => (
                       <FormItem className="flex flex-col">
                         <FormLabel className="font-medium text-[16px]">
-                          Work End Date (Leave blank if ongoing)
+                          End Date (Leave blank if ongoing)
                         </FormLabel>
                         <Popover>
                           <PopoverTrigger asChild>
@@ -465,10 +464,7 @@ const HandsOnReference: React.FC<HandsOnReferenceProps> = ({ docId }) => {
                               </Button>
                             </FormControl>
                           </PopoverTrigger>
-                          <PopoverContent
-                            className="w-auto p-0"
-                            align="start"
-                          >
+                          <PopoverContent className="w-auto p-0" align="start">
                             <Calendar
                               mode="single"
                               selected={field.value}

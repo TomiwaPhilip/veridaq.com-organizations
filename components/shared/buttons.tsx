@@ -75,7 +75,11 @@ export function BlackButton({
       disabled={disabled}
       onClick={onClick}
     >
-      {loading ? <RiLoader4Line className="animate-spin text-2xl" /> : name}
+      {loading ? (
+        <RiLoader4Line className="animate-spin text-2xl text-center" />
+      ) : (
+        name
+      )}
     </button>
   );
 }
