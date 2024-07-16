@@ -2,32 +2,32 @@ export const cardData = [
   {
     heading: "Check your Veridaq Box!",
     paragraph:
-      "Veridaq Box is the inbox on your interactions with other Veridaq users. Here, you receive request and make issuance based on the request",
+      "Check your Veridaq inbox for interactions with other Veridaq users. Here, you receive Verifiable Reference requests and make Issuances initiated by the requests.",
     bgColor: "#AF8BA4",
     outlineColor: "#A593C5",
   },
   {
     heading: "Issue a Veridaq!",
     paragraph:
-      "Click to directly intiate Veridaq Issuance (i.e. without prior requests) on Work Engagement and History",
+      "Initiate Verifiable Reference Issuances without prior requests.",
     bgColor: "#A593C5",
     outlineColor: "#A294A4",
   },
   {
     heading: "Check your Veridaq Store!",
     paragraph:
-      "Here is the Organization Veridaq databank where you record, trail and manage all your Veridaq Issuances.",
+      "Here is the Organisation data bank for records and management of all issued Verifiable References.",
     bgColor: "#F26BBA",
     outlineColor: "#A593C5",
   },
   {
     heading: "Configure your settings!",
     paragraph:
-      "Click on the Settings button to make changes to how your Veridaq account is configured.",
+      "Click on the Settings button to make changes to how your Veridaq account is configured",
     bgColor: "#D6B9C3",
     outlineColor: "#F69DD1",
   },
-];
+]
 
 export const cardData2 = [
   {
@@ -58,7 +58,7 @@ export const cardData2 = [
   //   outlineColor: "#F4DBE4",
   //   id: "4",
   // },
-];
+]
 
 export const cardData3 = [
   {
@@ -85,4 +85,4 @@ export const cardData3 = [
   //   bgColor: "#AF8BA4",
   //   outlineColor: "#F4DBE4",
   // },
-];
+]
