@@ -19,6 +19,8 @@ import {
 } from "@/lib/actions/request.action"
 import { BaseFramerAnimation } from "../shared/Animations"
 
+type allDocsKey = "workReferenceDoc" | "handsOnReferenceDoc"
+
 export default function Box() {
   interface Documents {
     DocDetails: string
@@ -32,6 +34,10 @@ export default function Box() {
   const [handsOnReferenceDoc, setHandsOnReferenceDoc] = useState<Documents[]>(
     []
   )
+  const [allDocs, setAllDocs] = useState<Record<allDocsKey, Documents[]>>({
+    workReferenceDoc: [],
+    handsOnReferenceDoc: [],
+  })
   // const [docVerificationDoc, setDocVerificationDoc] = useState<Documents[]>([]);
   // const [studentStatusDoc, setStudentStatusDoc] = useState<Documents[]>([]);
   const session = useSession()
@@ -41,11 +47,17 @@ export default function Box() {
     const fetchData = async () => {
       try {
         const doc1 = await getWorkReference()
-        if (doc1) setWorkReferenceDoc(doc1)
+        if (doc1) {
+          setWorkReferenceDoc(doc1)
+          setAllDocs((prev) => ({ ...prev, workReferenceDoc: doc1 }))
+        }
         console.log(workReferenceDoc)
 
         const doc2 = await getHandsOnReference()
-        if (doc2) setHandsOnReferenceDoc(doc2)
+        if (doc2) {
+          setHandsOnReferenceDoc(doc2)
+          setAllDocs((prev) => ({ ...prev, handsOnReferenceDoc: doc2 }))
+        }
 
         console.log(doc2)
 
@@ -100,7 +112,26 @@ export default function Box() {
             <div className="flex-1">
               <div className="p-7 bg-[#C3B8D8] rounded-lg h-full">
                 <div className="">
-                  <SearchBar2 />
+                  <SearchBar2
+                    onChange={(e) => {
+                      const value = e.target.value
+
+                      // Work Reference Search
+                      const newWorkRefData = allDocs.workReferenceDoc.filter(
+                        (workRef) => {
+                          return workRef.DocDetails.includes(value)
+                        }
+                      )
+                      setWorkReferenceDoc(newWorkRefData)
+
+                      // Hands On Reference search
+                      const newhandsOnRefData =
+                        allDocs.handsOnReferenceDoc.filter((handsOnRef) => {
+                          return handsOnRef.DocDetails.includes(value)
+                        })
+                      setHandsOnReferenceDoc(newhandsOnRefData)
+                    }}
+                  />
                 </div>
                 <div className="mt-10 overflow-auto">
                   {!isLoading ? (

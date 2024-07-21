@@ -16,6 +16,8 @@ import {
 } from "@/lib/actions/request.action"
 import { BaseFramerAnimation } from "../shared/Animations"
 
+type allDocsKey = "workReferenceDoc" | "handsOnReferenceDoc"
+
 export default function Store() {
   interface Documents {
     heading: string
@@ -35,14 +37,25 @@ export default function Store() {
   const session = useSession()
   const [isLoading, setIsLoading] = useState(true)
 
+  const [allDocs, setAllDocs] = useState<Record<allDocsKey, Documents[]>>({
+    workReferenceDoc: [],
+    handsOnReferenceDoc: [],
+  })
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const doc1 = await getIssuedWorkReference()
-        if (doc1) setWorkReferenceDoc(doc1)
+        if (doc1) {
+          setWorkReferenceDoc(doc1)
+          setAllDocs((prev) => ({ ...prev, workReferenceDoc: doc1 }))
+        }
 
         const doc2 = await getIssuedHandsOnReference()
-        if (doc2) setHandsOnReferenceDoc(doc2)
+        if (doc2) {
+          setHandsOnReferenceDoc(doc2)
+          setAllDocs((prev) => ({ ...prev, handsOnReferenceDoc: doc2 }))
+        }
 
         // const doc3 = await getIssuedDocVerification();
         // if (doc3) setDocVerificationDoc(doc3);
@@ -74,7 +87,27 @@ export default function Store() {
     return (
       <main className="mt-[60px]">
         <div className="">
-          <SearchBar />
+          <SearchBar
+            onChange={(e) => {
+              const value = e.target.value
+
+              // Work Reference Search
+              const newWorkRefData = allDocs.workReferenceDoc.filter(
+                (workRef) => {
+                  return workRef.heading.includes(value)
+                }
+              )
+              setWorkReferenceDoc(newWorkRefData)
+
+              // Hands On Reference search
+              const newhandsOnRefData = allDocs.handsOnReferenceDoc.filter(
+                (handsOnRef) => {
+                  return handsOnRef.heading.includes(value)
+                }
+              )
+              setHandsOnReferenceDoc(newhandsOnRefData)
+            }}
+          />
         </div>
         <div className="">
           {!isLoading ? (

@@ -1,38 +1,38 @@
-"use client";
+"use client"
 
-import Image from "next/image";
-import Link from "next/link";
-import { RiLoader4Line } from "react-icons/ri";
+import Image from "next/image"
+import Link from "next/link"
+import { RiLoader4Line } from "react-icons/ri"
 
-import { signOut } from "@/lib/actions/login.action";
-import { getSession2 } from "@/lib/actions/server-hooks/getsession.action";
-import { usePathname } from "next/navigation";
-import { useState, useEffect } from "react";
-import { SessionData } from "@/lib/iron-session/session";
-import { withDrawFunds } from "@/lib/actions/payment.action";
+import { signOut } from "@/lib/actions/login.action"
+import { getSession2 } from "@/lib/actions/server-hooks/getsession.action"
+import { usePathname } from "next/navigation"
+import { useState, useEffect } from "react"
+import { SessionData } from "@/lib/iron-session/session"
+import { withDrawFunds } from "@/lib/actions/payment.action"
 
 export function useSession() {
-  const [session, setSession] = useState<SessionData | null>(null);
+  const [session, setSession] = useState<SessionData | null>(null)
 
   useEffect(() => {
     async function fetchSession() {
       try {
-        const sessionData = await getSession2();
-        setSession(sessionData);
+        const sessionData = await getSession2()
+        setSession(sessionData)
       } catch (error) {
-        console.error("Error getting session:", error);
+        console.error("Error getting session:", error)
       }
     }
 
-    fetchSession();
-  }, []);
+    fetchSession()
+  }, [])
 
-  return session;
+  return session
 }
 
 // This is the Nav
 export function Nav() {
-  const pathname = usePathname();
+  const pathname = usePathname()
   return (
     <nav className="bg-[#38313A] w-max min-h-screen p-4 flex flex-col fixed top-0 left-0 overflow-y-auto hidden lg:block">
       <Image
@@ -45,7 +45,9 @@ export function Nav() {
       <div className="flex flex-col justify-center items-center min-h-screen">
         <ul className="list-none flex flex-col gap-2">
           <li
-            className={`gradient-border rounded-md ${pathname === "/" ? "normal-gradient-border" : ""}`}
+            className={`gradient-border rounded-md ${
+              pathname === "/" ? "normal-gradient-border" : ""
+            }`}
           >
             <Link
               href="/"
@@ -61,7 +63,9 @@ export function Nav() {
             </Link>
           </li>
           <li
-            className={`gradient-border rounded-md ${pathname === "/veridaq-box" ? "normal-gradient-border" : ""}`}
+            className={`gradient-border rounded-md ${
+              pathname === "/veridaq-box" ? "normal-gradient-border" : ""
+            }`}
           >
             <Link
               href="/veridaq-box"
@@ -77,7 +81,9 @@ export function Nav() {
             </Link>
           </li>
           <li
-            className={`gradient-border rounded-md ${pathname === "/veridaq-issue" ? "normal-gradient-border" : ""}`}
+            className={`gradient-border rounded-md ${
+              pathname === "/veridaq-issue" ? "normal-gradient-border" : ""
+            }`}
           >
             <Link
               href="/veridaq-issue"
@@ -93,7 +99,9 @@ export function Nav() {
             </Link>
           </li>
           <li
-            className={`gradient-border rounded-md ${pathname === "/veridaq-store" ? "normal-gradient-border" : ""}`}
+            className={`gradient-border rounded-md ${
+              pathname === "/veridaq-store" ? "normal-gradient-border" : ""
+            }`}
           >
             <Link
               href="/veridaq-store"
@@ -109,7 +117,9 @@ export function Nav() {
             </Link>
           </li>
           <li
-            className={`gradient-border rounded-md ${pathname === "/settings" ? "normal-gradient-border" : ""}`}
+            className={`gradient-border rounded-md ${
+              pathname === "/settings" ? "normal-gradient-border" : ""
+            }`}
           >
             <Link
               href="/settings"
@@ -127,51 +137,84 @@ export function Nav() {
         </ul>
       </div>
     </nav>
-  );
+  )
 }
 
 export function BottomBar() {
-  const pathname = usePathname();
+  const pathname = usePathname()
 
   return (
     <nav className="fixed bottom-0 left-0 w-full border-t border-gray-300 bg-gradient-to-t bg-[#38313A] pt-1 pb-2 backdrop-blur-2xl block rounded-t-lg lg:hidden">
       <div className="flex items-center justify-between">
         {/* Icon Links */}
         <div className="text-center flex items-center justify-between w-full px-2 py-2">
-          <Link href={"/"} passHref className={`cursor-pointer px-3 py-4 ${pathname === "/" ? "border-2 border-[#EA098D] rounded-md" : ""
-            }`}>
+          <Link
+            href={"/"}
+            passHref
+            className={`cursor-pointer px-3 py-4 ${
+              pathname === "/" ? "border-2 border-[#EA098D] rounded-md" : ""
+            }`}
+          >
             <img
               src={"/assets/icons/home.svg"}
               alt="Home"
               className="w-8 h-8"
             />
           </Link>
-          <Link href={"/veridaq-box"} passHref className={`cursor-pointer px-3 py-4 ${pathname === "/veridaq-box" ? "border-2 border-[#EA098D] rounded-md" : ""
-            }`}>
+          <Link
+            href={"/veridaq-box"}
+            passHref
+            className={`cursor-pointer px-3 py-4 ${
+              pathname === "/veridaq-box"
+                ? "border-2 border-[#EA098D] rounded-md"
+                : ""
+            }`}
+          >
             <img
               src={"/assets/icons/message.svg"}
               alt="message"
               className="w-8 h-8"
             />
           </Link>
-          <Link href={"/veridaq-issue"} passHref className={`cursor-pointer px-3 py-4 ${pathname === "/veridaq-issue" ? "border-2 border-[#EA098D] rounded-md" : ""
-            }`}>
+          <Link
+            href={"/veridaq-issue"}
+            passHref
+            className={`cursor-pointer px-3 py-4 ${
+              pathname === "/veridaq-issue"
+                ? "border-2 border-[#EA098D] rounded-md"
+                : ""
+            }`}
+          >
             <img
               src={"/assets/icons/send.svg"}
               alt="send"
               className="w-8 h-8"
             />
           </Link>
-          <Link href={"/veridaq-store"} passHref className={`cursor-pointer px-3 py-4 ${pathname === "/veridaq-store" ? "border-2 border-[#EA098D] rounded-md" : ""
-            }`}>
+          <Link
+            href={"/veridaq-store"}
+            passHref
+            className={`cursor-pointer px-3 py-4 ${
+              pathname === "/veridaq-store"
+                ? "border-2 border-[#EA098D] rounded-md"
+                : ""
+            }`}
+          >
             <img
               src={"/assets/icons/security.svg"}
               alt="store"
               className="w-8 h-8"
             />
           </Link>
-          <Link href={"/settings"} passHref className={`cursor-pointer px-3 py-4 ${pathname === "/settings" ? "border-2 border-[#EA098D] rounded-md" : ""
-            }`}>
+          <Link
+            href={"/settings"}
+            passHref
+            className={`cursor-pointer px-3 py-4 ${
+              pathname === "/settings"
+                ? "border-2 border-[#EA098D] rounded-md"
+                : ""
+            }`}
+          >
             <img
               src={"/assets/icons/settings.svg"}
               alt="settings"
@@ -181,17 +224,17 @@ export function BottomBar() {
         </div>
       </div>
     </nav>
-  );
+  )
 }
 
 const handleSignOut = async () => {
-  await signOut();
-};
+  await signOut()
+}
 
 export function Header() {
-  const pathname = usePathname();
-  const session = useSession();
-  const name = session?.firstName;
+  const pathname = usePathname()
+  const session = useSession()
+  const name = session?.firstName
 
   return (
     <header className="flex items-center justify-between text-[23px] w-full md:text-[32px] gap-10">
@@ -244,7 +287,7 @@ export function Header() {
         )}
       </div>
     </header>
-  );
+  )
 }
 
 // Cards for the home page
@@ -254,10 +297,10 @@ export function Card({
   bgColor,
   outlineColor,
 }: {
-  heading: string;
-  paragraph: string;
-  bgColor: string;
-  outlineColor: string;
+  heading: string
+  paragraph: string
+  bgColor: string
+  outlineColor: string
 }) {
   return (
     <div
@@ -272,7 +315,7 @@ export function Card({
       <p className="font-bold text-[24px] mt-4">{heading}</p>
       <p className="text-[20px]">{paragraph}</p>
     </div>
-  );
+  )
 }
 
 // Cards for the home page
@@ -284,16 +327,16 @@ export function Card2({
   id,
   onClick,
 }: {
-  heading: string;
-  bgColor: string;
-  outlineColor: string;
-  textColor: string;
-  id: string;
-  onClick: (id: string) => void;
+  heading: string
+  bgColor: string
+  outlineColor: string
+  textColor: string
+  id: string
+  onClick: (id: string) => void
 }) {
   const handleClick = () => {
-    onClick(id); // Pass the id to the onClick handler
-  };
+    onClick(id) // Pass the id to the onClick handler
+  }
 
   return (
     <div
@@ -310,7 +353,7 @@ export function Card2({
     >
       <p className="font-bold text-[20px] mt-4">{heading}</p>
     </div>
-  );
+  )
 }
 
 export function Card3({
@@ -320,18 +363,18 @@ export function Card3({
   textColor,
   link,
 }: {
-  heading: string;
-  bgColor: string;
-  outlineColor: string;
-  textColor: string;
-  link: string;
+  heading: string
+  bgColor: string
+  outlineColor: string
+  textColor: string
+  link: string
 }) {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [copy, setCopy] = useState("Copy Link");
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+  const [copy, setCopy] = useState("Copy Link")
 
   const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
-  };
+    setIsDropdownOpen(!isDropdownOpen)
+  }
 
   const handleCopyLink = (link: string) => {
     // Copy link to clipboard
@@ -339,20 +382,20 @@ export function Card3({
       navigator.clipboard
         .writeText(link)
         .then(() => {
-          setCopy("Copied");
-          console.log("Link copied to clipboard!");
+          setCopy("Copied")
+          console.log("Link copied to clipboard!")
           setTimeout(() => {
-            setCopy("Copy Link");
-          }, 4000);
+            setCopy("Copy Link")
+          }, 4000)
         })
         .catch((error) => {
           // Unable to write to clipboard
-          console.error("Failed to copy link to clipboard:", error);
-        });
+          console.error("Failed to copy link to clipboard:", error)
+        })
     } else {
-      setCopy("Unable to Copy");
+      setCopy("Unable to Copy")
     }
-  };
+  }
 
   return (
     <div
@@ -395,7 +438,7 @@ export function Card3({
         )}
       </div>
     </div>
-  );
+  )
 }
 
 export function Card4({
@@ -406,12 +449,12 @@ export function Card4({
   rights,
   role,
 }: {
-  heading: string;
-  bgColor: string;
-  outlineColor: string;
-  textColor: string;
-  rights: string;
-  role: string;
+  heading: string
+  bgColor: string
+  outlineColor: string
+  textColor: string
+  rights: string
+  role: string
 }) {
   return (
     <div
@@ -432,11 +475,19 @@ export function Card4({
         {role}
       </p>
     </div>
-  );
+  )
 }
 
+interface SearchBarI
+  extends Omit<
+    React.DetailedHTMLProps<
+      React.InputHTMLAttributes<HTMLInputElement>,
+      HTMLInputElement
+    >,
+    "type" | "className" | "placeholder" | "id"
+  > {}
 
-export function SearchBar() {
+export function SearchBar({ ...props }: SearchBarI) {
   return (
     <div className="bg-[#E1D7E2]">
       <label
@@ -448,6 +499,7 @@ export function SearchBar() {
           id="search"
           placeholder="search"
           className="border-none outline-none block bg-transparent w-[250px] text-[#5E5C64] placeholder:text-[#5E5C64] capitalize"
+          {...props}
         />
         <Image
           src="/assets/icons/search.svg"
@@ -458,10 +510,10 @@ export function SearchBar() {
         />
       </label>
     </div>
-  );
+  )
 }
 
-export function SearchBar2() {
+export function SearchBar2({ ...props }: SearchBarI) {
   return (
     <div className="">
       <label
@@ -473,6 +525,7 @@ export function SearchBar2() {
           id="search"
           placeholder="search"
           className="border-none outline-none block bg-transparent w-[250px] text-[#5E5C64] placeholder:text-[#5E5C64] capitalize"
+          {...props}
         />
         <Image
           src="/assets/icons/search.svg"
@@ -483,26 +536,26 @@ export function SearchBar2() {
         />
       </label>
     </div>
-  );
+  )
 }
 
 export function Wallet() {
-  const [isError, setIsError] = useState(false);
-  const [isSuccessful, setIsSuccessful] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false)
+  const [isSuccessful, setIsSuccessful] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
-  const session = useSession();
-  const balance = session?.walletBalance as string;
-  const isZeroBalance: boolean = balance === "0.00";
+  const session = useSession()
+  const balance = session?.walletBalance as string
+  const isZeroBalance: boolean = balance === "0.00"
 
   if (session?.role !== "admin") {
-    return null;
+    return null
   }
 
   async function handleWithdraw() {
-    setIsLoading(true);
-    setIsError(false);
-    const result = await withDrawFunds();
+    setIsLoading(true)
+    setIsError(false)
+    const result = await withDrawFunds()
 
     // if (result) {
     //   setIsLoading(false);
@@ -557,7 +610,7 @@ export function Wallet() {
         <StatusMessage message="Your money is on its way!" type="success" />
       ) : null}
     </div>
-  );
+  )
 }
 
 export function MessageView({
@@ -566,10 +619,10 @@ export function MessageView({
   message,
   imgSrc,
 }: {
-  name: string;
-  timestamp: string;
-  message: string;
-  imgSrc: string;
+  name: string
+  timestamp: string
+  message: string
+  imgSrc: string
 }) {
   return (
     <div className="flex items-start py-2 border-b border-gray-300">
@@ -592,7 +645,7 @@ export function MessageView({
         <div className="text-sm">{message}</div>
       </div>
     </div>
-  );
+  )
 }
 
 export function MessageCard({
@@ -600,9 +653,9 @@ export function MessageCard({
   timeStamp,
   bgColor,
 }: {
-  message: string;
-  timeStamp: string;
-  bgColor: string;
+  message: string
+  timeStamp: string
+  bgColor: string
 }) {
   return (
     <div className="bg-[#443B46] rounded-xl p-3 w-[70%]">
@@ -613,15 +666,15 @@ export function MessageCard({
         <p>{timeStamp}</p>
       </div>
     </div>
-  );
+  )
 }
 
 export function MessageLabel({
   imgSrc,
   name,
 }: {
-  imgSrc: string;
-  name: string;
+  imgSrc: string
+  name: string
 }) {
   return (
     <div className="absolute top-0 left-0 w-full mt-4 ml-4 mr-2 rounded-lg veridaq-gradient text-white z-10 shadow-md p-2 flex flex-grow items-center">
@@ -636,7 +689,7 @@ export function MessageLabel({
       </div>
       <div className="font-bold text-lg">{name}</div>
     </div>
-  );
+  )
 }
 
 export function MessageBox() {
@@ -658,7 +711,7 @@ export function MessageBox() {
         />
       </label>
     </div>
-  );
+  )
 }
 
 export function SuccessMessage() {
@@ -674,7 +727,7 @@ export function SuccessMessage() {
         Your Veridaq Request is Successful!
       </p>
     </div>
-  );
+  )
 }
 
 export function ErrorMessage() {
@@ -690,7 +743,7 @@ export function ErrorMessage() {
         Your Veridaq Request is UnSuccessful! Please try again later
       </p>
     </div>
-  );
+  )
 }
 
 export function VeridaqDocument({
@@ -700,15 +753,15 @@ export function VeridaqDocument({
   docId,
   onClick,
 }: {
-  DocDetails: string;
-  DocDate: string;
-  id: string;
-  docId: string;
-  onClick: (id: string, docId: string) => void;
+  DocDetails: string
+  DocDate: string
+  id: string
+  docId: string
+  onClick: (id: string, docId: string) => void
 }) {
   const handleClick = () => {
-    onClick(id, docId); // Pass the id to the onClick handler
-  };
+    onClick(id, docId) // Pass the id to the onClick handler
+  }
 
   return (
     <div
@@ -724,42 +777,47 @@ export function VeridaqDocument({
         />
       </div>
       <div className="flex flex-col items-start">
-        <div className="mb-1 sm:mb-0"> {/* Added margin bottom to separate elements */}
+        <div className="mb-1 sm:mb-0">
+          {" "}
+          {/* Added margin bottom to separate elements */}
           <p>{DocDetails}</p>
         </div>
-        <div className="text-sm"> {/* Added smaller text size for date */}
+        <div className="text-sm">
+          {" "}
+          {/* Added smaller text size for date */}
           <p>{DocDate}</p>
         </div>
       </div>
     </div>
-  );
+  )
 }
 
 interface StatusMessageProps {
-  message: string;
-  type: "error" | "success";
+  message: string
+  type: "error" | "success"
 }
 
 export const StatusMessage: React.FC<StatusMessageProps> = ({
   message,
   type,
 }) => {
-  const [isVisible, setIsVisible] = useState(true);
+  const [isVisible, setIsVisible] = useState(true)
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setIsVisible(false);
-    }, 10000); // Message disappears after 3 seconds
+      setIsVisible(false)
+    }, 10000) // Message disappears after 3 seconds
 
-    return () => clearTimeout(timer);
-  }, []);
+    return () => clearTimeout(timer)
+  }, [])
 
   return (
     <div
-      className={`fixed top-5 right-5 p-3 rounded-md text-white ${type === "error" ? "bg-red-500" : "bg-green-500"
-        } ${isVisible ? "opacity-100" : "opacity-0"}`}
+      className={`fixed top-5 right-5 p-3 rounded-md text-white ${
+        type === "error" ? "bg-red-500" : "bg-green-500"
+      } ${isVisible ? "opacity-100" : "opacity-0"}`}
     >
       {message}
     </div>
-  );
-};
+  )
+}
