@@ -89,8 +89,7 @@ export async function createOrUpdateWorkReferenceRequest({
       currentDateTime: currentDateTime,
       badgeID: badgeID,
     };
-    const url =
-      "https://generator-abfcaoddhq-bq.a.run.app/work-reference";
+    const url = "https://api.generator.veridaq.com/work-reference";
     const docName = "workReference.pdf";
 
     const result = await getDocAndUpload(data, url, docName);
@@ -220,29 +219,28 @@ export async function createOrUpdateHandsOnReferenceRequest({
 
     console.log(id);
 
-    // const data = {
-    //   nameOfEmployee: firstName + " " + lastName,
-    //   identifier: identifier,
-    //   employeeStatus: subType,
-    //   nameOfInstitution: orgName,
-    //   subType: subType,
-    //   designation: designation,
-    //   department: department,
-    //   period: period,
-    //   jobFunctions: jobFunction,
-    //   notableAchievement: notableAchievement,
-    //   personalitySummary: personalitySummary,
-    //   nameOfAdmin: adminName,
-    //   adminDesignation: adminDesignation,
-    //   currentDateTime: currentDateTime,
-    //   badgeID: badgeID,
-    // };
-    // const url =
-    //   "https://generator-abfcaoddhq-bq.a.run.app/work-reference";
-    // const docName = "handsOnReference.pdf";
+    const data = {
+      nameOfEmployee: firstName + " " + lastName,
+      identifier: identifier,
+      employeeStatus: subType,
+      nameOfInstitution: orgName,
+      subType: subType,
+      designation: designation,
+      department: department,
+      period: period,
+      jobFunctions: jobFunction,
+      notableAchievement: notableAchievement,
+      personalitySummary: personalitySummary,
+      nameOfAdmin: adminName,
+      adminDesignation: adminDesignation,
+      currentDateTime: currentDateTime,
+      badgeID: badgeID,
+    };
+    const url = "https://api.generator.veridaq.com/handson-reference";
+    const docName = "handsOnReference.pdf";
 
-    // const result = await getDocAndUpload(data, url, docName);
-    let result;
+    const result = await getDocAndUpload(data, url, docName);
+
     if (result) {
       // If id is provided, find and update the document
       if (id) {
@@ -291,7 +289,7 @@ export async function createOrUpdateHandsOnReferenceRequest({
           role,
           notableAchievement,
           roleResponsibilities,
-          personalitySummary,          
+          personalitySummary,
           issued: true,
           dateIssued: new Date(),
           badgeUrl: result,
@@ -310,7 +308,6 @@ export async function createOrUpdateHandsOnReferenceRequest({
     );
   }
 }
-
 
 interface StudentshipParams {
   firstName: string;
@@ -370,8 +367,7 @@ export async function createOrUpdateStudentshipStatus(
       currentDateTime: currentDateTime,
       badgeID: badgeID,
     };
-    const url =
-      "https://generator-abfcaoddhq-bq.a.run.app/student-status";
+    const url = "https://api.generator.veridaq.com/student-status";
     const docName = "studentStatus.pdf";
 
     const result = await getDocAndUpload(data, url, docName);
@@ -491,8 +487,7 @@ export async function createOrUpdateMembershipReference(
         badgeID: badgeID,
         moreInfo: params.info,
       };
-      const url =
-        "https://generator-abfcaoddhq-bq.a.run.app/member-reference";
+      const url = "https://api.generator.veridaq.com/member-reference";
       const docName = "memberReference.pdf";
 
       result = await getDocAndUpload(data, url, docName);
@@ -510,8 +505,7 @@ export async function createOrUpdateMembershipReference(
         badgeID: badgeID,
         moreInfo: params.info,
       };
-      const url =
-        "https://generator-abfcaoddhq-bq.a.run.app/alumni-reference";
+      const url = "https://api.generator.veridaq.com/alumni-reference";
       const docName = "alumniReference.pdf";
 
       result = await getDocAndUpload(data, url, docName);
@@ -620,8 +614,7 @@ export async function createOrUpdateDocumentVerificationRequest(
       badgeID: badgeID,
     };
 
-    const url =
-      "https://generator-abfcaoddhq-bq.a.run.app/doc-verification";
+    const url = "https://api.generator.veridaq.com/doc-verification";
     const docName = "docVerification.pdf";
 
     const result = await getDocAndUpload(data, url, docName);
@@ -779,7 +772,7 @@ export async function getHandsOnReference() {
       DocDate: formatDate(doc.dateRequested), // Format the date
     }));
 
-    console.log(formattedData)
+    console.log(formattedData);
 
     if (formattedData) return formattedData;
     false;
@@ -1230,4 +1223,3 @@ export async function getTeamMembers() {
     throw new Error("Failed to fetch team members");
   }
 }
-
