@@ -514,8 +514,10 @@ const WorkReference: React.FC<WorkReferenceProps> = ({ docId }) => {
                             placeholder="Notable Achievement"
                             id="notableAchievement"
                             className="flex h-12 w-full normal-border bg-[#C3B8D8] pt-10 rounded-lg px-1 py-3 placeholder:text-gray-500 text-left disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-950"
+                            {...field}
                           />
-                        </FormControl>                        <FormMessage />
+                        </FormControl>
+                        <FormMessage />
                       </FormItem>
                     )}
                   />
@@ -532,6 +534,7 @@ const WorkReference: React.FC<WorkReferenceProps> = ({ docId }) => {
                             placeholder="Function"
                             id="jobFunction"
                             className="flex h-12 w-full normal-border bg-[#C3B8D8] pt-10 rounded-lg px-1 py-3 placeholder:text-gray-500 text-left disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-950"
+                            {...field}
                           />
                         </FormControl>
                         <FormMessage />
@@ -543,16 +546,14 @@ const WorkReference: React.FC<WorkReferenceProps> = ({ docId }) => {
                     name="personalitySummary"
                     render={({ field }) => (
                       <FormItem className="w-full">
-                        <Label
-                          htmlFor="personalitySummary"
-                          className="font-medium text-[16px]"
-                        >
+                        <FormLabel className="font-medium text-[16px]">
                           Personality Summary
-                        </Label>
+                        </FormLabel>
                         <Textarea
                           placeholder="Good"
                           id="personalitySummary"
                           className="flex h-12 w-full normal-border bg-[#C3B8D8] pt-10 rounded-lg px-1 py-3 placeholder:text-gray-500 text-left disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-950"
+                          {...field}
                         />
                         <FormMessage />
                       </FormItem>

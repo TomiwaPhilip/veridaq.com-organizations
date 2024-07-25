@@ -222,13 +222,13 @@ export async function createOrUpdateHandsOnReferenceRequest({
     const data = {
       nameOfEmployee: firstName + " " + lastName,
       identifier: identifier,
-      employeeStatus: subType,
+      roleType: roleType,
       nameOfInstitution: orgName,
       subType: subType,
-      designation: designation,
-      department: department,
+      projectTitle: projectTitle,
+      role: role,
       period: period,
-      jobFunctions: jobFunction,
+      jobFunctions: roleResponsibilities,
       notableAchievement: notableAchievement,
       personalitySummary: personalitySummary,
       nameOfAdmin: adminName,
@@ -236,6 +236,7 @@ export async function createOrUpdateHandsOnReferenceRequest({
       currentDateTime: currentDateTime,
       badgeID: badgeID,
     };
+    console.log("Data at request", data);
     const url = "https://api.generator.veridaq.com/handson-reference";
     const docName = "handsOnReference.pdf";
 
@@ -1062,7 +1063,7 @@ export async function getIssuedHandsOnReference() {
 
     // Format the data before returning to the frontend
     const formattedData = workReferences.map((doc) => ({
-      heading: `Work Reference to ${doc.firstName} ${doc.lastName}`,
+      heading: `Hands-On Reference to ${doc.firstName} ${doc.lastName}`,
       DocId: doc._id.toString(), // Convert _id to string
       link: doc.badgeUrl,
       textColor: "#38313A",
@@ -1074,7 +1075,7 @@ export async function getIssuedHandsOnReference() {
     false;
   } catch (error: any) {
     console.error(error);
-    throw new Error("Failed to fetch issued WorkReference documents");
+    throw new Error("Failed to fetch issued Hands on Reference documents");
   }
 }
 
