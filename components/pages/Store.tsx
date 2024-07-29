@@ -89,12 +89,12 @@ export default function Store() {
         <div className="">
           <SearchBar
             onChange={(e) => {
-              const value = e.target.value
+              const value = e.target.value.toLowerCase()
 
               // Work Reference Search
               const newWorkRefData = allDocs.workReferenceDoc.filter(
                 (workRef) => {
-                  return workRef.heading.includes(value)
+                  return workRef.heading.toLowerCase().includes(value)
                 }
               )
               setWorkReferenceDoc(newWorkRefData)
@@ -102,7 +102,7 @@ export default function Store() {
               // Hands On Reference search
               const newhandsOnRefData = allDocs.handsOnReferenceDoc.filter(
                 (handsOnRef) => {
-                  return handsOnRef.heading.includes(value)
+                  return handsOnRef.heading.toLowerCase().includes(value)
                 }
               )
               setHandsOnReferenceDoc(newhandsOnRefData)
