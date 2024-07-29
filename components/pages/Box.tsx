@@ -114,12 +114,14 @@ export default function Box() {
                 <div className="">
                   <SearchBar2
                     onChange={(e) => {
-                      const value = e.target.value
+                      const value = e.target.value.toLowerCase()
 
                       // Work Reference Search
                       const newWorkRefData = allDocs.workReferenceDoc.filter(
                         (workRef) => {
-                          return workRef.DocDetails.includes(value)
+                          return workRef.DocDetails.toLowerCase().includes(
+                            value
+                          )
                         }
                       )
                       setWorkReferenceDoc(newWorkRefData)
@@ -127,7 +129,9 @@ export default function Box() {
                       // Hands On Reference search
                       const newhandsOnRefData =
                         allDocs.handsOnReferenceDoc.filter((handsOnRef) => {
-                          return handsOnRef.DocDetails.includes(value)
+                          return handsOnRef.DocDetails.toLowerCase().includes(
+                            value
+                          )
                         })
                       setHandsOnReferenceDoc(newhandsOnRefData)
                     }}
