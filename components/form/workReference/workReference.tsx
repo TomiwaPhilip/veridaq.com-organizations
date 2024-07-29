@@ -57,6 +57,9 @@ const WorkReference: React.FC<WorkReferenceProps> = ({ docId }) => {
   const [loading, setLoading] = useState(false);
   const inputFileRef = useRef<HTMLInputElement>(null);
   const session = useSession();
+  const [uploading, setUploading] = useState(
+    "Attach supporting documents (optional)",
+  );
 
   const handleNextStep = () => {
     setStep(step + 1);
@@ -127,6 +130,7 @@ const WorkReference: React.FC<WorkReferenceProps> = ({ docId }) => {
     fieldChange: (value: string) => void,
   ) => {
     e.preventDefault();
+    setUploading("Uploading Document");
 
     const fileReader = new FileReader();
     if (!inputFileRef.current?.files) {
@@ -143,10 +147,15 @@ const WorkReference: React.FC<WorkReferenceProps> = ({ docId }) => {
             access: "public",
             handleUploadUrl: "/api/avatar/upload",
           });
-
-          // Update the form data with the new blob URL
-          fieldChange(newBlob.url);
+          if (newBlob.url) {
+            setUploading("Document uploaded!");
+            // Update the form data with the new blob URL
+            fieldChange(newBlob.url);
+          } else {
+            setUploading("Error Uploading Documents!");
+          }
         } catch (error) {
+          setUploading("Error Uploading Documents!");
           console.error("Error uploading file:", error);
         }
       }
@@ -339,32 +348,9 @@ const WorkReference: React.FC<WorkReferenceProps> = ({ docId }) => {
                     name="image"
                     render={({ field }) => (
                       <FormItem className="flex items-center gap-4">
-                        <FormLabel className="account-form_image-label">
-                          {field.value ? (
-                            <Image
-                              src={field.value}
-                              alt="image"
-                              width={96}
-                              height={96}
-                              priority
-                              className="rounded-full aspect-square object-cover"
-                            />
-                          ) : (
-                            <Image
-                              src="/assets/icons/avatar.png"
-                              alt="image"
-                              width={96}
-                              height={96}
-                              className="rounded-full aspect-square object-cover"
-                            />
-                          )}
-                        </FormLabel>
-                        <label
-                          htmlFor="image"
-                          className="text-[#3344A8] cursor-pointer text-[20px] font-medium"
-                        >
-                          Any Supporting Documents (Optional)
-                        </label>
+                        <FormLabel className="text-[#3344A8] cursor-pointer text-[20px] font-medium">
+                          {uploading}
+                        </FormLabel>{" "}
                         <FormControl className="flex-1 text-base-semibold text-gray-200">
                           <Input
                             type="file"
